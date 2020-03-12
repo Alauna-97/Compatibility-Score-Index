@@ -1,0 +1,78 @@
+{% extends "base.html" %} {% block main %}
+<div class="register-form center-block">
+  <img
+    src="../static/images/Footer Logo.png"
+    class="d-inline-block align-top"
+    alt=""
+  />
+  <h2 class="mb-3 mt-3">Registration</h2>
+  <form class="card-main mb-5">
+    <p>Registering as:</p>
+    <button
+      type="submit"
+      name="Regular"
+      class="btn btn-outline-success my-2 my-sm-0"
+    >
+      Regular
+    </button>
+    <button
+      type="submit"
+      name="Organizer"
+      class="btn btn-outline-success my-2 my-sm-0"
+    >
+      Organizer
+    </button>
+  </form>
+</div>
+
+<style scoped>
+  .register-form.center-block {
+    text-align: center;
+    font-size: 40px;
+    line-height: 49px;
+    letter-spacing: -0.015em;
+    color: #3a3a3a;
+  }
+  .card-main {
+    background: #f1f1f1;
+    padding: 1rem 0rem 3rem 0rem;
+    margin-top: 2rem;
+  }
+
+
+  main .btn-outline-success,
+  main .btn-outline-success:hover {
+    border: 1px solid #0e267a;
+    box-sizing: border-box;
+    border-radius: 6px;
+    margin-right: 5rem;
+    padding: 0.5rem 2.5rem;
+    color: #0e267a;
+    font-weight: 600;
+  }
+
+  main .btn-outline-success:hover {
+    color: #fff;
+    background-color: #0e267a;
+  }
+
+  main .btn-outline-success:not(:disabled):not(.disabled):active {
+    background: #0e267a;
+    border-color: #0e267a;
+  }
+
+  main .btn-outline-success.focus,
+  .btn-outline-success:focus {
+    box-shadow: 0 0 0 0.2rem rgba(56, 48, 77, 0.5);
+  }
+
+  .card-main p {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 30px;
+    letter-spacing: -0.015em;
+    color: #0e267a;
+  }
+</style>
+{% endblock %}

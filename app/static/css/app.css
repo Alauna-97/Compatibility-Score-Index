@@ -1,3 +1,149 @@
 body {
-    padding-top: 5rem;
+  font-family: "Montserrat", "Open Sans";
+}
+
+/************************************** Navigation Area **************************************/
+.navbar {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding: 0rem 1rem;
+}
+
+.navbar-light .navbar-brand,
+.navbar-light .navbar-brand:hover {
+  color: #21abcb;
+}
+
+.nav-custom{
+  background-color: #6B92E8;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+  color: #957ae1;
+}
+
+.navbar-brand {
+  margin-right: 2rem;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  letter-spacing: -0.015em;
+}
+
+.btn-outline-success,
+.btn-outline-success:hover {
+  border: 1px solid #fff;
+  box-sizing: border-box;
+  border-radius: 6px;
+  margin-right: 1rem;
+  padding: 0.5rem 2.5rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-outline-success-V2{
+  border: 1px solid #fff;
+  background-color: #fff;
+  box-sizing: border-box;
+  border-radius: 6px;
+  margin-right: 1rem;
+  padding: 0.5rem 2.5rem;
+  color: #6B92E8;
+  font-weight: 600;
+
+}
+
+.btn-outline-success:hover {
+  color: #fff;
+  background-color: #0E267A;
+  border: 1px solid #0E267A;
+}
+
+.btn-outline-success-V2:hover {
+  color: #fff;
+  background-color: #0E267A;
+  border: 1px solid #0E267A;
+}
+
+.btn-outline-success:not(:disabled):not(.disabled):active {
+  background-color: #957ae1;
+  border-color: #957ae1;
+}
+
+.btn-outline-success.focus,
+.btn-outline-success:focus {
+  box-shadow: 0 0 0 0.2rem rgba(149, 122, 225, 0.5);
+}
+
+@media screen and (min-width: 992px) {
+  .navbar-expand-lg .navbar-nav .nav-link {
+    padding-left: 1rem;
+  }
+}
+
+
+/******************************** Footer Region ********************************/
+
+footer {
+  background: #22252e;
+  margin-top: 2rem;
+}
+footer a.navbar-brand.ml-1 {
+  color: #21abcb;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 39px;
+  letter-spacing: -0.015em;
+}
+
+footer div p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #fff;
+  font-size: 15px;
+}
+
+footer h5 {
+  color: #fff;
+}
+
+.col-6.mx-auto.p-3 {
+  text-align: center;
+}
+
+
+/******************************** FOR MAIN ********************************/
+
+
+.container {
+  width: 100%;
+  padding-top: 3rem;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+
+/******************************** FOR FOOTER ********************************/
+.container2 {
+  width: 100%;
+  margin-top: 5rem;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
 }
