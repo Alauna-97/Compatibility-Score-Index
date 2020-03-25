@@ -1,0 +1,119 @@
+{% extends "base.html" %} {% block main %}
+
+<!-- Sidebar -->
+<div class="row">
+  <div class="col-4">
+    <nav id="sidebar">
+      <div class="sidebar-header">
+        <h4>{{current_user.first_name}} {{current_user.last_name}}</h4>
+      </div>
+
+      <div>
+        <img
+          src="../static/images/no_profilepic2.png"
+          width="220"
+          height="220"
+          class="img-thumbnail"
+        />
+      </div>
+
+      <div class="abt">
+        <p>
+          <b>About</b>
+          <button class="btn recom" onclick="myFunction()">Edit</button>
+        </p>
+        <p id="abtP">
+          Here is where you tell us about yourself. <br />
+          To edit, click the <b>'Edit' </b> button above to start typing! When
+          you are finished press enter.
+        </p>
+      </div>
+
+      <!-- this makes the about section editable -->
+
+      <script>
+        function myFunction() {
+          document.getElementById("abtP").contentEditable = true;
+          document.getElementById("abtP").className = "abtP2";
+
+          document.getElementById("abtP").onkeypress = function(event) {
+            if (event.keyCode == 13 || event.which == 13) {
+              var editElem = document.getElementById("abtP");
+
+              //get the edited element content
+              var userVersion = editElem.innerHTML;
+              //save the content to local storage
+              localStorage.userEdits = userVersion;
+
+              //write a confirmation to the user
+              document.getElementById("abtP").innerHTML = userVersion;
+              document.getElementById("abtP").contentEditable = false;
+              document.getElementById("abtP").className = "";
+            }
+          };
+        }
+      </script>
+
+      <ul class="list-unstyled components">
+        <li>
+          <button class=" btn rec-button">My Groups</button>
+          <button class="btn num-button">0</button>
+        </li>
+
+        <li>
+          <button class="btn rec-button">Friends</button>
+          <button class="btn num-button">0</button>
+        </li>
+        <li>
+          <button class="btn rec-button">Messages</button>
+          <button class="btn num-button">0</button>
+        </li>
+      </ul>
+      <div class="socialmd">
+        <a href="#">
+          <img
+            src="../static/images/facebook.png"
+            width="24"
+            height="24"
+            class="d-inline-block align-top mr-4"
+            alt=""
+          />
+        </a>
+        <a href="#"
+          ><img
+            src="../static/images/linkedin.png"
+            width="24"
+            height="24"
+            class="d-inline-block align-top mr-4"
+            alt=""
+          />
+        </a>
+        <a href="#"
+          ><img
+            src="../static/images/instagram.png"
+            width="24"
+            height="24"
+            class="d-inline-block align-top mr-4"
+            alt=""
+          />
+        </a>
+        <a href="#"
+          ><img
+            src="../static/images/email.png"
+            width="24"
+            height="24"
+            class="d-inline-block align-top mr-4"
+            alt=""
+          />
+        </a>
+      </div>
+    </nav>
+  </div>
+  <div class="col-8">
+    <div class="content">
+      {% block div %}{% endblock %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

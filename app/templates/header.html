@@ -35,6 +35,35 @@
     </ul>
 
     <ul class="navbar-nav">
+      {% if current_user.is_authenticated %}
+      <li class="nav-item">
+        <form method="post" action="{{ url_for('result') }}" class="mt-1 mr-3">
+          <input type="text" class="form-control" placeholder="Search..." />
+        </form>
+      </li>
+
+      <div class="dropdown nav-item">
+        <button
+          class="btn-username btn dropdown-toggle"
+          id="dropdownMenuButton"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <img src="../static/images/User Header Icon.png" class="mr-2" />
+          {{current_user.username}}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a
+            class="nav-link username"
+            href="{{ url_for('dashboard', username=current_user.username) }}"
+          >
+            Your Profile</a
+          >
+          <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
+        </div>
+      </div>
+      {% else %}
       <li class="nav-item">
         <a
           class="btn btn-outline-success my-2 my-sm-0"
@@ -49,6 +78,7 @@
           >Register</a
         >
       </li>
+      {% endif %}
     </ul>
   </div>
 </nav>

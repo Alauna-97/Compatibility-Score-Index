@@ -16,10 +16,10 @@ class User(db.Model):
     username = db.Column(db.String(30), unique=True)
     password = db.Column(db.String(255))
 
-    __mapper_args__ = {
-        'polymorphic_identity': 'user',
-        'polymorphic_on': type
-    }
+    # __mapper_args__ = {
+    #     'polymorphic_identity': 'user',
+    #     'polymorphic_on': type
+    # }
 
     def __init__(self, type, first_name, last_name, email, username, password):
         self.type = type

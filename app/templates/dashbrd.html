@@ -1,0 +1,71 @@
+{% extends "sidebar.html" %} {% block div %}
+    <div class = "page_header">
+        <h2 class = "dash_header">Dashboard</h2>
+        {% include 'flash_messages.html' %}
+        <h4 class = "grp_header">My Groups 
+        <button class=" btn recom">Recommend Matches</button>
+        </h4>
+    </div>
+    <div class = "alert alert-primary">
+        You Currently Have No Groups
+    </div>
+    <!-- <div class = "row"> 
+        <div class="col-4">
+            <button class = "tile">
+                <div class = "grp_title"> 
+                    <p class = "tl"> </p> 
+                </div>
+            </button>
+        </div>
+        <div class = "col-4">
+            <button class = "tile">
+                <div class = "grp_title"> 
+                    <p class = "tl"></p> 
+                </div>
+            </button>
+        </div> -->
+
+        <div class = "col-4">
+            <button class = "tile add">
+                <img src="../static/images/plus.png" width="50" height="50" class = "img-add" />
+            </button>
+        </div>
+    </div>
+    
+
+        
+    <h4 class = "grp_header2">Current Friends </h4>
+    <!-- <div class = "row"> 
+        <div class="col-4">
+            <button class = "tile">
+                <div class = "grp_title"> 
+                    <p class = "tl"> </p> 
+                </div>
+            </button>
+        </div>
+        <div class = "col-4">
+            <button class = "tile">
+                <div class = "grp_title"> 
+                    <p class = "tl"></p> 
+                </div>
+            </button>
+        </div>
+        <div class = "col-4">
+            <button class = "tile">
+                <div class = "grp_title"> 
+                    <p class = "tl"> </p> 
+                </div>
+            </button>
+        </div> -->
+
+        <div class = "alert alert-primary">
+            You Currently Have No Friends
+        </div>
+
+        <button class=" btn recom2">All</button>
+    </div>
+
+    
+
+
+{% endblock %}

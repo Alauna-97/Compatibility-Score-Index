@@ -1,18 +1,49 @@
 {% extends "base.html" %} {% block main %}
-<div class="login-form center-block">
-  {% include 'flash_messages.html' %}
-  <form action="{{ url_for('login') }}" method="post">
+<div class="register-form center-block">
+  <img
+    src="../static/images/Footer Logo.png"
+    class="d-inline-block align-top mt-5"
+    alt=""
+  />
+  <h2 class="mb-5 mt-3">Login</h2>
+  <form
+    action="{{ url_for('login') }}"
+    method="post"
+    class="card-user-login mb-5 form-horizontal"
+  >
     {{ form.csrf_token }}
-    <div class="form-group">
-      {{ form.username.label }} {{ form.username(class='form-control',
-      placeholder="Enter your username") }}
+    <div class="form-body-login">
+      <div class="row mt-5 pt-5">
+        <div class="col">
+          <div class="form-group row">
+            {{ form.username.label(class='control-label') }}
+            <div class="col-sm-7">
+              {{ form.username(class='form-control') }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row my-2">
+        <div class="col">
+          <div class="form-group row">
+            {{ form.password.label(class='control-label') }}
+            <div class="col-sm-7">
+              {{ form.password(class='form-control') }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row my-2">
+        <div class="col">
+          <div class="row">
+            <div class="mt-1 mb-4">
+              {{ form.submit(class='btn btn-outline-success my-2 my-sm-0') }}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      {{ form.password.label }} {{ form.password(class='form-control') }}
-    </div>
-    <button type="submit" name="submit" class="btn btn-primary btn-block">
-      Log In
-    </button>
   </form>
 </div>
 {% endblock %}

@@ -5,12 +5,12 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 
-from app import app
-from app import db, login_manager
+from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
 from app.forms import LoginForm, SignUp
 # from app.forms import AboutYou
+from werkzeug.security import check_password_hash
 from app.models import User, Regular, Organizer, Grouped, joinGroup, Scores
 
 
@@ -32,26 +32,41 @@ def about():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
     form = LoginForm()
-    if request.method == "POST":
-        # change this to actually validate the entire form submission
-        # and not just one field
-        if form.username.data:
-            # Get the username and password values from the form.
+    if request.method == "POST" and form.validate_on_submit():
 
-            # using your model, query database for a user based on the username
-            # and password submitted. Remember you need to compare the password hash.
-            # You will need to import the appropriate function to do so.
-            # Then store the result of that query to a `user` variable so it can be
-            # passed to the login_user() method below.
+        # Query if User exists
+        user = db.session.query(User).filter_by(
+            username=form.username.data).first()
 
-            # get user id, load into session
+        # If valid credentials, flash success and redirect
+        if user is not None and check_password_hash(user.password, form.password.data):
             login_user(user)
+            flash('Login Successful')
+            return redirect(url_for('dashboard', username=current_user.username))
 
-            # remember to flash a message to the user
-            # they should be redirected to a secure-page route instead
-            return redirect(url_for("home"))
+        # Flash error message with incorrect username/password
+        flash(u'Invalid Credentials', 'error')
     return render_template("login.html", form=form)
+
+
+@app.route('/dashboard/<username>')
+@login_required
+def dashboard(username):
+    """Render the website's dashboard page."""
+    return render_template('dashbrd.html', user=current_user.user_id)
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    # Logout the user and end the session
+    logout_user()
+    flash('You have been logged out.')
+    return redirect(url_for('home'))
 
 
 @app.route('/register')
@@ -84,7 +99,7 @@ def registerRegular():
     # First Name, Last Name, Email, Password and Username are collected from the SignUp Form
     form = SignUp()
 
-    if request.method == "POST":
+    if request.method == "POST" and form.validate_on_submit():
         # Checks in User Table if another user has this username
         username = form.username.data
         email = form.email.data
@@ -96,7 +111,19 @@ def registerRegular():
         existing_email = db.session.query(User).filter_by(email=email).first()
 
         if existing_username is None and existing_email is None:
-            return redirect(url_for("aboutRegular"))
+            user = User(type="regular", first_name=request.form['fname'], last_name=request.form['lname'],
+                        email=request.form['email'], username=request.form['username'], password=request.form['password'])
+
+            # Adds a regular user info to the database
+            db.session.add(user)
+            db.session.commit()
+
+            # Success Message Appears
+            flash('Successfully registered', 'success')
+
+            # return redirect(url_for("aboutRegular"))
+            return redirect(url_for('dashboard', userid=user.user_id))
+    flash_errors(form)
     return render_template("signup.html", form=form)
 
 
@@ -128,12 +155,24 @@ def aboutRegular():
 def registerOrganizer():
     return render_template('signup.html')
 
+
+@app.route('/results',  methods=['GET', 'POST'])
+def result():
+    """Render the website's result page."""
+    return render_template('results.html')
+
 # user_loader callback. This callback is used to reload the user object from
 # the user ID stored in the session
 @login_manager.user_loader
-def load_user(id):
-    return User.query.get(int(id))
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    """Redirect unauthorized users to Login page."""
+    flash('You must be logged in to view that page.')
+    return redirect(url_for('login'))
 ###
 # The functions below should be applicable to all Flask apps.
 ###
@@ -144,6 +183,17 @@ def send_text_file(file_name):
     """Send your static text file."""
     file_dot_text = file_name + '.txt'
     return app.send_static_file(file_dot_text)
+
+# Flash errors from the form if validation fails
+
+
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Error in the %s field - %s" % (
+                getattr(form, field).label.text,
+                error
+            ), 'danger')
 
 
 @app.after_request
