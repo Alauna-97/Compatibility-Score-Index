@@ -8,13 +8,13 @@
   <h2 class="mb-5 mt-3">User Registration - About You</h2>
   <form
     class="card-user-reg mb-5"
-    action="{{ url_for('aboutRegular') }}"
+    action="{{ url_for('aboutUser', typeUser='Organizer') }}"
     method="POST"
   >
     {{ form.csrf_token }}
     <div class="row my-2">
       <div class="col general title">
-        <a href="{{ url_for('registerRegular') }}">General</a>
+        <a href="{{ url_for('register') }}">General</a>
       </div>
       <div class="col title">
         About You
