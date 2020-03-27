@@ -57,7 +57,7 @@ def login():
 @login_required
 def dashboard(username):
     """Render the website's dashboard page."""
-    return render_template('dashbrd.html', user=current_user.user_id)
+    return render_template('dashbrd.html', user=current_user.username)
 
 
 @app.route("/logout")
@@ -69,33 +69,20 @@ def logout():
     return redirect(url_for('home'))
 
 
-@app.route('/register')
-def register():
+@app.route('/registerAs', methods=["GET", "POST"])
+def registerAs():
     """Render the website's register page."""
-    form = LoginForm()
     if request.method == "POST":
-        # change this to actually validate the entire form submission
-        # and not just one field
-        if form.username.data:
-            # Get the username and password values from the form.
+        if request.form.get('Regular') == 'Regular':
+            return redirect(url_for('register', typeUser="Regular"))
 
-            # using your model, query database for a user based on the username
-            # and password submitted. Remember you need to compare the password hash.
-            # You will need to import the appropriate function to do so.
-            # Then store the result of that query to a `user` variable so it can be
-            # passed to the login_user() method below.
-
-            # get user id, load into session
-            # login_user(user)
-
-            # remember to flash a message to the user
-            # they should be redirected to a secure-page route instead
-            return render_template('about_you.html')
-    return render_template('register.html', form=form)
+        elif request.form.get('Organizer') == 'Organizer':
+            return redirect(url_for('register', typeUser="Organizer"))
+    return render_template('registerAs.html')
 
 
-@app.route('/registerRegular/', methods=["GET", "POST"])
-def registerRegular():
+@app.route('/register/<typeUser>', methods=["GET", "POST"])
+def register(typeUser):
     # First Name, Last Name, Email, Password and Username are collected from the SignUp Form
     form = SignUp()
 
@@ -109,9 +96,8 @@ def registerRegular():
 
         # Checks in User Table if another user has this email address
         existing_email = db.session.query(User).filter_by(email=email).first()
-
         if existing_username is None and existing_email is None:
-            user = User(type="regular", first_name=request.form['fname'], last_name=request.form['lname'],
+            user = User(type=typeUser, first_name=request.form['fname'], last_name=request.form['lname'],
                         email=request.form['email'], username=request.form['username'], password=request.form['password'])
 
             # Adds a regular user info to the database
@@ -121,14 +107,19 @@ def registerRegular():
             # Success Message Appears
             flash('Successfully registered', 'success')
 
-            # return redirect(url_for("aboutRegular"))
-            return redirect(url_for('dashboard', userid=user.user_id))
+            # Logs in a newly registered user
+            login_user(user)
+
+            # Redirects to Profile Page
+            return redirect(url_for('dashboard', username=user.username))
+    
+    # Flash errors in form and redirects to Register Form
     flash_errors(form)
     return render_template("signup.html", form=form)
 
 
-@app.route('/aboutRegular/', methods=["GET", "POST"])
-def aboutRegular():
+@app.route('/about/<typeUser>', methods=["GET", "POST"])
+def aboutUser(typeUser):
     # How am I going to pass the above information
     # form = SignUp()
     print(form.username.data)
@@ -149,11 +140,6 @@ def aboutRegular():
 
         # if form entry is invalid, redirected to the same page to fill in required details
     return render_template('about_you.html', form=form)
-
-
-@app.route('/registerOrganizer/')
-def registerOrganizer():
-    return render_template('signup.html')
 
 
 @app.route('/results',  methods=['GET', 'POST'])

@@ -6,20 +6,24 @@
     alt=""
   />
   <h2 class="mb-5 mt-3">Registration</h2>
-  <form class="card-main mb-5">
+  <form
+    action="{{ url_for('registerAs') }}"
+    method="post"
+    class="card-main mb-5"
+  >
     <p>Registering as:</p>
-    <a
-      href="{{ url_for('registerRegular') }}"
+    <input
+      type="submit"
+      value="Regular"
+      name="Regular"
       class="btn btn-outline-success my-2 my-sm-0"
-    >
-      Regular
-    </a>
-    <a
-      href="{{ url_for('registerOrganizer') }}"
+    />
+    <input
+      type="submit"
+      value="Organizer"
+      name="Organizer"
       class="btn btn-outline-success my-2 my-sm-0"
-    >
-      Organizer
-    </a>
+    />
   </form>
 </div>
 {% endblock %}
