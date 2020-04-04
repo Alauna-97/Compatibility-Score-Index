@@ -60,45 +60,11 @@ def dashboard(username):
     if current_user.type == "Organizer":
         getGroups = Grouped.query.filter_by(
             administrator=current_user.user_id).all()
-        print("HHeyyyyyyy Organizer")
     else:
-        getGroups = joinGroup.query.filter_by(
-            user_id=current_user.user_id).all()
-
-        print(getGroups)
-
-        print("=================================")
-        print("=================================")
-        print("")
-        print("")
-        print("")
-        print("")
-        # getG = joinGroup.query.join(
-        #     Grouped).filter(Grouped.group_id == joinGroup.group_id)
-        # print(getG)
-        # print(getG.group_name)
-
-        # join_query = joinGroup.query(Grouped).join(
-        #     joinGroup.group_id == Grouped.group_id)
-
-        join_results1 = (
-            db.session.query(joinGroup).filter_by().join(
-                Grouped, Grouped.group_id == joinGroup.group_id)
-            .all()
+        getGroups = (
+            db.session.query(joinGroup, Grouped).join(
+                joinGroup).filter_by(user_id=current_user.user_id).all()
         )
-
-        join_results2 = (
-            db.session.query(joinGroup).filter_by(user_id=current_user.user_id).join(
-                Grouped, Grouped.group_id == joinGroup.group_id)
-            .all())
-
-        for row in join_results2:
-            print(row)
-            # print("(")
-            # for item in row:
-            #     print("   ", item)
-            # print(")")
-
     return render_template('dashbrd.html', gps=getGroups)
 
 
@@ -225,16 +191,14 @@ def joinAGroup(username):
 @app.route('/<username>/groupmembers/<gp_id>',  methods=['GET', 'POST'])
 def members(username, gp_id):
     gp_name = Grouped.query.filter_by(group_id=gp_id).first()
-    # print(gp_name)
     if current_user.type == "Organizer":
-        getMembers = joinGroup.query.filter_by(
-            group_id=gp_id).all()
+        getMembers = (
+            db.session.query(joinGroup, Regular, User).join(
+                joinGroup).filter_by(group_id=gp_id).all()
+        )
 
     # if current_user.type == "Regular":
-    #     getMembers = joinGroup.query.filter_by(
-    #         group_id=gp_id).all()
-    #     print(getMembers)
-    #     print("Byee")
+
     return render_template('members.html', getMembers=getMembers, gp_name=gp_name)
 
 

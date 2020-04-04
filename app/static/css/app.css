@@ -467,9 +467,9 @@ div.register-form form.card-user-reg div.form-group {
 /********* Member of Groups *********/
 
 button.member-tile {
-  opacity: 0.4;
-  border: 2px solid #6b92e8;
+  border: 2px solid #6b92e878;
   box-sizing: border-box;
   border-radius: 6px;
   width: 238px;
+  background: none;
 }

@@ -146,7 +146,7 @@ class joinGroup(db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey(
         'Grouped.group_id'), primary_key=True)
 
-    def get_id(self):
+    def get_gid(self):
         try:
             return unicode(self.group_id)  # python 2 support
         except NameError:
