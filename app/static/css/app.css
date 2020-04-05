@@ -57,7 +57,8 @@ a.navbar-brand.ml-1 {
   background-color: #fff;
 }
 
-.btn-outline-success:not(:disabled):not(.disabled):active {
+.btn-outline-success:not(:disabled):not(.disabled):active,
+.show > .btn-outline-success.dropdown-toggle {
   background-color: #6b92e8;
   border-color: #6b92e8;
 }
@@ -292,7 +293,7 @@ div.register-form form.card-user-reg div.form-group {
 }
 
 .col-4.sidebar-spacing {
-  max-width: 30%;
+  max-width: 27%;
 }
 
 .img-thumbnail {
@@ -376,6 +377,11 @@ div.register-form form.card-user-reg div.form-group {
   letter-spacing: -0.015em;
   color: #99b0d1;
   margin-top: 3.5rem;
+}
+
+.col.btn-align {
+  text-align: right;
+  margin-right: 2%;
 }
 
 .tile {
@@ -470,9 +476,9 @@ div.register-form form.card-user-reg div.form-group {
   border: 1px solid #0e267a;
 }
 
-.col-4.grid-spacing {
+/* .col-4.grid-spacing {
   max-width: 30%;
-}
+} */
 
 /********* Member of Groups *********/
 
@@ -482,4 +488,14 @@ button.member-tile {
   border-radius: 6px;
   width: 238px;
   background: none;
+}
+
+/********* Modal *********/
+
+h5#PopUpTitle {
+  text-align: center;
+}
+
+.dropdown.show {
+  text-align: center;
 }

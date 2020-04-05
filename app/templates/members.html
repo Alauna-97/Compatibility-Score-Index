@@ -5,12 +5,32 @@
     <!-- {% include 'flash_messages.html' %} -->
   </div>
 
-  <h4 class="grp_header">Members:</h4>
+  <!-- <h4 class="grp_header">Members:</h4> -->
+  {% if current_user.type == "Organizer"%}
+  <div class="row mb-3">
+          
+    <div class="col">
+      <h4 class="grp_header">Members: </h4>
+    </div>
+       
+    <div class="col btn-align">
+      <!-- Button trigger modal -->
+      <button class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#formgroupmodal">
+        Form Groups
+      </button>
+    </div>
+  </div>
+  
+    <span class="btn-right">
+      </span
+    >
+  </h4>
+  {% endif %}
 
   <div class="row">
     {% if current_user.type == "Organizer" and getMembers %} {% for item in
     getMembers %}
-    <div class="col-4">
+    <div class="col-4 mb-4">
       <button class="member-tile">
         <div class="grp_title py-3">
           {{ item[1].first_name }} {{ item[1].last_name }}
@@ -19,5 +39,50 @@
     </div>
     {% endfor %} {% endif %}
   </div>
+  
+
+<!-- Modal -->
+<div class="modal fade" id="formgroupmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="PopUpTitle">Form Groups</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="dropdown show">
+         <h5 class="modal-title mb-2" id="PopUpTitle">Group By:</h5> 
+  <button class="btn btn-outline-success my-2 my-sm-0 dropdown-toggle mb-3" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Choose one...
+  </button>
+
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <a class="dropdown-item" href="#">Compatible</a>
+    <a class="dropdown-item" href="#">Uncompatible</a>
+  </div>
+</div>
+<div class="dropdown show">
+         <h5 class="modal-title mb-2 mt-4" id="PopUpTitle">Number of Persons:</h5> 
+  <button class="btn btn-outline-success my-2 my-sm-0 dropdown-toggle mb-3" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Choose one...
+  </button>
+
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <a class="dropdown-item" href="#">2</a>
+    <a class="dropdown-item" href="#">3</a>
+    <a class="dropdown-item" href="#">4</a>
+    <a class="dropdown-item" href="#">5</a>
+  </div>
+</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 {% endblock %}

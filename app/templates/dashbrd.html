@@ -8,6 +8,18 @@
         <h4 class = "grp_header">My Groups 
             <button class=" btn recom">Recommend Matches</button>
         </h4>
+
+        <!-- <div class="row mb-2">     
+            <div class="col">
+                <h4 class="grp_header">My Groups </h4>
+            </div>
+        
+            <div class="col btn-align">
+                <button class="btn btn-outline-success my-2 my-sm-0">
+                    Recommended Matches
+                </button>
+            </div>
+        </div>  -->
     {% endif %} 
 
     {% if current_user.type == "Regular" and not gps %}
@@ -22,7 +34,7 @@
 
     {% if current_user.type == "Organizer" and not gps %}
         <div class = "alert alert-primary">
-            You Currently Have No Groups
+            You Currently Have No Sets
         </div>
     {% endif %} 
     
