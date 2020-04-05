@@ -188,8 +188,8 @@ def joinAGroup(username):
 
 
 @login_required
-@app.route('/<username>/groupmembers/<gp_id>',  methods=['GET', 'POST'])
-def members(username, gp_id):
+@app.route('/members/<gp_id>',  methods=['GET', 'POST'])
+def members(gp_id):
     gp_name = Grouped.query.filter_by(group_id=gp_id).first()
     if current_user.type == "Organizer":
         getMembers = (

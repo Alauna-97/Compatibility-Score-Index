@@ -24,10 +24,11 @@
     {% block css %} {% endblock%}
   </head>
   <body>
-    <header class="mb-3">
+    <header class="">
       {% include "header.html" %}
     </header>
     <main>
+      {% block mains %}{% endblock %}
       <div class="container">
         {% block main %}{% endblock %}
       </div>

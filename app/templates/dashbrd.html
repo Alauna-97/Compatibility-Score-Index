@@ -29,8 +29,8 @@
     <div class = "row">
         {% if current_user.type == "Organizer" and gps %}
             {% for item in gps %}
-                <div class="col-4">
-                    <a href="{{ url_for('members', username=current_user.username, gp_id=item.group_id) }}">
+                <div class="col-4 grid-spacing">
+                    <a href="{{ url_for('members', gp_id=item.group_id) }}">
                     <button class = "tile">
                         <div class = "grp_title py-3"> 
                             {{ item.group_name }} <span class="code ml-4">{{ item.code }}</span>

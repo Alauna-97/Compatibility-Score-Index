@@ -1,4 +1,4 @@
-header.mb-3 {
+header {
   background: #6b92e8;
 }
 
@@ -92,8 +92,8 @@ button#dropdownMenuButton.btn-username {
 
 footer {
   background: #22252e;
-  margin-top: 2rem;
 }
+
 footer a.navbar-brand.ml-1 {
   color: #6b92e8;
   font-style: normal;
@@ -291,6 +291,10 @@ div.register-form form.card-user-reg div.form-group {
   margin-left: 3rem;
 }
 
+.col-4.sidebar-spacing {
+  max-width: 30%;
+}
+
 .img-thumbnail {
   padding: 0.25rem;
   margin-left: 3rem;
@@ -351,8 +355,6 @@ div.register-form form.card-user-reg div.form-group {
 }
 
 .socialmd {
-  margin-top: 5rem;
-  margin-bottom: 2rem;
   padding-bottom: 3rem;
   text-align: center;
 }
@@ -391,6 +393,10 @@ div.register-form form.card-user-reg div.form-group {
   line-height: 1;
   border-radius: 0.25rem;
   transition: 0.5s;
+}
+
+.row.extra-marg {
+  margin-right: 0px;
 }
 
 .tile:hover {
@@ -462,6 +468,10 @@ div.register-form form.card-user-reg div.form-group {
   color: #0e267a;
   background-color: #fff;
   border: 1px solid #0e267a;
+}
+
+.col-4.grid-spacing {
+  max-width: 30%;
 }
 
 /********* Member of Groups *********/
