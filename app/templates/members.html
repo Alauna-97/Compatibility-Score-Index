@@ -22,9 +22,8 @@
   </div>
   
     <span class="btn-right">
-      </span
-    >
-  </h4>
+      </span>
+
   {% endif %}
 
   <div class="row">
@@ -40,8 +39,6 @@
     {% endfor %} {% endif %}
   </div>
   
-
-<!-- Modal -->
 <div class="modal fade" id="formgroupmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -51,35 +48,36 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+
       <div class="modal-body">
-        <div class="dropdown show">
-         <h5 class="modal-title mb-2" id="PopUpTitle">Group By:</h5> 
-  <button class="btn btn-outline-success my-2 my-sm-0 dropdown-toggle mb-3" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Choose one...
-  </button>
+        <form
+        action="{{ url_for('members', gp_id = gp_id) }}"
+        method="post"
+        >
 
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-    <a class="dropdown-item" href="#">Compatible</a>
-    <a class="dropdown-item" href="#">Uncompatible</a>
-  </div>
-</div>
-<div class="dropdown show">
-         <h5 class="modal-title mb-2 mt-4" id="PopUpTitle">Number of Persons:</h5> 
-  <button class="btn btn-outline-success my-2 my-sm-0 dropdown-toggle mb-3" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Choose one...
-  </button>
+        {{ form.csrf_token }}
 
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-    <a class="dropdown-item" href="#">2</a>
-    <a class="dropdown-item" href="#">3</a>
-    <a class="dropdown-item" href="#">4</a>
-    <a class="dropdown-item" href="#">5</a>
-  </div>
-</div>
+        <div class="dropdown">
+
+          <h5 class="modal-title mb-2" id="PopUpTitle">Group By:</h5> 
+          {{ form.grpBy(class='btn btn-outline-success my-2 my-sm-0 dropdown-toggle mb-3') }}
+
+        </div>
+        
+        <div class="dropdown">
+
+          <h5 class="modal-title mb-2 mt-4" id="PopUpTitle">Number of Persons:</h5>  
+          {{ form.numPersons(class='btn btn-outline-success my-2 my-sm-0 dropdown-toggle mb-3') }}
+
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Create</button>
+        
+          {{ form.submit(class='btn btn-outline-success my-2 my-sm-0') }}
+      
+        </form>
+
       </div>
     </div>
   </div>

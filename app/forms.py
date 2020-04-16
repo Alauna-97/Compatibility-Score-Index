@@ -80,10 +80,17 @@ class newGroup(FlaskForm):
 
 
 class joinNewGroup(FlaskForm):
-    group_name = StringField('Group Name:', validators=[DataRequired(), Length(
-        min=4, max=30, message=('Name should be Characters Only'))])
-
     group_code = StringField('Code:', validators=[DataRequired(), Length(
         min=4, max=30, message=('Name should be Characters Only'))])
 
     submit = SubmitField('Join Group')
+
+
+class Groupings(FlaskForm):
+    grpBy = SelectField('Criteria', choices=[(
+        0, 'Select an option'), ('compatible', 'Compatible'), ('uncompatible', 'Uncompatible')])
+
+    numPersons = SelectField('Amount', choices=[(
+        0, 'Select an option'), ('2', 'two'), ('3', 'three'), ('4', 'four'), ('5', 'five')])
+
+    submit = SubmitField('Create')

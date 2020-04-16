@@ -1,0 +1,129 @@
+{% extends "sidebar.html" %} {% block div %}
+<div>
+  <div class="page_header">
+    <h2 class="dash_header">{{gp_name.group_name}}</h2>
+    <h4 class="dash_header2">{{grpAmt}} Groups of {{numPersons}}: <button class=" btn recom">Disband Groups</button></h2>
+  </div>
+
+  <div class="row">
+    {% for i in range(1,grpAmt+1) %}
+    <div class="col-4 mb-4">
+      <button class="grp-tile" data-toggle="modal" data-target="#formgroupmodal">
+        <div class="py-3">
+          {{'Group ' + i|string()}}
+        </div>
+      </button>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<div class="modal fade" id="formgroupmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="PopUpTitle">Group 1</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="randomizeData()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="hr-bar"></div>
+      <canvas id="myChart" width="450" height="250"></canvas>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="randomizeData()">Close</button>
+            <button type="button" class="btn btn-primary" onclick="randomizeData()" >Explore</button>        
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var ctx = document.getElementById("myChart");
+
+  //Global
+  // Chart.defaults.global.defaultFontFamily = "Monserrat";
+  // Chart.defaults.global.defaultFontSize = 17;
+  Chart.defaults.scale.gridLines.drawOnChartArea = false;
+
+  let firstValues = [90, 75, 80, 95];
+  let firstlabels = ["Ethnicity", "Age", "Leadership", "Personality"];
+  let seclabels = ["Ethnicity", "Age", "Leadership", "Personality", "Education", "Field", "Gender", "Height", "Hobbies"];
+  initial = {
+        labels: firstlabels,
+        datasets: [
+          {
+            label: "Scores",
+            data: firstValues,
+            backgroundColor: ["#4E77D2", "#7EA2F3", "#ABC5FE", "#D8E4FF"],
+            borderColor: ["#4E77D2", "#7EA2F3", "#ABC5FE", "#D8E4FF"],
+            borderWidth: 1,
+            maxBarThickness: 16,
+        },
+      ]
+    };
+
+  var myChart = new Chart(ctx, {
+    type: "horizontalBar",
+    data: initial,
+    options: {
+      responsive: false,
+      maintainAspectRatio: this.maintainAspectRatio,
+      title: {
+        display: true,
+        text: "Stats",
+        fontSize: 18,
+      },
+      legend: {
+        display: false,
+        labels: {
+          // This more specific font property overrides the global property
+          fontColor: "rgba(0, 0, 0, 0.8)",
+          fontFamily: "Monserrat",
+          fontsize: 16,
+          fontColor: "red"
+        },
+      },
+      tooltips: {
+        enabled: false,
+      },
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        ],
+        xAxes: [
+          {
+            stacked: true,
+            scaleLabel: {
+              labelString: "Compatibility",
+              display: true,
+              fontSize: 16,
+            }
+          },
+        ]
+      },
+    },
+  });
+
+  function randomizeData() {
+    let newfirstValues = firstValues.map(x => Math.floor(Math.random() * 80));
+    let newfirstlabels = getRandom(seclabels, 4)
+    initial.datasets[0].data = newfirstValues;
+    initial.labels = newfirstlabels;
+    myChart.update();
+  };
+
+  function getRandom(arr, size) {
+    var copy = arr.slice(0), rand = [];
+    for (var i = 0; i < size && i < copy.length; i++) {
+      var index = Math.floor(Math.random() * copy.length);
+      rand.push(copy.splice(index, 1)[0]);
+    }
+    return rand;
+  }
+</script>
+{% endblock %}

@@ -4,11 +4,11 @@ Jinja2 Documentation:    http://jinja.pocoo.org/2/documentation/
 Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
-
+import math
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import LoginForm, SignUp, newGroup, joinNewGroup
+from app.forms import LoginForm, SignUp, Groupings, newGroup, joinNewGroup
 # from app.forms import AboutYou
 from werkzeug.security import check_password_hash
 from app.models import User, Regular, Organizer, Grouped, joinGroup, Scores
@@ -163,18 +163,17 @@ def joinAGroup(username):
     form = joinNewGroup()
     if request.method == "POST" and form.validate_on_submit():
         # Collects username and email info from form
-        group_name = form.group_name.data
         code = form.group_code.data
 
         # Checks if another user has this username
-        existing_group = db.session.query(
-            Grouped).filter_by(group_name=group_name).first()
+        existing_code = db.session.query(
+            Grouped).filter_by(code=code).first()
 
         # If valid credentials, flash success and redirect
-        if existing_group.group_name == group_name and existing_group.code == code:
+        if existing_code.code == code:
 
             join_gp = joinGroup(user_id=current_user.user_id,
-                                group_id=existing_group.group_id)
+                                group_id=existing_code.group_id)
 
             db.session.add(join_gp)
             db.session.commit()
@@ -197,9 +196,36 @@ def members(gp_id):
                 joinGroup).filter_by(group_id=gp_id).all()
         )
 
-    # if current_user.type == "Regular":
+        mbrsCopy = getMembers
 
-    return render_template('members.html', getMembers=getMembers, gp_name=gp_name)
+        form = Groupings()
+        if request.method == "POST" and form.validate_on_submit():
+
+            grpBy = form.grpBy.data
+            numPersons = form.numPersons.data
+
+            # THIS ONLY ALLOWS FOR THE GROUPS TO SHOW
+
+            length = len(getMembers)
+            print("Length: ", length)
+
+            grpAmt = round(length/int(numPersons))
+            print("grpAmt rounded: ", grpAmt)
+
+            gp = []
+            for i in getMembers:
+                gp = gp + [i[1].first_name + " " + i[1].last_name]
+
+            return redirect(url_for('miniGrps', gp_id=gp_id, grpAmt=grpAmt, numPersons=numPersons))
+
+    return render_template('members.html', getMembers=getMembers, gp_name=gp_name, gp_id=gp_id, form=form)
+
+
+@login_required
+@app.route('/minigroups/<gp_id>/<numPersons>/<grpAmt>',  methods=['GET', 'POST'])
+def miniGrps(gp_id, numPersons, grpAmt):
+    gp_name = Grouped.query.filter_by(group_id=gp_id).first()
+    return render_template('miniGrps.html', gp_name=gp_name, numPersons=numPersons, grpAmt=int(grpAmt))
 
 
 @app.route('/about/<typeUser>', methods=["GET", "POST"])
