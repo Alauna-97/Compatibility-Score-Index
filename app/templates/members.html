@@ -1,12 +1,12 @@
 {% extends "sidebar.html" %} {% block div %}
 <div>
   <div class="page_header">
-    <h2 class="dash_header">{{gp_name.group_name}}</h2>
+    <h2 class="dash_header">{{set_name.set_name}}</h2>
     <!-- {% include 'flash_messages.html' %} -->
   </div>
 
   <!-- <h4 class="grp_header">Members:</h4> -->
-  {% if current_user.type == "Organizer"%}
+  {% if current_user.type == "Administrator"%}
   <div class="row mb-3">
           
     <div class="col">
@@ -27,7 +27,7 @@
   {% endif %}
 
   <div class="row">
-    {% if current_user.type == "Organizer" and getMembers %} {% for item in
+    {% if current_user.type == "Administrator" and getMembers %} {% for item in
     getMembers %}
     <div class="col-4 mb-4">
       <button class="member-tile">
@@ -51,7 +51,7 @@
 
       <div class="modal-body">
         <form
-        action="{{ url_for('members', gp_id = gp_id) }}"
+        action="{{ url_for('members', sid = sid) }}"
         method="post"
         >
 

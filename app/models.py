@@ -49,20 +49,20 @@ class User(db.Model):
         return '<User %r>' % (self.username)
 
 
-class Organizer (User):
-    __tablename__ = 'organizer'
+class Administrator (User):
+    __tablename__ = 'administrator'
 
     user_id = db.Column(db.Integer, db.ForeignKey(
         'user.user_id'), primary_key=True)
-    occupation = db.Column(db.String(30))
-    groups = db.relationship('Grouped', backref='admin')
+    position = db.Column(db.String(30))
+    groups = db.relationship('Sets', backref='admin')
 
-    def __init__(self, type, first_name, last_name, email, username, password, occupation):
+    def __init__(self, type, first_name, last_name, email, username, password, position):
         super().__init__(type, first_name, last_name, email, username, password)
-        self.occupation = occupation
+        self.position = position
 
     __mapper_args__ = {
-        'polymorphic_identity': 'Organizer'
+        'polymorphic_identity': 'Administrator'
     }
 
 
@@ -80,9 +80,9 @@ class Regular (User):
     education = db.Column(db.String(50))
     hobby = db.Column(db.String(50))
     faculty = db.Column(db.String(50))
-    work = db.Column(db.String(50))
+    occupation = db.Column(db.String(50))
 
-    def __init__(self, type, first_name, last_name, email, username, password, gender, age, height, leadership, ethnicity, personality, education, hobby, faculty, work):
+    def __init__(self, type, first_name, last_name, email, username, password, gender, age, height, leadership, ethnicity, personality, education, hobby, faculty, occupation):
         super().__init__(type, first_name, last_name, email, username, password)
         self.ethnicity = ethnicity
         self.age = age
@@ -93,24 +93,24 @@ class Regular (User):
         self.hobby = hobby
         self.education = education
         self.faculty = faculty
-        self.work = work
+        self.occupation = occupation
 
     __mapper_args__ = {
         'polymorphic_identity': 'Regular'
     }
 
 
-class Grouped (db.Model):
-    __tablename__ = 'Grouped'
+class Sets (db.Model):
+    __tablename__ = 'Sets'
 
-    group_id = db.Column(db.Integer, primary_key=True)
-    group_name = db.Column(db.String(20), unique=True)
+    sid = db.Column(db.Integer, primary_key=True)
+    set_name = db.Column(db.String(20), unique=True)
     purpose = db.Column(db.String(30))
     code = db.Column(db.String(10))
     administrator = db.Column(db.Integer, db.ForeignKey(
-        'organizer.user_id'))
+        'administrator.user_id'))
 
-    def __init__(self, group_name, purpose, administrator):
+    def __init__(self, set_name, purpose, administrator):
         def random_Coder(lgth):
             """Generate a random string of letters, digits and special characters """
             return ''.join(random.choice(string.ascii_letters + string.digits + string.punctuation) for i in range(lgth))
@@ -119,7 +119,7 @@ class Grouped (db.Model):
             """Generate a random string of letters, digits and special characters Option 2"""
             return uuid.uuid4().hex.upper()[0:lgth]
 
-        self.group_name = group_name
+        self.set_name = set_name
         self.purpose = purpose
         self.administrator = administrator
         # self.code = random_Coder(10)
@@ -127,9 +127,9 @@ class Grouped (db.Model):
 
     def get_id(self):
         try:
-            return unicode(self.group_id)  # python 2 support
+            return unicode(self.sid)  # python 2 support
         except NameError:
-            return str(self.group_id)  # python 3 support
+            return str(self.sid)  # python 3 support
 
     def get_Code(self):
         try:
@@ -138,19 +138,35 @@ class Grouped (db.Model):
             return str(self.code)  # python 3 support
 
 
-class joinGroup(db.Model):
-    __tablename__ = 'joinGroup'
+class joinSet(db.Model):
+    __tablename__ = 'joinSet'
 
     user_id = db.Column(db.Integer, db.ForeignKey(
         'regular.user_id'), primary_key=True)
-    group_id = db.Column(db.Integer, db.ForeignKey(
-        'Grouped.group_id'), primary_key=True)
+    sid = db.Column(db.Integer, db.ForeignKey(
+        'Sets.sid'), primary_key=True)
 
     def get_gid(self):
         try:
-            return unicode(self.group_id)  # python 2 support
+            return unicode(self.sid)  # python 2 support
         except NameError:
-            return str(self.group_id)  # python 3 support
+            return str(self.sid)  # python 3 support
+
+
+class SetUserGp(db.Model):
+    __tablename__ = 'SetUserGp'
+
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        'regular.user_id'), primary_key=True)
+    sid = db.Column(db.Integer, db.ForeignKey(
+        'Sets.sid'), primary_key=True)
+    gp_num = db.Column(db.Integer,  primary_key=True)
+
+    def get_gid(self):
+        try:
+            return unicode(self.sid)  # python 2 support
+        except NameError:
+            return str(self.sid)  # python 3 support
 
 
 class Scores(db.Model):

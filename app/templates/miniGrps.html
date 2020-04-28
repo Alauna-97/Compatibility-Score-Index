@@ -1,14 +1,15 @@
 {% extends "sidebar.html" %} {% block div %}
 <div>
   <div class="page_header">
-    <h2 class="dash_header">{{gp_name.group_name}}</h2>
+    <h2 class="dash_header">{{set_name.set_name}}</h2>
+    <h3 class="dash_header">{{set_name.purpose}}</h3>
     <h4 class="dash_header2">{{grpAmt}} Groups of {{numPersons}}: <button class=" btn recom">Disband Groups</button></h2>
   </div>
 
   <div class="row">
-    {% for i in range(1,grpAmt+1) %}
+    {% for i in range(1, grpAmt+1) %}
     <div class="col-4 mb-4">
-      <button class="grp-tile" data-toggle="modal" data-target="#formgroupmodal">
+      <button class="grp-tile" data-toggle="modal" data-target="#formgroupmodal" onclick="changeText(this)">
         <div class="py-3">
           {{'Group ' + i|string()}}
         </div>
@@ -27,7 +28,14 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="hr-bar"></div>
+        <div class="row">
+          {% for i in mini_gp[1] %}
+            <div class="col">
+              {{i[1].first_name}} {{i[1].last_name}}
+            </div>  
+            {% endfor %}
+        </div>    
+      <div class="hr-bar"></div>
       <canvas id="myChart" width="450" height="250"></canvas>
       </div>
       <div class="modal-footer">
@@ -39,6 +47,9 @@
 </div>
 
 <script>
+  function changeText(id) {
+    alert(id);
+}
   var ctx = document.getElementById("myChart");
 
   //Global

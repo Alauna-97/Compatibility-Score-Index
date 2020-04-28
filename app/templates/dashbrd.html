@@ -5,7 +5,7 @@
     </div>
 
     {% if current_user.type == "Regular"%}
-        <h4 class = "grp_header">My Groups 
+        <h4 class = "grp_header">My Sets 
             <button class=" btn recom">Recommend Matches</button>
         </h4>
 
@@ -24,28 +24,28 @@
 
     {% if current_user.type == "Regular" and not gps %}
         <div class = "alert alert-primary">
-            You Currently Have No Groups
+            You are not a member of any Sets
         </div>
     {% endif %}
 
-    {% if current_user.type == "Organizer" %}
+    {% if current_user.type == "Administrator" %}
         <h4 class = "grp_header">My Sets</h4>
     {% endif %} 
 
-    {% if current_user.type == "Organizer" and not gps %}
+    {% if current_user.type == "Administrator" and not gps %}
         <div class = "alert alert-primary">
             You Currently Have No Sets
         </div>
     {% endif %} 
     
     <div class = "row">
-        {% if current_user.type == "Organizer" and gps %}
+        {% if current_user.type == "Administrator" and gps %}
             {% for item in gps %}
                 <div class="col-4 grid-spacing">
-                    <a href="{{ url_for('members', gp_id=item.group_id) }}">
+                    <a href="{{ url_for('members', sid=item.sid) }}">
                     <button class = "tile">
                         <div class = "grp_title py-3"> 
-                            {{ item.group_name }} <span class="code ml-4">{{ item.code }}</span>
+                            {{ item.set_name }} <span class="code ml-4">{{ item.code }}</span>
                         </div>
                     </button>
                     </a>
@@ -54,8 +54,8 @@
         {% endif %} 
 
         <div class = "col-4">
-            {% if current_user.type == "Organizer" %}
-            <a href="{{ url_for('createGroup', username=current_user.username) }}">
+            {% if current_user.type == "Administrator" %}
+            <a href="{{ url_for('createSet', username=current_user.username) }}">
             <button class = "tile add">
                 <img src="../static/images/plus.png" width="50" height="50" class = "img-add" />
             </button>
@@ -70,7 +70,7 @@
                 <div class="col-4">
                     <button class = "tile">
                         <div class = "grp_title py-3"> 
-                            {{ item[1].group_name }}
+                            {{ item[1].set_name }}
                         </div>
                     </button>
                 </div>
@@ -79,7 +79,7 @@
 
         <div class = "col-4">
             {% if current_user.type == "Regular" %}
-            <a href="{{ url_for('joinAGroup', username=current_user.username) }}">
+            <a href="{{ url_for('joinASet', username=current_user.username) }}">
             <button class = "tile add">
                 <img src="../static/images/plus.png" width="50" height="50" class = "img-add" />
             </button>
