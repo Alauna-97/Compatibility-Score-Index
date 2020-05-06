@@ -14,7 +14,6 @@ from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet
 # from app.forms import AboutYou
 from werkzeug.security import check_password_hash
 from app.models import User, Regular, Administrator, Sets, joinSet, Scores, SetUserGp
-
 fake = Faker()
 
 ###
@@ -106,7 +105,7 @@ def login():
         # If valid credentials, flash success and redirect
         if user is not None and check_password_hash(user.password, form.password.data):
             login_user(user)
-            flash('Login Successful')
+            flash('Login Successful', 'success')
             return redirect(url_for('dashboard', username=current_user.username))
 
         # Flash error message with incorrect username/password
@@ -256,7 +255,9 @@ def members(sid):
             db.session.query(joinSet, Regular, User).join(
                 joinSet).filter_by(sid=sid).all()
         )
-
+        print(getMembers)
+        print("")
+        print("")
         mbrsCopy = getMembers
 
         form = Groupings()
@@ -282,14 +283,23 @@ def members(sid):
                     # db.session.add(sug)
                     # db.session.commit()
 
-            getGroups = (db.session.query(
+            sug = (db.session.query(
                 SetUserGp).filter_by(sid=set_name.sid).all())
 
             print("")
             print("")
-            print(getGroups)
+            print(sug)
+            print("")
+            print("")
+            lst = []
+            for p in sug:
+                lst = lst + [p.gp_num]
 
-            # return render_template('miniGrps.html', set_name=set_name, numPersons=numPersons, grpAmt=grpAmt, mini_gp=mini_gp)
+            # sug = list(dict.fromkeys(lst))
+            # sug = getGroups + sug
+            # print(sug[-(grpAmt):])
+
+            return render_template('miniGrps.html', set_name=set_name, numPersons=numPersons, grpAmt=grpAmt, mini_gp=mini_gp, sug=sug)
     return render_template('members.html', getMembers=getMembers, set_name=set_name, sid=sid, form=form)
 
 
