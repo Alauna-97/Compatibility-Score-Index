@@ -16,10 +16,10 @@ class User(db.Model):
     username = db.Column(db.String(30), unique=True)
     password = db.Column(db.String(255))
 
-    # __mapper_args__ = {
-    #     'polymorphic_identity': 'user',
-    #     'polymorphic_on': type
-    # }
+    __mapper_args__ = {
+        'polymorphic_identity': 'user',
+        'polymorphic_on': type
+    }
 
     def __init__(self, type, first_name, last_name, email, username, password):
         self.type = type
@@ -62,7 +62,7 @@ class Organizer (User):
         self.occupation = occupation
 
     __mapper_args__ = {
-        'polymorphic_identity': 'organizer'
+        'polymorphic_identity': 'Organizer'
     }
 
 
@@ -96,7 +96,7 @@ class Regular (User):
         self.work = work
 
     __mapper_args__ = {
-        'polymorphic_identity': 'regular'
+        'polymorphic_identity': 'Regular'
     }
 
 
@@ -145,6 +145,12 @@ class joinGroup(db.Model):
         'regular.user_id'), primary_key=True)
     group_id = db.Column(db.Integer, db.ForeignKey(
         'Grouped.group_id'), primary_key=True)
+
+    def get_gid(self):
+        try:
+            return unicode(self.group_id)  # python 2 support
+        except NameError:
+            return str(self.group_id)  # python 3 support
 
 
 class Scores(db.Model):

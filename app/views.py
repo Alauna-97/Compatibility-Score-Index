@@ -8,7 +8,7 @@ This file creates your application.
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import LoginForm, SignUp
+from app.forms import LoginForm, SignUp, newGroup, joinNewGroup
 # from app.forms import AboutYou
 from werkzeug.security import check_password_hash
 from app.models import User, Regular, Organizer, Grouped, joinGroup, Scores
@@ -57,7 +57,15 @@ def login():
 @login_required
 def dashboard(username):
     """Render the website's dashboard page."""
-    return render_template('dashbrd.html', user=current_user.username)
+    if current_user.type == "Organizer":
+        getGroups = Grouped.query.filter_by(
+            administrator=current_user.user_id).all()
+    else:
+        getGroups = (
+            db.session.query(joinGroup, Grouped).join(
+                joinGroup).filter_by(user_id=current_user.user_id).all()
+        )
+    return render_template('dashbrd.html', gps=getGroups)
 
 
 @app.route("/logout")
@@ -100,9 +108,12 @@ def register(typeUser):
 
         # If unique email address and username provided then log new user
         if existing_username is None and existing_email is None:
-            user = User(type=typeUser, first_name=request.form['fname'], last_name=request.form['lname'],
-                        email=request.form['email'], username=request.form['username'], password=request.form['password'])
-
+            if typeUser == "Regular":
+                user = Regular(type=typeUser, first_name=request.form['fname'], last_name=request.form['lname'],
+                               email=request.form['email'], username=request.form['username'], password=request.form['password'], gender="", age="", height="", leadership="", ethnicity="", personality="", education="", hobby="", faculty="", work="")
+            else:
+                user = Organizer(type=typeUser, first_name=request.form['fname'], last_name=request.form['lname'],
+                                 email=request.form['email'], username=request.form['username'], password=request.form['password'], occupation="")
             # Adds a regular user info to the database
             db.session.add(user)
             db.session.commit()
@@ -121,13 +132,83 @@ def register(typeUser):
     return render_template("signup.html", form=form)
 
 
+@login_required
+@app.route('/<username>/createGroup',  methods=['GET', 'POST'])
+def createGroup(username):
+    """Render the website's  page."""
+    form = newGroup()
+    if request.method == "POST" and form.validate_on_submit():
+        gp_name = form.group_name.data
+
+        if gp_name is not None:
+            gp = Grouped(
+                group_name=gp_name, purpose=request.form['purpose'], administrator=current_user.user_id)
+
+            # Adds a regular user info to the database
+            db.session.add(gp)
+            db.session.commit()
+
+            # Success Message Appears
+            flash('Group Added', 'success')
+
+            # Redirects to Profile Page
+            return redirect(url_for('dashboard', username=current_user.username))
+    return render_template('createGroup.html', form=form)
+
+
+@login_required
+@app.route('/<username>/joinGroup',  methods=['GET', 'POST'])
+def joinAGroup(username):
+    """Render the website's  page."""
+    form = joinNewGroup()
+    if request.method == "POST" and form.validate_on_submit():
+        # Collects username and email info from form
+        group_name = form.group_name.data
+        code = form.group_code.data
+
+        # Checks if another user has this username
+        existing_group = db.session.query(
+            Grouped).filter_by(group_name=group_name).first()
+
+        # If valid credentials, flash success and redirect
+        if existing_group.group_name == group_name and existing_group.code == code:
+
+            join_gp = joinGroup(user_id=current_user.user_id,
+                                group_id=existing_group.group_id)
+
+            db.session.add(join_gp)
+            db.session.commit()
+
+            flash('Successfully Added to Group')
+
+            # return redirect(url_for('dashboard', username=current_user.username))
+
+        return redirect(url_for('dashboard', username=current_user.username))
+    return render_template('joinGroup.html', form=form)
+
+
+@login_required
+@app.route('/members/<gp_id>',  methods=['GET', 'POST'])
+def members(gp_id):
+    gp_name = Grouped.query.filter_by(group_id=gp_id).first()
+    if current_user.type == "Organizer":
+        getMembers = (
+            db.session.query(joinGroup, Regular, User).join(
+                joinGroup).filter_by(group_id=gp_id).all()
+        )
+
+    # if current_user.type == "Regular":
+
+    return render_template('members.html', getMembers=getMembers, gp_name=gp_name)
+
+
 @app.route('/about/<typeUser>', methods=["GET", "POST"])
 def aboutUser(typeUser):
     # How am I going to pass the above information
     form = SignUp()
     if request.method == "POST" and form.validate_on_submit():
-        user = Regular(type="regular", first_name=request.form['fname'], last_name=request.form['lname'], email=request.form['email'], username=request.form['username'], password=request.form['password'], gender=request.form['sex'], age=request.form['age'], height=request.form[
-                       'height'], leadership=request.form['leadership'], ethnicity=request.form['ethnicity'], personality=request.form['personality'], education=request.form['education'], hobby=request.form['hobby'], faculty=request.form['faculty'], work=request.form['work'])
+        user = Regular(type="Regular", first_name=request.form['fname'], last_name=request.form['lname'], email=request.form['email'], username=request.form['username'], password=request.form['password'], gender=request.form['sex'], age=request.form['age'], height=request.form[
+            'height'], leadership=request.form['leadership'], ethnicity=request.form['ethnicity'], personality=request.form['personality'], education=request.form['education'], hobby=request.form['hobby'], faculty=request.form['faculty'], work=request.form['work'])
 
         db.session.add(user)
 
@@ -148,6 +229,7 @@ def aboutUser(typeUser):
 def result():
     """Render the website's result page."""
     return render_template('results.html')
+
 
 # user_loader callback. This callback is used to reload the user object from
 # the user ID stored in the session

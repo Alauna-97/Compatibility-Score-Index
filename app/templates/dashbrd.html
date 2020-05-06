@@ -2,39 +2,101 @@
     <div class = "page_header">
         <h2 class = "dash_header">Dashboard</h2>
         {% include 'flash_messages.html' %}
+    </div>
+
+    {% if current_user.type == "Regular"%}
         <h4 class = "grp_header">My Groups 
-        <button class=" btn recom">Recommend Matches</button>
+            <button class=" btn recom">Recommend Matches</button>
         </h4>
-    </div>
-    <div class = "alert alert-primary">
-        You Currently Have No Groups
-    </div>
-    <!-- <div class = "row"> 
-        <div class="col-4">
-            <button class = "tile">
-                <div class = "grp_title"> 
-                    <p class = "tl"> </p> 
-                </div>
-            </button>
+
+        <!-- <div class="row mb-2">     
+            <div class="col">
+                <h4 class="grp_header">My Groups </h4>
+            </div>
+        
+            <div class="col btn-align">
+                <button class="btn btn-outline-success my-2 my-sm-0">
+                    Recommended Matches
+                </button>
+            </div>
+        </div>  -->
+    {% endif %} 
+
+    {% if current_user.type == "Regular" and not gps %}
+        <div class = "alert alert-primary">
+            You Currently Have No Groups
         </div>
-        <div class = "col-4">
-            <button class = "tile">
-                <div class = "grp_title"> 
-                    <p class = "tl"></p> 
+    {% endif %}
+
+    {% if current_user.type == "Organizer" %}
+        <h4 class = "grp_header">My Sets</h4>
+    {% endif %} 
+
+    {% if current_user.type == "Organizer" and not gps %}
+        <div class = "alert alert-primary">
+            You Currently Have No Sets
+        </div>
+    {% endif %} 
+    
+    <div class = "row">
+        {% if current_user.type == "Organizer" and gps %}
+            {% for item in gps %}
+                <div class="col-4 grid-spacing">
+                    <a href="{{ url_for('members', gp_id=item.group_id) }}">
+                    <button class = "tile">
+                        <div class = "grp_title py-3"> 
+                            {{ item.group_name }} <span class="code ml-4">{{ item.code }}</span>
+                        </div>
+                    </button>
+                    </a>
                 </div>
-            </button>
-        </div> -->
+            {% endfor %}
+        {% endif %} 
 
         <div class = "col-4">
+            {% if current_user.type == "Organizer" %}
+            <a href="{{ url_for('createGroup', username=current_user.username) }}">
             <button class = "tile add">
                 <img src="../static/images/plus.png" width="50" height="50" class = "img-add" />
             </button>
+            </a>
+            {% endif %}
         </div>
     </div>
-    
 
-        
-    <h4 class = "grp_header2">Current Friends </h4>
+    <div class = "row">
+        {% if current_user.type == "Regular" and gps %}
+            {% for item in gps %}
+                <div class="col-4">
+                    <button class = "tile">
+                        <div class = "grp_title py-3"> 
+                            {{ item[1].group_name }}
+                        </div>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %} 
+
+        <div class = "col-4">
+            {% if current_user.type == "Regular" %}
+            <a href="{{ url_for('joinAGroup', username=current_user.username) }}">
+            <button class = "tile add">
+                <img src="../static/images/plus.png" width="50" height="50" class = "img-add" />
+            </button>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+
+    {% if current_user.type == "Regular" %}
+       <h4 class = "grp_header2">Current Friends </h4>
+        <div class = "alert alert-primary">
+            You Currently Have No Friends
+        </div>
+        <button class=" btn recom2">All</button>
+    {% endif %}  
+    
     <!-- <div class = "row"> 
         <div class="col-4">
             <button class = "tile">
@@ -57,15 +119,5 @@
                 </div>
             </button>
         </div> -->
-
-        <div class = "alert alert-primary">
-            You Currently Have No Friends
-        </div>
-
-        <button class=" btn recom2">All</button>
     </div>
-
-    
-
-
 {% endblock %}

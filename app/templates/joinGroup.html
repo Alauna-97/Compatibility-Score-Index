@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% block main %}
+<div class="register-form center-block">
+  <h2 class="mb-5 mt-3">Join A Group</h2>
+  <form
+    action="{{ url_for('joinAGroup', username=current_user.username) }}"
+    method="post"
+    class="card-user-login mb-5 form-horizontal"
+  >
+    {{ form.csrf_token }}
+    <div class="form-body-login">
+      <div class="row mt-5 pt-5">
+        <div class="col">
+          <div class="form-group row">
+            {{ form.group_name.label(class='control-label') }}
+            <div class="col-sm-7">
+              {{ form.group_name(class='form-control') }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row my-2">
+        <div class="col">
+          <div class="form-group row">
+            {{ form.group_code.label(class='control-label') }}
+            <div class="col-sm-7">
+              {{ form.group_code(class='form-control') }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row my-2">
+        <div class="col">
+          <div class="row">
+            <div class="mt-1 mb-4">
+              {{ form.submit(class='btn btn-outline-success my-2 my-sm-0') }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
