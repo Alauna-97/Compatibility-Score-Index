@@ -1,12 +1,12 @@
 {% extends "sidebar.html" %} {% block div %}
 <div>
   <div class="page_header">
-    <h2 class="dash_header">{{set_name.set_name}}</h2>
+    <h2 class="dash_header">{{fullSet[0][1]}}</h2>
     <!-- {% include 'flash_messages.html' %} -->
   </div>
 
   <!-- <h4 class="grp_header">Members:</h4> -->
-  {% if current_user.type == "Administrator"%}
+  {% if session.get('TYPE') == "Organizer"%}
   <div class="row mb-3">
           
     <div class="col">
@@ -27,12 +27,12 @@
   {% endif %}
 
   <div class="row">
-    {% if current_user.type == "Administrator" and getMembers %} {% for item in
+    {% if session.get('TYPE') == "Organizer" and getMembers %} {% for item in
     getMembers %}
     <div class="col-4 mb-4">
       <button class="member-tile">
         <div class="grp_title py-3">
-          {{ item[1].first_name }} {{ item[1].last_name }}
+          {{ item[0] }} {{ item[1] }}
         </div>
       </button>
     </div>

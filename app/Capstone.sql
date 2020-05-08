@@ -1,6 +1,6 @@
-drop database IF EXISTS csi;
-create database csi;
-use csi;
+drop database IF EXISTS csi2;
+create database csi2;
+use csi2;
 
 drop table IF EXISTS User;
 drop table IF EXISTS Regular;
@@ -35,14 +35,13 @@ create table Regular (
     personality varchar(35),
     education varchar(35),
     hobby varchar(50),
-    faculty varchar(50),
     occupation varchar(50),
     primary key(user_id), 
     foreign key (user_id) references User(user_id) on delete cascade
 );
 
 create table Organizer (
-    user_id varchar (5), 
+    user_id int auto_increment not null, 
     position varchar (50),
     primary key(user_id),
     foreign key (user_id) references User(user_id) on delete cascade
@@ -76,36 +75,47 @@ create table SetUserGroup (
     foreign key (sid) references Sets(sid) on delete cascade
 );
 
+create table pin_user (
+    user_id int not null,
+    other_id int not null,
+    primary key(user_id, other_id),
+    foreign key (user_id) references User (user_id) on delete cascade on update cascade,
+    foreign key (other_id) references User (user_id) on delete cascade on update cascade
+);
 
 create table Administrator (
-    admin_id int auto_increment not null,
+    admin_id varchar(10) not null,
     first_name varchar(30),
     last_name varchar(30),
     primary key (admin_id)
 );
 
 create table Dictionary (
-    admin_id int auto_increment not null,
-    dict_id int auto_increment not null,
-    music varchar(250),
-    sports varchar(250),
-    shopping varchar(250),
-    dancing varchar(250),
-    watching_tv varchar(250),
-    reading_writing varchar(250),
-    arts varchar(250),
-    laissez_faire varchar(250),
-    democratic varchar(250),
-    autocratic varchar(250),
-    introvert varchar(250),
-    extrovert varchar(250),
-    ambivert varchar(250),
-    education varchar(250),
-    height_weight int,
-    faculty_weight int,
+    dict_id varchar(10) not null,
+    admin_id varchar(10) not null,
     personality_weight int,
-    primary key (admin_id, dict_id),
+    leadership_weight int,
+    hobby_weight int,
+    democratic varchar(500),
+    autocratic varchar(500),
+    laissez_faire varchar(500),
+    ambivert varchar(500),
+    extrovert varchar(500),
+    introvert varchar(500),
+    sports varchar(500),
+    music varchar(500),
+    exercising varchar(500),
+    reading varchar(500),
+    shopping varchar(500),
+    writing varchar(500),
+    dancing varchar(500),
+    arts varchar(500),
+    watching_tv varchar(500),
+    primary key (dict_id),
     foreign key (admin_id) references Administrator (admin_id) on delete cascade on update cascade
 );
 
 
+insert into Administrator values('A-01', 'Horfield', 'Brovers');
+
+insert into Dictionary values('D-01', 'A-01', 5, 5, 5,'participative leadership or shared leadership,members of the group take a more participative role in the decision-making process', 'authoritarian leadership, individual control over all decisions and little input from group members.rarely accept advice from followers', 'delegative leadership,leaders are hands-off and allow group members to make the decisions. lowest productivity among group members', 'normal overall behavior is between introversion and extroversion', 'Their outgoing, vibrant nature draws people to them, and they have a hard time turning away the attention. They thrive off the interaction', 'Introverts tend to feel drained after socializing and regain their energy by spending time alone', 'activity needing physical effort and skill that is played according to rules, for enjoyment or as a job', 'an art of sound in time that expresses ideas and emotions in significant forms through the elements of rhythm, melody, harmony, and color', 'activity requiring physical effort, carried out to sustain or improve health and fitness', 'cognitive process of decoding symbols to derive meaning', 'Searching for or buying goods', 'using symbols to communicate thoughts and ideas in a readable form', "to move one's body, rhythmically in a pattern of steps", 'expression of human creative skill and imagination', 'keep under attentive view or observation or view attentively with interest to a broadcast on television');

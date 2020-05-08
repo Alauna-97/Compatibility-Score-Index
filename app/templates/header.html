@@ -35,7 +35,7 @@
     </ul>
 
     <ul class="navbar-nav">
-      {% if current_user.is_authenticated %}
+      {% if 'username' in session %}
       <li class="nav-item">
         <form method="post" action="{{ url_for('result') }}" class="mt-1 mr-3">
           <input type="text" class="form-control" placeholder="Search..." />
@@ -51,25 +51,25 @@
           aria-expanded="false"
         >
           <img src="../static/images/User Header Icon.png" class="mr-2" />
-          {{current_user.username}}
+          {{session['username']}}
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <a
             class="nav-link username"
-            href="{{ url_for('dashboard', username=current_user.username) }}"
+            href="{{ url_for('dashboard', username=session.get('username')) }}"
           >
             Your Profile</a
           >
-          {% if current_user.type == "Administrator" %}
+          {% if session['TYPE'] == "Organizer" %}
           <a
             class="nav-link"
-            href="{{ url_for('createSet', username=current_user.username) }}"
+            href="{{ url_for('createSet', username=session.get('username')) }}"
             >New Set</a
           >
-          {% endif %} {% if current_user.type == "Regular" %}
+          {% endif %} {% if session['TYPE'] == "Regular" %}
           <a
             class="nav-link"
-            href="{{ url_for('joinASet', username=current_user.username) }}"
+            href="{{ url_for('joinASet', username=session.get('username')) }}"
             >Join A Set</a
           >
           {% endif %}

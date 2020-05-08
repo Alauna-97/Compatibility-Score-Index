@@ -134,20 +134,6 @@
       <div class="row">
         <div class="col">
           <div class="form-group mt-3">
-            {{ form.faculty.label }} {{ form.faculty(class='form-control ques')
-            }} {% if form.faculty.errors %}
-            <ul class="errors">
-              {% for error in form.faculty.errors %}
-              <li>Please select an option from the dropdown.</li>
-              {% endfor %}
-            </ul>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <div class="form-group mt-3">
             {{ form.hobby.label }} {{ form.hobby(class='form-control ques') }}
             {% if form.hobby.errors %}
             <ul class="errors">

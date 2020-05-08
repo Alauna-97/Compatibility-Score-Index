@@ -4,7 +4,7 @@
         {% include 'flash_messages.html' %}
     </div>
 
-    {% if current_user.type == "Regular"%}
+    {% if type == "Regular"%}
         <h4 class = "grp_header">My Sets 
             <button class=" btn recom">Recommend Matches</button>
         </h4>
@@ -22,30 +22,30 @@
         </div>  -->
     {% endif %} 
 
-    {% if current_user.type == "Regular" and not gps %}
+    {% if type == "Regular" and not groups %}
         <div class = "alert alert-primary">
             You are not a member of any Sets
         </div>
     {% endif %}
 
-    {% if current_user.type == "Administrator" %}
+    {% if type == "Organizer" %}
         <h4 class = "grp_header">My Sets</h4>
     {% endif %} 
 
-    {% if current_user.type == "Administrator" and not gps %}
+    {% if type == "Organizer" and not groups %}
         <div class = "alert alert-primary">
             You Currently Have No Sets
         </div>
     {% endif %} 
     
     <div class = "row">
-        {% if current_user.type == "Administrator" and gps %}
-            {% for item in gps %}
+        {% if type == "Organizer" and groups %}
+            {% for group in groups %}
                 <div class="col-4 grid-spacing">
-                    <a href="{{ url_for('members', sid=item.sid) }}">
+                    <a href="{{ url_for('members', sid=group[0]) }}">
                     <button class = "tile">
                         <div class = "grp_title py-3"> 
-                            {{ item.set_name }} <span class="code ml-4">{{ item.code }}</span>
+                            {{ group[1] }} <span class="code ml-4">{{ group[3] }}</span>
                         </div>
                     </button>
                     </a>
@@ -54,8 +54,8 @@
         {% endif %} 
 
         <div class = "col-4">
-            {% if current_user.type == "Administrator" %}
-            <a href="{{ url_for('createSet', username=current_user.username) }}">
+            {% if type == "Organizer" %}
+            <a href="{{ url_for('createSet', username=session.get('username')) }}">
             <button class = "tile add">
                 <img src="../static/images/plus.png" width="50" height="50" class = "img-add" />
             </button>
@@ -65,12 +65,12 @@
     </div>
 
     <div class = "row">
-        {% if current_user.type == "Regular" and gps %}
-            {% for item in gps %}
+        {% if type == "Regular" and groups %}
+            {% for item in groups %}
                 <div class="col-4">
                     <button class = "tile">
                         <div class = "grp_title py-3"> 
-                            {{ item[1].set_name }}
+                            {{ item[1] }}
                         </div>
                     </button>
                 </div>
@@ -78,8 +78,8 @@
         {% endif %} 
 
         <div class = "col-4">
-            {% if current_user.type == "Regular" %}
-            <a href="{{ url_for('joinASet', username=current_user.username) }}">
+            {% if type == "Regular" %}
+            <a href="{{ url_for('joinASet', username=session.get('username')) }}">
             <button class = "tile add">
                 <img src="../static/images/plus.png" width="50" height="50" class = "img-add" />
             </button>
@@ -89,7 +89,7 @@
     </div>
 
 
-    {% if current_user.type == "Regular" %}
+    {% if type == "Regular" %}
        <h4 class = "grp_header2">Current Friends </h4>
         <div class = "alert alert-primary">
             You Currently Have No Friends

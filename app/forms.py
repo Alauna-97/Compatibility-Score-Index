@@ -63,9 +63,6 @@ class AboutYou(FlaskForm):
     hobby = SelectField('What is your favourite hobby?', choices=[(0, 'Select an option'), ('Sports', 'Sports'), (
         'Music', 'Music'), ('Exercising', 'Exercising'), ('Shopping', 'Shopping'), ('Dancing', 'Dancing'), ('Watching TV', 'Watching TV'), ('Reading and Writing', 'Reading and Writing'), ('Arts', 'Arts')])
 
-    faculty = SelectField('To which faculty do you belong?', choices=[(0, 'Select an option'), ('Science and Technology', 'Science and Technology'), (
-        'Medical Sciences', 'Medical Sciences'), ('Social Sciences', 'Social Sciences'), ('Humanities', 'Humanities'), ('Engineering', 'Engineering'), ('Law', 'Law')])
-
     submit = SubmitField('Submit')
 
 
