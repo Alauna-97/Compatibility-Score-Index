@@ -36,6 +36,8 @@ create table Regular (
     education varchar(35),
     hobby varchar(50),
     occupation varchar(50),
+    pref_gender varchar(50),
+    pref_ethnicity varchar(50),
     primary key(user_id), 
     foreign key (user_id) references User(user_id) on delete cascade
 );
@@ -75,12 +77,21 @@ create table SetUserGroup (
     foreign key (sid) references Sets(sid) on delete cascade
 );
 
+create table Scores(
+    user_id int not null,
+    match_id int not null,
+    score decimal (3, 2),
+    primary key (user_id, match_id),
+    foreign key (user_id) references Regular(user_id) on delete cascade on update cascade,
+    foreign key (match_id) references Regular(user_id) on delete cascade on update cascade
+);
+
 create table pin_user (
     user_id int not null,
-    other_id int not null,
-    primary key(user_id, other_id),
+    match_id int not null,
+    primary key(user_id, match_id),
     foreign key (user_id) references User (user_id) on delete cascade on update cascade,
-    foreign key (other_id) references User (user_id) on delete cascade on update cascade
+    foreign key (match_id) references User (user_id) on delete cascade on update cascade
 );
 
 create table Administrator (

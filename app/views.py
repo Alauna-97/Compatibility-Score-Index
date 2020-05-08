@@ -167,14 +167,15 @@ def register(typeUser):
             mysql.connection.commit()
 
             last = mycursor.lastrowid
+
             # Specialisation of Users
             if typeUser == "Regular":
                 # Calls RandomFeatures  function to generate features for regular user
                 randFt = randomFeatures()
 
-                sql = "INSERT INTO Regular (user_id, gender, age, height, leadership, ethnicity, personality, education, hobby, occupation) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                sql = "INSERT INTO Regular (user_id, gender, age, height, leadership, ethnicity, personality, education, hobby, occupation, pref_gender, pref_ethnicity) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 val = (mycursor.lastrowid, randFt[0], randFt[1],
-                       randFt[2], randFt[3], randFt[4], randFt[5], randFt[6], randFt[7], randFt[8])
+                       randFt[2], randFt[3], randFt[4], randFt[5], randFt[6], randFt[7], randFt[8], randFt[9], randFt[10])
 
                 mycursor.execute(sql, val)
                 mysql.connection.commit()
@@ -343,7 +344,7 @@ def aboutUser(typeUser):
     form = SignUp()
     if request.method == "POST" and form.validate_on_submit():
         user = Regular(type="Regular", first_name=request.form['fname'], last_name=request.form['lname'], email=request.form['email'], username=request.form['username'], password=request.form['password'], gender=request.form['sex'], age=request.form['age'], height=request.form[
-            'height'], leadership=request.form['leadership'], ethnicity=request.form['ethnicity'], personality=request.form['personality'], education=request.form['education'], hobby=request.form['hobby'], occupation=request.form['occupation'])
+            'height'], leadership=request.form['leadership'], ethnicity=request.form['ethnicity'], personality=request.form['personality'], education=request.form['education'], hobby=request.form['hobby'], occupation=request.form['occupation'], pref_gender=request.form['pref_gender'], pref_ethnicity=request.form['pref_ethnicity'])
 
         db.session.add(user)
 
@@ -365,14 +366,16 @@ def getRegularUsers():
     """Render website's home page."""
     mycursor = mysql.connection.cursor()
     mycursor.execute(
-        'SELECT * from user join regular on user.user_id=regular.user_id')
-    rv = list(mycursor.fetchall())
-    return '<p>' + str(rv) + '</p>'
+        'SELECT username, first_name, last_name, gender, pref_gender, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user join regular on user.user_id=regular.user_id')
+    user = list(mycursor.fetchall())
+    return '<p>' + str(user) + '</p>'
 
 
 def randomFeatures():
     # These are random features for the regular user
     gender = random.choice(
+        ['Female', 'Male'])
+    pref_gender = random.choice(
         ['Female', 'Male'])
     height = random.randint(142, 198)
     age = random.randint(22, 35)
@@ -382,13 +385,15 @@ def randomFeatures():
         ['Sports', 'Music', 'Exercising', 'Shopping', 'Dancing', 'Watching TV', 'Reading and Writing', 'Arts'])
     ethnicity = random.choice(
         ['Black', 'White', 'Chinese', 'Indian', 'Hispanic'])
+    pref_ethnicity = random.choice(
+        ['Black', 'White', 'Chinese', 'Indian', 'Hispanic'])
     occupation = random.choice(
         ['Business', 'Science', 'Technology', 'Construction', 'Communication', 'Law'])
     education = random.choice(
         ['Bachelors', 'Masters', 'PhD', 'Diploma', 'Associate Degree'])
     personality = random.choice(['Introvert', 'Extrovert', 'Ambivert'])
 
-    return [gender, age, height, leadership, ethnicity, personality, education, hobby, occupation]
+    return [gender, age, height, leadership, ethnicity, personality, education, hobby, occupation, pref_gender, pref_ethnicity]
 
 
 @app.route('/results',  methods=['GET', 'POST'])
