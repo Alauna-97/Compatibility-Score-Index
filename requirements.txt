@@ -9,6 +9,7 @@ Flask-Script
 Flask-Login
 psycopg2
 Faker-4.0.3
+flask-mysqldb
 
 # ----------------------
 # Production Server

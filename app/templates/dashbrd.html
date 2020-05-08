@@ -42,10 +42,10 @@
         {% if type == "Organizer" and groups %}
             {% for group in groups %}
                 <div class="col-4 grid-spacing">
-                    <a href="{{ url_for('members', sid=group[0]) }}">
+                    <a href="{{ url_for('members', sid=group['sid']) }}">
                     <button class = "tile">
                         <div class = "grp_title py-3"> 
-                            {{ group[1] }} <span class="code ml-4">{{ group[3] }}</span>
+                            {{ group['set_name'] }} <span class="code ml-4">{{ group['code'] }}</span>
                         </div>
                     </button>
                     </a>
@@ -70,7 +70,7 @@
                 <div class="col-4">
                     <button class = "tile">
                         <div class = "grp_title py-3"> 
-                            {{ item[1] }}
+                            {{ item['set_name'] }}
                         </div>
                     </button>
                 </div>

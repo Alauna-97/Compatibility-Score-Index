@@ -6,28 +6,34 @@ This file creates your application.
 """
 
 from app import app, login_manager
+from flask_mysqldb import MySQL
 from flask import render_template, request, redirect, url_for, flash, session
-# from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet
-# from app.forms import AboutYou
+from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou
 from werkzeug.security import check_password_hash
-# from app.models import User, Regular, Organizer, Sets, joinSet, Scores, SetUserGp
 
 import random
 import uuid
-import mysql.connector
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    passwd="",
-    database="csi2"
-)
+# import mysql.connector
+# mydb = mysql.connector.connect(
+#     host="localhost",
+#     user="root",
+#     passwd="",
+#     database="csi2"
+# )
 
-mycursor = mydb.cursor()
+# mycursor = mydb.cursor()
 
 ###
 # Routing for your application.
 ###
+
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'csi2'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+
+mysql = MySQL(app)
 
 
 @app.route('/')
@@ -49,6 +55,7 @@ def login():
 
     form = LoginForm()
     if request.method == "POST" and form.validate_on_submit():
+        mycursor = mysql.connection.cursor()
         username = form.username.data
         # Query if User exists
         mycursor.execute(
@@ -60,11 +67,11 @@ def login():
         if user:
             # Create session data, we can access this data in other routes
             session['logged_in'] = True
-            session['id'] = user[0]
+            session['id'] = user['user_id']
             session['username'] = request.form['username']
-            session['TYPE'] = user[1]
-            session['first_name'] = user[2]
-            session['last_name'] = user[3]
+            session['TYPE'] = user['type']
+            session['first_name'] = user['first_name']
+            session['last_name'] = user['last_name']
 
             # Flash Success
             flash('Login Successful', 'success')
@@ -80,6 +87,7 @@ def login():
 def dashboard(username):
     """Render the website's dashboard page."""
     if 'username' in session:
+        mycursor = mysql.connection.cursor()
         mycursor.execute('Select * from user where username = %s', (username,))
         user = mycursor.fetchone()
 
@@ -100,6 +108,8 @@ def logout():
     session.pop('id', None)
     session.pop('username', None)
     session.pop('type', None)
+    session.pop('first_name', None)
+    session.pop('last_name', None)
     flash('Logged out Succesfully', 'success')
     return redirect(url_for('home'))
 
@@ -122,6 +132,7 @@ def register(typeUser):
     form = SignUp()
 
     if request.method == "POST" and form.validate_on_submit():
+        mycursor = mysql.connection.cursor()
         # Collects username and email info from form
         username = form.username.data
         email = form.email.data
@@ -138,22 +149,24 @@ def register(typeUser):
 
         # Gets last record in User Table
         mycursor.execute(
-            'SELECT user_id from user ORDER BY user_id DESC LIMIT 1')
-        lastRec = int(mycursor.fetchone()[0])
+            'SELECT * from user ORDER BY user_id DESC LIMIT 1')
+        lastRec = mycursor.fetchone()
         if lastRec is None:
             lastRec = 1
         else:
-            lastRec += 1
+            lastRec = lastRec['user_id'] + 1
 
         # If unique email address and username provided then log new user
         if existing_username is None and existing_email is None:
+            mycursor = mysql.connection.cursor()
             sql = "INSERT INTO User (user_id, type, first_name, last_name, username, email, password) VALUES (%s, %s, %s, %s, %s, %s, %s)"
             val = (lastRec, typeUser, request.form['fname'], request.form['lname'],
                    request.form['username'], request.form['email'], request.form['password'])
 
             mycursor.execute(sql, val)
-            mydb.commit()
+            mysql.connection.commit()
 
+            last = mycursor.lastrowid
             # Specialisation of Users
             if typeUser == "Regular":
                 # Calls RandomFeatures  function to generate features for regular user
@@ -164,9 +177,9 @@ def register(typeUser):
                        randFt[2], randFt[3], randFt[4], randFt[5], randFt[6], randFt[7], randFt[8])
 
                 mycursor.execute(sql, val)
-                mydb.commit()
+                mysql.connection.commit()
 
-            if typeUser == "Organizer":
+            else:
                 position = random.choice(
                     ['Secretary', 'CEO', 'Treasurer', 'Vice President', 'Supervisor', 'Manager'])
 
@@ -174,18 +187,18 @@ def register(typeUser):
                 val = (mycursor.lastrowid, position)
 
                 mycursor.execute(sql, val)
-                mydb.commit()
+                mysql.connection.commit()
 
             # Success Message Appears
             flash('Successfully registered', 'success')
 
             # Logs in a newly registered user
             session['logged_in'] = True
-            session['id'] = mycursor.lastrowid
+            session['id'] = last
             session['username'] = request.form['username']
             session['TYPE'] = typeUser
-            session['first_name'] = request.form['first_name']
-            session['last_name'] = request.form['last_name']
+            session['first_name'] = request.form['fname']
+            session['last_name'] = request.form['lname']
 
             # Redirects to Profile Page
             return redirect(url_for('dashboard', username=session.get('username')))
@@ -201,6 +214,7 @@ def createSet(username):
     form = newSet()
     # If user is logged in session and is an organizer
     if 'username' in session and session.get('TYPE') == "Organizer":
+        mycursor = mysql.connection.cursor()
         if request.method == "POST" and form.validate_on_submit():
             set_name = form.set_name.data
             purpose = form.purpose.data
@@ -212,12 +226,12 @@ def createSet(username):
             if existing_set is None:
                 # Get last index in Sets Relation
                 mycursor.execute(
-                    'SELECT sid from sets ORDER BY sid DESC LIMIT 1')
-                lastRec = int(mycursor.fetchone()[0])
+                    'SELECT * from sets ORDER BY sid DESC LIMIT 1')
+                lastRec = mycursor.fetchone()
                 if lastRec is None:
                     lastRec = 1
                 else:
-                    lastRec += 1
+                    lastRec = lastRec['sid'] + 1
 
                 # Generates Random Code for the Set
                 code = uuid.uuid4().hex.upper()[0:10]
@@ -227,7 +241,7 @@ def createSet(username):
                 val = (lastRec, set_name, purpose, code, session.get('id'))
 
                 mycursor.execute(sql, val)
-                mydb.commit()
+                mysql.connection.commit()
 
                 # Success Message Appears
                 flash('Set Added', 'success')
@@ -241,7 +255,8 @@ def createSet(username):
 def joinASet(username):
     """Render the website's  page."""
     form = joinNewSet()
-    if request.method == "POST" and form.validate_on_submit():
+    if request.method == "POST" and form.validate_on_submit() and session.get('TYPE') == "Regular":
+        mycursor = mysql.connection.cursor()
         # Code entered in form for joining a set
         code = form.set_code.data
 
@@ -249,14 +264,13 @@ def joinASet(username):
         mycursor.execute(
             'SELECT * FROM sets WHERE code = %s', (code,))
         existing_code = mycursor.fetchone()
-        print(existing_code)
         # If valid credentials, flash success and redirect
         if existing_code:
+            mycursor = mysql.connection.cursor()
             sql = "INSERT INTO joinSet (user_id, sid) VALUES (%s, %s)"
-            val = (session.get('id'), existing_code[0],)
-
+            val = (session.get('id'), existing_code['sid'])
             mycursor.execute(sql, val)
-            mydb.commit()
+            mysql.connection.commit()
 
             flash('Successfully Added to Set', 'success')
 
@@ -266,6 +280,7 @@ def joinASet(username):
 
 @app.route('/members/<sid>',  methods=['GET', 'POST'])
 def members(sid):
+    mycursor = mysql.connection.cursor()
     mycursor.execute('SELECT * from sets WHERE sid = %s', (sid,))
     fullSet = mycursor.fetchall()
 
@@ -274,6 +289,7 @@ def members(sid):
     form = Groupings()
 
     if 'username' in session and session.get('TYPE') == "Organizer":
+        mycursor = mysql.connection.cursor()
         mycursor.execute('SELECT user.first_name, user.last_name from user JOIN regular JOIN joinset ON regular.user_id = user.user_id and regular.user_id = joinset.user_id and user.user_id=joinset.user_id WHERE joinset.sid = %s', (sid,))
         getMembers = mycursor.fetchall()
         print(getMembers)
@@ -342,6 +358,16 @@ def aboutUser(typeUser):
 
         # if form entry is invalid, redirected to the same page to fill in required details
     return render_template('about_you.html', form=form)
+
+
+@app.route('/Regulars')
+def getRegularUsers():
+    """Render website's home page."""
+    mycursor = mysql.connection.cursor()
+    mycursor.execute(
+        'SELECT * from user join regular on user.user_id=regular.user_id')
+    rv = list(mycursor.fetchall())
+    return '<p>' + str(rv) + '</p>'
 
 
 def randomFeatures():

@@ -1,7 +1,7 @@
 {% extends "sidebar.html" %} {% block div %}
 <div>
   <div class="page_header">
-    <h2 class="dash_header">{{fullSet[0][1]}}</h2>
+    <h2 class="dash_header">{{ fullSet[0]['set_name'] }}</h2>
     <!-- {% include 'flash_messages.html' %} -->
   </div>
 
@@ -32,7 +32,7 @@
     <div class="col-4 mb-4">
       <button class="member-tile">
         <div class="grp_title py-3">
-          {{ item[0] }} {{ item[1] }}
+          {{ item['first_name'] }} {{ item['last_name'] }}
         </div>
       </button>
     </div>
