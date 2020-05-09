@@ -1,6 +1,6 @@
-drop database IF EXISTS csi2;
-create database csi2;
-use csi2;
+drop database IF EXISTS csi;
+create database csi;
+use csi;
 
 drop table IF EXISTS User;
 drop table IF EXISTS Regular;
@@ -27,7 +27,7 @@ create table User(
 
 create table Regular (
     user_id int not null,
-    gender varchar(10),
+    sex varchar(10),
     age varchar(10),
     height varchar(50),
     leadership varchar(35),
@@ -36,7 +36,7 @@ create table Regular (
     education varchar(35),
     hobby varchar(50),
     occupation varchar(50),
-    pref_gender varchar(50),
+    pref_sex varchar(50),
     pref_ethnicity varchar(50),
     primary key(user_id), 
     foreign key (user_id) references User(user_id) on delete cascade

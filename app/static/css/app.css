@@ -2,6 +2,30 @@ header {
   background: #6b92e8;
 }
 
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  font-size: 1rem;
+  padding: 5px;
+}
+
+.alert-primary {
+  color: #383d41;
+  background-color: #e4e6ff;
+  border-color: #e4e6ff;
+  margin-left: 1rem;
+  opacity: 0.7;
+  padding: 0.5rem 0.8rem;
+}
+
+.alert-success {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  font-size: medium;
+}
+
 body {
   font-family: "Montserrat", "Open Sans";
 }
@@ -39,6 +63,30 @@ a.navbar-brand.ml-1 {
 
 .navbar-light .navbar-nav .active > .nav-link {
   font-weight: bold;
+}
+
+.nav-custom {
+  background-color: #6b92e8;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.nav-username {
+  color: #1f1f1f;
+  display: block;
+  padding: 0.5rem 1rem;
+}
+
+.nav-username:hover,
+.nav-username:focus {
+  text-decoration: none;
+  color: #fff;
+}
+
+.mid {
+  margin-left: 14rem;
 }
 
 .btn-outline-success,
@@ -89,6 +137,32 @@ button#dropdownMenuButton.btn-username {
   color: #6b92e8;
 }
 
+a.drop {
+  color: #6b92e8;
+  padding-left: 8px;
+  font-size: 15px;
+  text-decoration: none;
+}
+
+a.drop:hover {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.navbar-light .navbar-nav .show > .nav-link:hover {
+  color: #6b92e8;
+  background: #f9f8f8;
+}
+
+.navbar-light .navbar-nav .show > .nav-link {
+  color: #6b92e8;
+}
+
+.dropdown-menu {
+  min-width: 7rem;
+  line-height: 2rem;
+}
+
 /******************************** Footer Region ********************************/
 
 footer {
@@ -119,6 +193,29 @@ footer h5 {
   text-align: center;
 }
 
+/********************************************* HOME *************************************************/
+.slide {
+  height: 580px;
+}
+
+.slide-info {
+  background: linear-gradient(316.23deg, #0bf0ff -47.49%, #d841d2 147.67%);
+  text-align: center;
+  color: #fff;
+}
+
+.col-8.mine {
+  padding-left: 0px;
+  padding-right: 0px;
+  max-width: 63.666667%;
+}
+
+.col-5.slide-info {
+  max-width: 35.666667%;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
 /******************************** User Registration Form Region ********************************/
 .register-form.center-block {
   text-align: center;
@@ -132,6 +229,7 @@ footer h5 {
   box-shadow: 3px 0px 5px rgba(182, 182, 182, 0.25);
   padding: 1rem 0rem 3rem 0rem;
 }
+
 main .btn-outline-success,
 main .btn-outline-success:hover {
   border: 1px solid #0e267a;
@@ -264,11 +362,17 @@ div.register-form form.card-user-reg div.form-group {
 }
 
 .ques-container select.ques {
-  width: 447px;
+  width: 299px;
+  margin-bottom: 1rem;
+  background: linear-gradient(
+    90deg,
+    rgb(161, 238, 255) -313.56%,
+    rgb(255, 201, 225) 398.31%
+  );
 }
 
 .ques-container {
-  width: 500px;
+  width: 100%;
 }
 
 /******************************** FOR SIDE BAR ********************************/
@@ -289,6 +393,12 @@ div.register-form form.card-user-reg div.form-group {
 }
 
 .sidebar-header {
+  /* margin-left: 3rem; */
+  text-align: center;
+}
+
+.sidebar-header h4 {
+  text-align: left;
   margin-left: 3rem;
 }
 
@@ -308,8 +418,9 @@ div.register-form form.card-user-reg div.form-group {
 
 .abt {
   margin-top: 3rem;
-  margin-left: 3rem;
-  margin-right: 2rem;
+  /* margin-left: 3rem; */
+  /* margin-right: 2rem; */
+  text-align: center;
   line-height: 30px;
   letter-spacing: -0.015em;
 }
@@ -541,4 +652,84 @@ button.grp-tile:hover {
   line-height: 30px;
   color: rgb(69, 70, 73);
   margin-top: 3.5rem;
+}
+
+/************************************* RECOMMENDED MATCHES *************************************/
+.darken {
+  color: #4d565e;
+}
+
+.postn {
+  margin-left: 67%;
+  /* width: 11rem; */
+}
+
+.rmndTile {
+  width: 200px;
+  height: 200px;
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+  margin-top: 2rem;
+  background: linear-gradient(
+    88.74deg,
+    rgb(76, 219, 252) -173.8%,
+    rgb(252, 154, 196) 271.63%
+  );
+  /* opacity: 0.9; */
+  border-radius: 6px;
+  position: relative;
+  text-align: justify;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 3px solid transparent;
+  line-height: 1;
+  border-radius: 0.25rem;
+  transition: 0.5s;
+}
+
+.rmndTile:hover {
+  background: linear-gradient(
+    40.74deg,
+    rgb(76, 219, 252) -173.8%,
+    rgb(252, 154, 196) 271.63%
+  );
+}
+
+.delete_ {
+  font-size: 2rem;
+  font-weight: thin;
+  line-height: 1;
+  color: #000;
+  /* text-shadow: 0 1px 0 #fff; */
+  position: absolute;
+  right: 10px;
+  top: 2px;
+}
+
+.percentage {
+  position: absolute;
+  left: 10px;
+  top: 9px;
+}
+
+img.reload {
+  height: 2.5rem;
+  margin: 0rem;
+  cursor: pointer;
+}
+
+.mydropdown {
+  color: #0e267a;
+  background-color: white;
+  border: 2px solid #97b0e7;
+}
+
+.ok-sml {
+  color: #97b0e7;
+  font-weight: bold;
+  background-color: #fff;
+}
+
+.ok-sml:hover {
+  color: #0e267a;
 }

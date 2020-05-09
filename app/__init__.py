@@ -4,7 +4,7 @@ from flask_login import LoginManager
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "CompatibiltyScore"
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root@localhost/csi2"
+# app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root@localhost/csi"
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 # db = SQLAlchemy(app)

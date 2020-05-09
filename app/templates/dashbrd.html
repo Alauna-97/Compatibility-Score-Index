@@ -5,26 +5,14 @@
     </div>
 
     {% if type == "Regular"%}
-        <h4 class = "grp_header">My Sets 
-            <button class=" btn recom">Recommend Matches</button>
+        <h4 class = "grp_header">My Groups 
+            <a href = "{{ url_for('recommend', username=session.get('username')) }}" class=" btn recom">Recommend Matches</a>
         </h4>
-
-        <!-- <div class="row mb-2">     
-            <div class="col">
-                <h4 class="grp_header">My Groups </h4>
-            </div>
-        
-            <div class="col btn-align">
-                <button class="btn btn-outline-success my-2 my-sm-0">
-                    Recommended Matches
-                </button>
-            </div>
-        </div>  -->
     {% endif %} 
 
     {% if type == "Regular" and not groups %}
         <div class = "alert alert-primary">
-            You are not a member of any Sets
+            You are not a member of any Groups
         </div>
     {% endif %}
 

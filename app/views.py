@@ -8,7 +8,7 @@ This file creates your application.
 from app import app, login_manager
 from flask_mysqldb import MySQL
 from flask import render_template, request, redirect, url_for, flash, session
-from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou
+from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria
 from werkzeug.security import check_password_hash
 
 import random
@@ -18,7 +18,7 @@ import uuid
 #     host="localhost",
 #     user="root",
 #     passwd="",
-#     database="csi2"
+#     database="csi"
 # )
 
 # mycursor = mydb.cursor()
@@ -30,7 +30,7 @@ import uuid
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'csi2'
+app.config['MYSQL_DB'] = 'csi'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
@@ -88,7 +88,7 @@ def dashboard(username):
     """Render the website's dashboard page."""
     if 'username' in session:
         mycursor = mysql.connection.cursor()
-        mycursor.execute('Select * from user where username = %s', (username,))
+        mycursor.execute('Select * from user WHERE username = %s', (username,))
         user = mycursor.fetchone()
 
         if session.get('TYPE') == "Organizer":
@@ -173,7 +173,7 @@ def register(typeUser):
                 # Calls RandomFeatures  function to generate features for regular user
                 randFt = randomFeatures()
 
-                sql = "INSERT INTO Regular (user_id, gender, age, height, leadership, ethnicity, personality, education, hobby, occupation, pref_gender, pref_ethnicity) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                sql = "INSERT INTO Regular (user_id, sex, age, height, leadership, ethnicity, personality, education, hobby, occupation, pref_sex, pref_ethnicity) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 val = (mycursor.lastrowid, randFt[0], randFt[1],
                        randFt[2], randFt[3], randFt[4], randFt[5], randFt[6], randFt[7], randFt[8], randFt[9], randFt[10])
 
@@ -340,25 +340,49 @@ def members(sid):
 
 @app.route('/about/<typeUser>', methods=["GET", "POST"])
 def aboutUser(typeUser):
-    # How am I going to pass the above information
-    form = SignUp()
+    form = AboutYou()
     if request.method == "POST" and form.validate_on_submit():
-        user = Regular(type="Regular", first_name=request.form['fname'], last_name=request.form['lname'], email=request.form['email'], username=request.form['username'], password=request.form['password'], gender=request.form['sex'], age=request.form['age'], height=request.form[
-            'height'], leadership=request.form['leadership'], ethnicity=request.form['ethnicity'], personality=request.form['personality'], education=request.form['education'], hobby=request.form['hobby'], occupation=request.form['occupation'], pref_gender=request.form['pref_gender'], pref_ethnicity=request.form['pref_ethnicity'])
+        mycursor = mysql.connection.cursor()
 
-        db.session.add(user)
-
-        # Adds a regular user info to the database
-        db.session.commit()
+        sql = "UPDATE Regular SET (sex = %s, age = %s, height = %s, leadership = %s, ethnicity = %s, personality = %s, education = %s, hobby = %s, occupation = %s, pref_sex = %s, pref_ethnicity = %s) WHERE user_id = %s"
+        val = (request.form['sex'], request.form['age'],
+               request.form['height'], request.form['leadership'], request.form['ethnicity'], request.form['personality'], request.form['education'], request.form['hobby'], request.form['occupation'], request.form['pref_sex'], request.form['pref_ethnicity'], session.get('id'))
+        mycursor.execute(sql, val)
+        mysql.connection.commit()
 
         # Success Message Appears
         flash('You have successfully registered :) ')
 
         # Redirect User to Main Page
-        return redirect(url_for("home"))
+        return redirect(url_for("dashboard", username=session.get('username')))
 
         # if form entry is invalid, redirected to the same page to fill in required details
     return render_template('about_you.html', form=form)
+
+
+@app.route('/recommend/<username>', methods=['GET', 'POST'])
+def recommend(username):
+    """Render the website's recommended matches page."""
+    form = Criteria()
+    mycursor = mysql.connection.cursor()
+    if request.method == "POST" and 'logged_in' in session:
+        crit = form.crit.data
+        if crit == "compatible":
+            mycursor.execute(
+                'SELECT first_name, last_name, scores.match_id, score from User JOIN Scores ON scores.match_id=user.user_id WHERE scores.user_id = %s ORDER BY score DESC', (session['id'],))
+            matches = (db.session.query(Scores, User).join(Scores, Scores.other_id == User.user_id).filter_by(
+                user_id=current_user.user_id).order_by(Scores.score.desc()).limit(9).all())
+        else:
+            mycursor.execute(
+                'SELECT first_name, last_name, scores.match_id, score from User JOIN Scores ON scores.match_id=user.user_id WHERE scores.user_id = %s ORDER BY score ASC', (session['id'],))
+
+        matches = list(mycursor.fetchmany(9))
+        return render_template('recomnd.html', form=form, matches=matches)
+
+    mycursor.execute(
+        'SELECT first_name, last_name, scores.match_id, score from User JOIN Scores ON scores.match_id=user.user_id WHERE scores.user_id = %s ORDER BY score DESC', (session['id'],))
+    matches = list(mycursor.fetchmany(9))
+    return render_template('recomnd.html', form=form, matches=matches)
 
 
 @app.route('/Regulars')
@@ -366,23 +390,23 @@ def getRegularUsers():
     """Render website's home page."""
     mycursor = mysql.connection.cursor()
     mycursor.execute(
-        'SELECT username, first_name, last_name, gender, pref_gender, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user join regular on user.user_id=regular.user_id')
+        'SELECT username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user join regular on user.user_id=regular.user_id')
     user = list(mycursor.fetchall())
     return '<p>' + str(user) + '</p>'
 
 
 def randomFeatures():
     # These are random features for the regular user
-    gender = random.choice(
+    sex = random.choice(
         ['Female', 'Male'])
-    pref_gender = random.choice(
+    pref_sex = random.choice(
         ['Female', 'Male'])
     height = random.randint(142, 198)
     age = random.randint(22, 35)
     leadership = random.choice(
         ['Autocratic', 'Laissez-Faire', 'Democratic'])
     hobby = random.choice(
-        ['Sports', 'Music', 'Exercising', 'Shopping', 'Dancing', 'Watching TV', 'Reading and Writing', 'Arts'])
+        ['Sports', 'Music', 'Exercising', 'Shopping', 'Dancing', 'Watching-TV', 'Reading', 'Writing', 'Arts'])
     ethnicity = random.choice(
         ['Black', 'White', 'Chinese', 'Indian', 'Hispanic'])
     pref_ethnicity = random.choice(
@@ -393,7 +417,7 @@ def randomFeatures():
         ['Bachelors', 'Masters', 'PhD', 'Diploma', 'Associate Degree'])
     personality = random.choice(['Introvert', 'Extrovert', 'Ambivert'])
 
-    return [gender, age, height, leadership, ethnicity, personality, education, hobby, occupation, pref_gender, pref_ethnicity]
+    return [sex, age, height, leadership, ethnicity, personality, education, hobby, occupation, pref_sex, pref_ethnicity]
 
 
 @app.route('/results',  methods=['GET', 'POST'])

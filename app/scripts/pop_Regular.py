@@ -6,7 +6,7 @@ mydb = mysql.connector.connect(
     host="localhost",
     user="root",
     passwd="",
-    database="csi2"
+    database="csi"
 )
 
 fake = Faker()
@@ -27,7 +27,10 @@ def populateReg(records):
         mycursor.execute(sql, val)
         mydb.commit()
 
-        gender = random.choice(
+        sex = random.choice(
+            ['Female', 'Male'])
+
+        pref_sex = random.choice(
             ['Female', 'Male'])
 
         height = random.randint(142, 198)
@@ -38,15 +41,17 @@ def populateReg(records):
             ['Sports', 'Music', 'Exercising', 'Shopping', 'Dancing', 'Watching TV', 'Reading and Writing', 'Arts'])
         ethnicity = random.choice(
             ['Black', 'White', 'Chinese', 'Indian', 'Hispanic'])
+        pref_ethnicity = random.choice(
+            ['Black', 'White', 'Chinese', 'Indian', 'Hispanic'])
         occupation = random.choice(
             ['Business', 'Science', 'Technology', 'Construction', 'Communication', 'Law'])
         education = random.choice(
             ['Bachelors', 'Masters', 'PhD', 'Diploma', 'Associate Degree'])
         personality = random.choice(['Introvert', 'Extrovert', 'Ambivert'])
 
-        sql = "INSERT INTO Regular (user_id, gender, age, height, leadership, ethnicity, personality, education, hobby, occupation) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        val = (mycursor.lastrowid, gender, age,
-               height, leadership, ethnicity, personality, education, hobby, occupation)
+        sql = "INSERT INTO Regular (user_id, sex, age, height, leadership, ethnicity, personality, education, hobby, occupation, pref_sex, pref_ethnicity) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        val = (mycursor.lastrowid, sex, age,
+               height, leadership, ethnicity, personality, education, hobby, occupation, pref_sex, pref_ethnicity)
 
         mycursor.execute(sql, val)
         mydb.commit()

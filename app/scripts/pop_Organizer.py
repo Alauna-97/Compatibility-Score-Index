@@ -6,7 +6,7 @@ mydb = mysql.connector.connect(
     host="localhost",
     user="root",
     passwd="",
-    database="csi2"
+    database="csi"
 )
 
 fake = Faker()
@@ -14,9 +14,7 @@ mycursor = mydb.cursor()
 
 
 def populateOrg(records):
-    print("start")
     for i in range(16, records):
-        print("enter")
         first_name = fake.first_name()
         last_name = fake.last_name()
         username = first_name
@@ -41,5 +39,5 @@ def populateOrg(records):
 
 
 if __name__ == '__main__':
-    populateOrg(26)
+    populateOrg(21)
     print("Organizers Added!")

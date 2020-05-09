@@ -1,40 +1,19 @@
-{% extends "base.html" %} {% block main %}
-<div class="register-form center-block">
-  <img
-    src="../static/images/Footer Logo.png"
-    class="d-inline-block align-top mt-5"
-    alt=""
-  />
-  <h2 class="mb-5 mt-3">User Registration - About You</h2>
+{% extends "sidebar.html" %} {% block div %}
+<div class="register-form center-block less">
+  {% if 'username' in session %}
+  <div class="page_header">
+    <h2 class="dash_header darken">Tell Us About Yourself</h2>
+  </div>
   <form
-    class="card-user-reg mb-5"
-    action="{{ url_for('aboutUser', typeUser='Organizer') }}"
+    class="card-user-reg mt-4 mb-0"
+    action="{{ url_for('aboutUser', typeUser = session.get('TYPE')) }}"
     method="POST"
   >
     {{ form.csrf_token }}
-    <div class="row my-2">
-      <div class="col general title">
-        <a href="{{ url_for('register') }}">General</a>
-      </div>
-      <div class="col title">
-        About You
-      </div>
-    </div>
-    <div class="form-body-about">
+    <div class="ques-container mt-4">
+
       <div class="row mt-5">
-        <div class="col">
-          <div class="form-group">
-            {{ form.sex.label }} {{ form.sex(class='form-control sel') }} {% if
-            form.sex.errors %}
-            <ul class="errors">
-              {% for error in form.sex.errors %}
-              <li>Please select an option from the dropdown.</li>
-              {% endfor %}
-            </ul>
-            {% endif %}
-          </div>
-        </div>
-        <div class="col">
+        <div class="col-6">
           <div class="form-group">
             {{ form.age.label }} {{ form.age(class='form-control sel') }} {% if
             form.age.errors %}
@@ -46,9 +25,10 @@
             {% endif %}
           </div>
         </div>
-        <div class="col">
+
+        <div class="col-6">
           <div class="form-group">
-            {{ form.height.label }} {{ form.height(class='form-control sel') }}
+            {{ form.height.label }} {{ form.height(class='form-control ques') }}
             {% if form.height.errors %}
             <ul class="errors">
               {% for error in form.height.errors %}
@@ -59,10 +39,38 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="ques-container mt-4">
+
       <div class="row">
-        <div class="col">
+        <div class="col-6">
+          <div class="form-group mt-3">
+            {{ form.sex.label }} {{ form.sex(class='form-control ques') }} {% if
+            form.sex.errors %}
+            <ul class="errors">
+              {% for error in form.sex.errors %}
+              <li>Please select an option from the dropdown.</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group mt-3">
+            {{ form.pref_sex.label }} {{ form.pref_sex(class='form-control ques') }} {% if
+            form.pref_sex.errors %}
+            <ul class="errors">
+              {% for error in form.pref_sex.errors %}
+              <li>Please select an option from the dropdown.</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-6">
           <div class="form-group mt-3">
             {{ form.ethnicity.label }} {{ form.ethnicity(class='form-control
             ques') }} {% if form.ethnicity.errors %}
@@ -74,9 +82,25 @@
             {% endif %}
           </div>
         </div>
+
+        <div class="col-6">
+          <div class="form-group mt-3">
+            {{ form.pref_ethnicity.label }} {{ form.pref_ethnicity(class='form-control
+            ques') }} {% if form.pref_ethnicity.errors %}
+            <ul class="errors">
+              {% for error in form.pref_ethnicity.errors %}
+              <li>Please select an option from the dropdown.</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+        </div>
       </div>
+
+
+
       <div class="row">
-        <div class="col">
+        <div class="col-6">
           <div class="form-group mt-3">
             {{ form.personality.label }} {{ form.personality(class='form-control
             ques') }} {% if form.personality.errors %}
@@ -88,14 +112,13 @@
             {% endif %}
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col">
+
+        <div class="col-6">
           <div class="form-group mt-3">
-            {{ form.work.label }} {{ form.work(class='form-control ques') }} {%
-            if form.work.errors %}
+            {{ form.occupation.label }} {{ form.occupation(class='form-control ques') }} {%
+            if form.occupation.errors %}
             <ul class="errors">
-              {% for error in form.work.errors %}
+              {% for error in form.occupation.errors %}
               <li>Please select an option from the dropdown.</li>
               {% endfor %}
             </ul>
@@ -103,8 +126,9 @@
           </div>
         </div>
       </div>
+      
       <div class="row">
-        <div class="col">
+        <div class="col-6">
           <div class="form-group mt-3">
             {{ form.leadership.label }} {{ form.leadership(class='form-control
             ques') }} {% if form.leadership.errors %}
@@ -116,9 +140,8 @@
             {% endif %}
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col">
+
+        <div class="col-6">
           <div class="form-group mt-3">
             {{ form.education.label }} {{ form.education(class='form-control
             ques') }} {% if form.education.errors %}
@@ -131,8 +154,9 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
+      
+     
+        <div class="col-6">
           <div class="form-group mt-3">
             {{ form.hobby.label }} {{ form.hobby(class='form-control ques') }}
             {% if form.hobby.errors %}
@@ -145,14 +169,8 @@
           </div>
         </div>
       </div>
+
       <div class="row my-2">
-        <div class="col mt-5 mb-4">
-          <a
-            class="btn btn-outline-success my-2 my-sm-0"
-            href="{{ url_for('registerRegular') }}"
-            >Previous</a
-          >
-        </div>
         <div class="col mt-5 mb-4">
           {{ form.submit(class='btn btn-outline-success my-2 my-sm-0') }}
         </div>
@@ -160,4 +178,4 @@
     </div>
   </form>
 </div>
-{% endblock %}
+{% endif %} {% endblock %}
