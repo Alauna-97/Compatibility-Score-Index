@@ -382,6 +382,7 @@ def recommend(username):
     mycursor.execute(
         'SELECT first_name, last_name, scores.match_id, score from User JOIN Scores ON scores.match_id=user.user_id WHERE scores.user_id = %s ORDER BY score DESC', (session['id'],))
     matches = list(mycursor.fetchmany(9))
+    print(matches)
     return render_template('recomnd.html', form=form, matches=matches)
 
 
