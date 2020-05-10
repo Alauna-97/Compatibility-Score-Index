@@ -344,14 +344,14 @@ def aboutUser(typeUser):
     if request.method == "POST" and form.validate_on_submit():
         mycursor = mysql.connection.cursor()
 
-        sql = "UPDATE Regular SET (sex = %s, age = %s, height = %s, leadership = %s, ethnicity = %s, personality = %s, education = %s, hobby = %s, occupation = %s, pref_sex = %s, pref_ethnicity = %s) WHERE user_id = %s"
+        sql = """UPDATE Regular SET sex = %s, age = %s, height = %s, leadership = %s, ethnicity = %s, personality = %s, education = %s, hobby = %s, occupation = %s, pref_sex = %s, pref_ethnicity = %s WHERE user_id = %s"""
         val = (request.form['sex'], request.form['age'],
                request.form['height'], request.form['leadership'], request.form['ethnicity'], request.form['personality'], request.form['education'], request.form['hobby'], request.form['occupation'], request.form['pref_sex'], request.form['pref_ethnicity'], session.get('id'))
         mycursor.execute(sql, val)
         mysql.connection.commit()
 
         # Success Message Appears
-        flash('You have successfully registered :) ')
+        flash('Your information has been updated :) ', 'success')
 
         # Redirect User to Main Page
         return redirect(url_for("dashboard", username=session.get('username')))
