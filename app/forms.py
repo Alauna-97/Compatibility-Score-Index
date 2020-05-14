@@ -46,12 +46,12 @@ class AboutYou(FlaskForm):
         '144', '(4 ft 9 inches) 144 cm'), ('147', '(4 ft 10 inches) 147 cm'), ('149', '(4 ft 11 inches)  149 cm'), ('152', '(5 ft 0 inches)	152 cm'), ('154', '(5 ft 1 inches)	154 cm'), ('157', '(5 ft 2 inches)	157 cm'), ('160', '(5 ft 3 inches)	160 cm'), ('162', '(5 ft 4 inches)	162 cm'), ('165', '(5 ft 5 inches)	165 cm'), ('168', '(5 ft 6 inches)	168 cm'), ('170', '(5 ft 7 inches)	170 cm'), ('172', '(5 ft 8 inches)	172 cm'), ('175', '(5 ft 9 inches)	175 cm'), ('177', '(5 ft 10 inches)	177 cm'), ('180', '(5 ft 11 inches) 180 cm'), ('183', '(6 ft 0 inches)	183 cm'), ('185', '(6 ft 1 inches)	185 cm'), ('188', '(6 ft 2 inches)	188 cm'), ('191', '(6 ft 3 inches)	191 cm'), ('194', '(6 ft 4 inches)	194 cm'), ('196', '(6 ft 5 inches)	196 cm'), ('198', '(6 ft 6 inches)	198 cm')])
 
     ethnicity = SelectField('What is your ethnicity?', choices=[(0, 'Select an option'), (
-        'Black', 'Black (Coloured)'), ('Chinese', 'Chinese'), ('White', 'White'), ('Indian', 'Indian')])
+        'Black', 'Black (Coloured)'), ('Chinese', 'Chinese'), ('White', 'White'), ('Indian', 'Indian'), ('Hispanic', 'Hispanic')])
 
     personality = SelectField('What is your personality type?', choices=[(0, 'Select an option'), (
         'Introvert', 'Introvert'), ('Extrovert', 'Extrovert'), ('Ambivert', 'Ambivert')])
 
-    work = SelectField('To which work area do you belong?', choices=[(0, 'Select an option'), ('Business', 'Business'), ('Education', 'Education'), (
+    occupation = SelectField('To which work area do you belong?', choices=[(0, 'Select an option'), ('Business', 'Business'), ('Education', 'Education'), (
         'Science', 'Science'), ('Technology', 'Technology'), ('Construction', 'Construction'), ('Communication', 'Communication'), ('Law', 'Law')])
 
     leadership = SelectField('How would you describe your leadership style?', choices=[(0, 'Select an option'), (
@@ -69,21 +69,28 @@ class AboutYou(FlaskForm):
     submit = SubmitField('Submit')
 
 
-class newGroup(FlaskForm):
-    group_name = StringField('Group Name:', validators=[DataRequired(), Length(
+class newSet(FlaskForm):
+    set_name = StringField('Set Name:', validators=[DataRequired(), Length(
         min=4, max=30, message=('Name should be Characters Only'))])
 
     purpose = StringField('Purpose:', validators=[DataRequired(), Length(
         min=4, max=30, message=('Name should be Characters Only'))])
 
-    submit = SubmitField('Add New Group')
+    submit = SubmitField('Add New Set')
 
 
-class joinNewGroup(FlaskForm):
-    group_name = StringField('Group Name:', validators=[DataRequired(), Length(
+class joinNewSet(FlaskForm):
+    set_code = StringField('Code:', validators=[DataRequired(), Length(
         min=4, max=30, message=('Name should be Characters Only'))])
 
-    group_code = StringField('Code:', validators=[DataRequired(), Length(
-        min=4, max=30, message=('Name should be Characters Only'))])
+    submit = SubmitField('Join Set')
 
-    submit = SubmitField('Join Group')
+
+class Groupings(FlaskForm):
+    grpBy = SelectField('Criteria', choices=[(
+        0, 'Select an option'), ('compatible', 'Compatible'), ('uncompatible', 'Uncompatible')])
+
+    numPersons = SelectField('Amount', choices=[(
+        0, 'Select an option'), ('2', 'two'), ('3', 'three'), ('4', 'four'), ('5', 'five')])
+
+    submit = SubmitField('Create')

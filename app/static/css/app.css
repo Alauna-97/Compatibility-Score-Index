@@ -385,7 +385,7 @@ div.register-form form.card-user-reg div.form-group {
 }
 
 .tile {
-  width: 240px;
+  width: 250px;
   height: 240px;
   margin-bottom: 1.5rem;
   background: linear-gradient(90deg, #31d2f7 -143.33%, #ff71af 254.17%);
@@ -496,6 +496,49 @@ h5#PopUpTitle {
   text-align: center;
 }
 
-.dropdown.show {
+.dropdown {
   text-align: center;
+}
+
+.hr-bar {
+  height: 40px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 113, 175, 0.9) -151.77%,
+    rgba(49, 210, 247, 0.9) 191.91%
+  );
+}
+
+.dropdown > .btn-outline-success.dropdown-toggle {
+  color: #0e267a;
+  background-color: white;
+  border: 2px solid #97b0e7;
+}
+
+/********* MiniGrps *********/
+
+button.grp-tile {
+  border: 2px solid #97b0e7;
+  box-sizing: border-box;
+  border-radius: 6px;
+  width: 238px;
+  height: 164px;
+  color: #769ae7;
+  font-weight: 600;
+  background-color: white;
+  margin-left: 1rem;
+  margin-top: 2.5rem;
+}
+
+button.grp-tile:hover {
+  cursor: pointer;
+  border: none;
+  background-color: #ebf1ff;
+}
+
+.dash_header2 {
+  font-size: 24px;
+  line-height: 30px;
+  color: rgb(69, 70, 73);
+  margin-top: 3.5rem;
 }

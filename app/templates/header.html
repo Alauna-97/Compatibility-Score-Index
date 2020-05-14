@@ -60,17 +60,17 @@
           >
             Your Profile</a
           >
-          {% if current_user.type == "Organizer" %}
+          {% if current_user.type == "Administrator" %}
           <a
             class="nav-link"
-            href="{{ url_for('createGroup', username=current_user.username) }}"
-            >New Group</a
+            href="{{ url_for('createSet', username=current_user.username) }}"
+            >New Set</a
           >
           {% endif %} {% if current_user.type == "Regular" %}
           <a
             class="nav-link"
-            href="{{ url_for('joinAGroup', username=current_user.username) }}"
-            >Join A Group</a
+            href="{{ url_for('joinASet', username=current_user.username) }}"
+            >Join A Set</a
           >
           {% endif %}
           <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
