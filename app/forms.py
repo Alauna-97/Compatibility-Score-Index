@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectField, SubmitField, IntegerField
+from wtforms import StringField, PasswordField, SelectField, SubmitField, IntegerField,TextAreaField
 from wtforms.validators import InputRequired, Email, DataRequired, Length, EqualTo
 
 
@@ -60,7 +60,7 @@ class AboutYou(FlaskForm):
     occupation = SelectField('To which work area do you belong?', choices=[(0, 'Select an option'), ('Business', 'Business'), ('Education', 'Education'), (
         'Science', 'Science'), ('Technology', 'Technology'), ('Construction', 'Construction'), ('Communication', 'Communication'), ('Law', 'Law')])
 
-    leadership = SelectField('How would you describe your leadership style?', choices=[(0, 'Select an option'), (
+    leadership = SelectField('Which is your leadership style?', choices=[(0, 'Select an option'), (
         'Democratic', 'Democratic'), ('Autocratic', 'Autocratic'), ('Laissez-Faire', 'Laissez-Faire')])
 
     education = SelectField('Which is your level of education?', choices=[(0, 'Select an option'), ('Bachelors', 'Bachelors'), (
@@ -118,3 +118,25 @@ class TranferGrp(FlaskForm):
 class Criteria(FlaskForm):
     crit = SelectField('Criteria', choices=[
                        ('compatible', 'Compatible'), ('incompatible', 'Incompatible')])
+
+
+class adminSettings(FlaskForm):
+    pers_weight = SelectField('Personality', choices=[('5', '5'), ('10', '10')])
+    ldrshp_weight = SelectField('Leadership', choices=[('5', '5'), ('10', '10')])
+    hobby_weight = SelectField('Hobby', choices=[('5', '5'), ('10', '10')])
+    democratic = TextAreaField('Democratic', validators= [Length(max=500)])
+    autocratic = TextAreaField('Autocratic', validators= [Length(max=500)])
+    laissezfaire = TextAreaField('Laissez-Faire', validators= [Length(max=500)])
+    ambivert = TextAreaField('Ambivert', validators= [Length(max=500)])
+    extrovert = TextAreaField('Extrovert', validators= [Length(max=500)])
+    introvert = TextAreaField('Introvert', validators= [Length(max=500)])
+    sports = TextAreaField('Sports', validators= [Length(max=500)])
+    music = TextAreaField('Music', validators= [Length(max=500)])
+    exercising = TextAreaField('Exercising', validators= [Length(max=500)])
+    reading = TextAreaField('Reading', validators= [Length(max=500)])
+    shopping = TextAreaField('Shopping', validators= [Length(max=500)])
+    writing = TextAreaField('Writing', validators= [Length(max=500)])
+    dancing = TextAreaField('Dancing', validators= [Length(max=500)])
+    arts = TextAreaField('Arts', validators= [Length(max=500)])
+    watchingTV = TextAreaField('Watching TV', validators= [Length(max=500)])
+    submit = SubmitField('Save')

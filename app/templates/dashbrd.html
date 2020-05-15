@@ -1,11 +1,11 @@
 {% extends "sidebar.html" %} {% block div %}
-    <div class = "page_header">
+    <div class = "page_header mb-5">
         <h2 class = "dash_header">Dashboard</h2>
         {% include 'flash_messages.html' %}
     </div>
 
     {% if type == "Regular"%}
-        <h4 class = "grp_header">My Groups 
+        <h4 class = "grp_header ml-3">My Groups 
             <a href = "{{ url_for('recommend', username=session.get('username')) }}" class=" btn recom">Recommend Matches</a>
         </h4>
     {% endif %} 
@@ -33,7 +33,7 @@
                     <a href="{{ url_for('members', sid=group['sid']) }}">
                     <button class = "tile">
                         <div class = "grp_title py-3"> 
-                            {{ group['set_name'] }} <span class="code ml-4">{{ group['code'] }}</span>
+                            {{ group['set_name'] }} <span class="code">-{{ group['code'] }}</span>
                         </div>
                     </button>
                     </a>
@@ -45,7 +45,7 @@
             {% if type == "Organizer" %}
             <a href="{{ url_for('createSet', username=session.get('username')) }}">
             <button class = "tile add">
-                <img src="../static/images/plus.png" width="50" height="50" class = "img-add" />
+                <img src="../static/images/plus.png" width="50" height="50" class = "img-add grow" />
             </button>
             </a>
             {% endif %}
@@ -69,7 +69,7 @@
             {% if type == "Regular" %}
             <a href="{{ url_for('joinASet', username=session.get('username')) }}">
             <button class = "tile add">
-                <img src="../static/images/plus.png" width="50" height="50" class = "img-add" />
+                <img src="../static/images/plus.png" width="50" height="50" class = "img-add grow" />
             </button>
             </a>
             {% endif %}
@@ -78,7 +78,7 @@
 
 
     {% if type == "Regular" %}
-       <h4 class = "grp_header2">Current Friends </h4>
+       <h4 class = "grp_header2 ml-3">Current Friends </h4>
         <div class = "alert alert-primary">
             You Currently Have No Friends
         </div>
