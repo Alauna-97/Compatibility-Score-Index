@@ -625,6 +625,34 @@ div.register-form form.card-user-reg div.form-group {
   border: 1px solid #0e267a;
 }
 
+
+.frndTile{
+  width: 240px;
+  height: 90px;
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+  /* background-image: url(slideshow1.jpg); */
+  background-color: #AEBBFF;
+  /* opacity: 0.6; */
+  border-radius: 6px;
+  position: relative;
+  text-align: justify;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 3px solid transparent;
+  line-height: 1;
+  border-radius: 0.25rem;
+  transition: 0.5s;
+  /*transition: color 0.15s ease-in-out, background 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+*/
+}
+
+.frndTile:hover{
+  background-color: #AEBBFF;
+  opacity: 0.8;
+}
+
+
 /* .col-4.grid-spacing {
   max-width: 30%;
 } */

@@ -278,8 +278,16 @@ def dashboard(username):
         else:
             mycursor.execute(
                 'SELECT * FROM Sets JOIN joinset ON sets.sid = joinset.sid WHERE joinset.user_id = %s ', (session['id'],))
+            
         getSets = mycursor.fetchall()
-    return render_template('dashbrd.html', groups=getSets, type=session.get('TYPE'))
+
+        if session.get('TYPE') == "Regular":
+            mycursor.execute(
+                'SELECT * FROM user JOIN pin_user ON user.user_id = pin_user.match_id WHERE pin_user.user_id = %s ', (session['id'],))
+            getFriends = mycursor.fetchall()
+    
+    
+    return render_template('dashbrd.html', groups=getSets, getFriends = getFriends, type=session.get('TYPE'))
 
 
 @app.route("/logout")
@@ -291,7 +299,6 @@ def logout():
     session.pop('type', None)
     session.pop('first_name', None)
     session.pop('last_name', None)
-    flash('Logged out Succesfully', 'success')
     return redirect(url_for('home'))
 
 

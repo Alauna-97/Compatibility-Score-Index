@@ -78,34 +78,33 @@
 
 
     {% if type == "Regular" %}
-       <h4 class = "grp_header2 ml-3">Current Friends </h4>
+    <h4 class = "grp_header2 ml-3">Current Friends </h4>
+        {% if getFriends %} 
+        <div class = "row"> 
+            {% for friend in getFriends %}
+            <div class="col-4">
+                <button class = "frndTile">
+                    <div class = "grp_title text-center">
+                        {{friend['first_name']}} {{friend['last_name']}}
+                    </div>
+   
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+        <button class=" btn recom2">All</button>
+       
+    {% else %}  
+
+  
         <div class = "alert alert-primary">
             You Currently Have No Friends
         </div>
-        <button class=" btn recom2">All</button>
-    {% endif %}  
+
+    {% endif %}
+
+    {% endif %}
     
-    <!-- <div class = "row"> 
-        <div class="col-4">
-            <button class = "tile">
-                <div class = "grp_title"> 
-                    <p class = "tl"> </p> 
-                </div>
-            </button>
-        </div>
-        <div class = "col-4">
-            <button class = "tile">
-                <div class = "grp_title"> 
-                    <p class = "tl"></p> 
-                </div>
-            </button>
-        </div>
-        <div class = "col-4">
-            <button class = "tile">
-                <div class = "grp_title"> 
-                    <p class = "tl"> </p> 
-                </div>
-            </button>
-        </div> -->
+    
     </div>
 {% endblock %}
