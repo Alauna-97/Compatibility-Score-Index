@@ -9,10 +9,10 @@
         <h4>
           {% if session['TYPE'] == "Administrator" %}
             {{session['TYPE']}}
-          {% endif %}
+          {% else %}
 
           {{session['first_name']}} {{session['last_name']}} 
-
+          {% endif %}
           {%if session['TYPE'] == "Regular"%}
 
           <a href="{{ url_for('aboutUser', typeUser = session.get('TYPE')) }}"
