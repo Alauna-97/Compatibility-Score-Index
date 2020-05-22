@@ -8,6 +8,7 @@ This file creates your application.
 from app import app, login_manager
 from flask_mysqldb import MySQL
 from flask import render_template, request, redirect, url_for, flash, session
+from flask import jsonify
 from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria
 from werkzeug.security import check_password_hash
 
@@ -366,7 +367,7 @@ def recommend(username):
                 'SELECT * from User JOIN Scores ON scores.primary_user=user.username WHERE scores.primary_user = %s ORDER BY score DESC', (session['username'],))
         else:
             mycursor.execute(
-                'SELECT * from Usesr JOIN Scores ON scores.primary_user=user.username WHERE scores.primary_user = %s ORDER BY score ASC', (session['username'],))
+                'SELECT * from User JOIN Scores ON scores.primary_user=user.username WHERE scores.primary_user = %s ORDER BY score ASC', (session['username'],))
 
         matches = list(mycursor.fetchmany(9))
         return render_template('recomnd.html', form=form, matches=matches)
@@ -374,7 +375,14 @@ def recommend(username):
     mycursor.execute(
         'SELECT * from User JOIN Scores ON scores.primary_user=user.username WHERE scores.primary_user = %s ORDER BY score DESC', (session['username'],))
     matches = list(mycursor.fetchmany(9))
-    print(matches)
+    # message = {
+    #     'status': 200,
+    #     'message': 'OK',
+    #     'scores': matches
+    # }
+    # resp = jsonify(message)
+    # print(resp['scores'])
+    # print(matches)
     return render_template('recomnd.html', form=form, matches=matches)
 
 
