@@ -1,0 +1,53 @@
+{% extends "sidebar.html" %} {% block div %}
+<div class="register-form center-block less ml-5">
+  <div class = "page_header text-left">
+    <h2 class = "dash_header mb-5">Current Users</h2>
+  </div>
+
+  <div class = "card px-5 py-0 scrollable">
+    <div class = "card table-header">
+        <div class = "row">
+            <div class = "col-4">
+                Username
+            </div>
+
+            <div class = "col-4">
+                Email
+            </div>
+
+            <div class = "col-4">
+                User Type
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- TABLE DATA HERE  -->
+{% for user in users %}
+    <div class = "card table-data">
+        <div class = "row">
+            <div class = "col-4">
+                {{ user['username'] }}
+            </div>
+
+            <div class = "col-4">
+                {{ user['email'] }}
+            </div>
+
+            <div class = "col-4">
+                {{ user['type'] }}
+            </div>
+
+        </div>
+    </div>
+{% endfor %}
+  
+
+   
+  
+
+  </div>
+
+</div>
+
+{% endblock %}

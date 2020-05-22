@@ -7,7 +7,7 @@
   />
   <h2 class="mb-5 mt-3">Create a New Set</h2>
   <form
-    action="{{ url_for('createSet', username=current_user.username) }}"
+    action="{{ url_for('createSet', username=session.get('username')) }}"
     method="post"
     class="card-user-login mb-5 form-horizontal"
   >

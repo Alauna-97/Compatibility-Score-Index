@@ -29,7 +29,8 @@
       </div>
       <div class="modal-body">
         <div class="row" id="formgroupmodalClick">
-          {% for i in mini_gp[1] %}  
+          {% for i in mini_gp[group_num] %}
+          {{ group_num }}
             <div class="col">
               {{i[1].first_name}} {{i[1].last_name}}
             </div>  

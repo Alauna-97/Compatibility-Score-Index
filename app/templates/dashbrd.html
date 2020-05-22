@@ -1,51 +1,39 @@
 {% extends "sidebar.html" %} {% block div %}
-    <div class = "page_header">
+    <div class = "page_header mb-5">
         <h2 class = "dash_header">Dashboard</h2>
         {% include 'flash_messages.html' %}
     </div>
 
-    {% if current_user.type == "Regular"%}
-        <h4 class = "grp_header">My Sets 
-            <button class=" btn recom">Recommend Matches</button>
+    {% if type == "Regular"%}
+        <h4 class = "grp_header ml-3">My Groups 
+            <a href = "{{ url_for('recommend', username=session.get('username')) }}" class=" btn recom">Recommend Matches</a>
         </h4>
-
-        <!-- <div class="row mb-2">     
-            <div class="col">
-                <h4 class="grp_header">My Groups </h4>
-            </div>
-        
-            <div class="col btn-align">
-                <button class="btn btn-outline-success my-2 my-sm-0">
-                    Recommended Matches
-                </button>
-            </div>
-        </div>  -->
     {% endif %} 
 
-    {% if current_user.type == "Regular" and not gps %}
+    {% if type == "Regular" and not groups %}
         <div class = "alert alert-primary">
-            You are not a member of any Sets
+            You are not a member of any Groups
         </div>
     {% endif %}
 
-    {% if current_user.type == "Administrator" %}
+    {% if type == "Organizer" %}
         <h4 class = "grp_header">My Sets</h4>
     {% endif %} 
 
-    {% if current_user.type == "Administrator" and not gps %}
+    {% if type == "Organizer" and not groups %}
         <div class = "alert alert-primary">
             You Currently Have No Sets
         </div>
     {% endif %} 
     
     <div class = "row">
-        {% if current_user.type == "Administrator" and gps %}
-            {% for item in gps %}
+        {% if type == "Organizer" and groups %}
+            {% for group in groups %}
                 <div class="col-4 grid-spacing">
-                    <a href="{{ url_for('members', sid=item.sid) }}">
+                    <a href="{{ url_for('members', sid=group['sid']) }}">
                     <button class = "tile">
                         <div class = "grp_title py-3"> 
-                            {{ item.set_name }} <span class="code ml-4">{{ item.code }}</span>
+                            {{ group['set_name'] }} <span class="code">-{{ group['code'] }}</span>
                         </div>
                     </button>
                     </a>
@@ -54,10 +42,10 @@
         {% endif %} 
 
         <div class = "col-4">
-            {% if current_user.type == "Administrator" %}
-            <a href="{{ url_for('createSet', username=current_user.username) }}">
+            {% if type == "Organizer" %}
+            <a href="{{ url_for('createSet', username=session.get('username')) }}">
             <button class = "tile add">
-                <img src="../static/images/plus.png" width="50" height="50" class = "img-add" />
+                <img src="../static/images/plus.png" width="50" height="50" class = "img-add grow" />
             </button>
             </a>
             {% endif %}
@@ -65,12 +53,12 @@
     </div>
 
     <div class = "row">
-        {% if current_user.type == "Regular" and gps %}
-            {% for item in gps %}
+        {% if type == "Regular" and groups %}
+            {% for item in groups %}
                 <div class="col-4">
                     <button class = "tile">
                         <div class = "grp_title py-3"> 
-                            {{ item[1].set_name }}
+                            {{ item['set_name'] }}
                         </div>
                     </button>
                 </div>
@@ -78,10 +66,10 @@
         {% endif %} 
 
         <div class = "col-4">
-            {% if current_user.type == "Regular" %}
-            <a href="{{ url_for('joinASet', username=current_user.username) }}">
+            {% if type == "Regular" %}
+            <a href="{{ url_for('joinASet', username=session.get('username')) }}">
             <button class = "tile add">
-                <img src="../static/images/plus.png" width="50" height="50" class = "img-add" />
+                <img src="../static/images/plus.png" width="50" height="50" class = "img-add grow" />
             </button>
             </a>
             {% endif %}
@@ -89,35 +77,34 @@
     </div>
 
 
-    {% if current_user.type == "Regular" %}
-       <h4 class = "grp_header2">Current Friends </h4>
+    {% if type == "Regular" %}
+    <h4 class = "grp_header2 ml-3">Current Friends </h4>
+        {% if getFriends %} 
+        <div class = "row"> 
+            {% for friend in getFriends %}
+            <div class="col-4">
+                <button class = "frndTile">
+                    <div class = "grp_title text-center">
+                        {{friend['first_name']}} {{friend['last_name']}}
+                    </div>
+   
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+        <button class=" btn recom2">All</button>
+       
+    {% else %}  
+
+  
         <div class = "alert alert-primary">
             You Currently Have No Friends
         </div>
-        <button class=" btn recom2">All</button>
-    {% endif %}  
+
+    {% endif %}
+
+    {% endif %}
     
-    <!-- <div class = "row"> 
-        <div class="col-4">
-            <button class = "tile">
-                <div class = "grp_title"> 
-                    <p class = "tl"> </p> 
-                </div>
-            </button>
-        </div>
-        <div class = "col-4">
-            <button class = "tile">
-                <div class = "grp_title"> 
-                    <p class = "tl"></p> 
-                </div>
-            </button>
-        </div>
-        <div class = "col-4">
-            <button class = "tile">
-                <div class = "grp_title"> 
-                    <p class = "tl"> </p> 
-                </div>
-            </button>
-        </div> -->
+    
     </div>
 {% endblock %}

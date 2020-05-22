@@ -1,0 +1,43 @@
+{% extends "sidebar.html" %} {% block div %}
+<div class="page_header">
+  <h2 class="dash_header darken">Recommended Matches</h2>
+  <h3 class="dash_header2">Top 9 Matches</h3>
+  {% include 'flash_messages.html' %}
+
+  <span>
+    <img src="/static/images/multimedia.png" class="reload grow" />
+  </span>
+</div>
+
+<div class="dropdown">
+  <form method="post" action="/recommend/{{session.get('username')}}">
+    <div class="row postn">
+      <div class="col-6">
+        {{ form.crit(class='btn mydropdown mb-1') }}
+      </div>
+
+      <div class="col-6 pl-0 pr-0">
+        <input type="submit" value="Go" class="btn ok-sml" />
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- RECOMMEND TILE LAYOUT -->
+<div class="row pl-5 pr-4">
+  {% for match in matches %}
+  <div class="col-4">
+    <button class="rmndTile">
+      <span class="delete_" aria-hidden="true">&times;</span>
+
+      <span class="percentage">{{(match['score']*100)|round|int}}%</span>
+
+      <div class="grp_title py-3">
+        {{match['first_name']}} {{match['last_name']}}
+      </div>
+    </button>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

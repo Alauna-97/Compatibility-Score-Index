@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectField, SubmitField
+from wtforms import StringField, PasswordField, SelectField, SubmitField, IntegerField,TextAreaField
 from wtforms.validators import InputRequired, Email, DataRequired, Length, EqualTo
 
 
@@ -40,6 +40,9 @@ class AboutYou(FlaskForm):
     sex = SelectField(
         'Sex', choices=[(0, 'Select an option'), ('Female', 'Female'), ('Male', 'Male')])
 
+    pref_sex = SelectField('Your preferred sex:', choices=[(
+        0, 'Select an option'), ('Female', 'Female'), ('Male', 'Male')])
+
     age = StringField('Age', validators=[DataRequired()])
 
     height = SelectField('Height', choices=[(0, 'Select an option'), ('142', '(4 ft 8 inches) 142 cm'), (
@@ -48,23 +51,23 @@ class AboutYou(FlaskForm):
     ethnicity = SelectField('What is your ethnicity?', choices=[(0, 'Select an option'), (
         'Black', 'Black (Coloured)'), ('Chinese', 'Chinese'), ('White', 'White'), ('Indian', 'Indian'), ('Hispanic', 'Hispanic')])
 
+    pref_ethnicity = SelectField('Your preferred ethnicity:', choices=[(0, 'Select an option'), (
+        'Black', 'Black (Coloured)'), ('Chinese', 'Chinese'), ('White', 'White'), ('Indian', 'Indian'), ('Hispanic', 'Hispanic')])
+
     personality = SelectField('What is your personality type?', choices=[(0, 'Select an option'), (
         'Introvert', 'Introvert'), ('Extrovert', 'Extrovert'), ('Ambivert', 'Ambivert')])
 
     occupation = SelectField('To which work area do you belong?', choices=[(0, 'Select an option'), ('Business', 'Business'), ('Education', 'Education'), (
         'Science', 'Science'), ('Technology', 'Technology'), ('Construction', 'Construction'), ('Communication', 'Communication'), ('Law', 'Law')])
 
-    leadership = SelectField('How would you describe your leadership style?', choices=[(0, 'Select an option'), (
+    leadership = SelectField('Which is your leadership style?', choices=[(0, 'Select an option'), (
         'Democratic', 'Democratic'), ('Autocratic', 'Autocratic'), ('Laissez-Faire', 'Laissez-Faire')])
 
     education = SelectField('Which is your level of education?', choices=[(0, 'Select an option'), ('Bachelors', 'Bachelors'), (
         'Masters', 'Masters'), ('PhD', 'PhD'), ('Diploma', 'Diploma'), ('Associate Degree', 'Associate Degree')])
 
     hobby = SelectField('What is your favourite hobby?', choices=[(0, 'Select an option'), ('Sports', 'Sports'), (
-        'Music', 'Music'), ('Exercising', 'Exercising'), ('Shopping', 'Shopping'), ('Dancing', 'Dancing'), ('Watching TV', 'Watching TV'), ('Reading and Writing', 'Reading and Writing'), ('Arts', 'Arts')])
-
-    faculty = SelectField('To which faculty do you belong?', choices=[(0, 'Select an option'), ('Science and Technology', 'Science and Technology'), (
-        'Medical Sciences', 'Medical Sciences'), ('Social Sciences', 'Social Sciences'), ('Humanities', 'Humanities'), ('Engineering', 'Engineering'), ('Law', 'Law')])
+        'Music', 'Music'), ('Exercising', 'Exercising'), ('Shopping', 'Shopping'), ('Dancing', 'Dancing'), ('Watching-TV', 'Watching TV'), ('Reading', 'Reading'), ('Writing', 'Writing'), ('Arts', 'Arts')])
 
     submit = SubmitField('Submit')
 
@@ -94,3 +97,46 @@ class Groupings(FlaskForm):
         0, 'Select an option'), ('2', 'two'), ('3', 'three'), ('4', 'four'), ('5', 'five')])
 
     submit = SubmitField('Create')
+
+
+def intcheck(self, field):
+    try:
+        val = int(field.data)
+    except ValueError:
+        raise ValidationError('Must be a number')
+
+class TranferGrp(FlaskForm):
+    # NOT WOKRING :(
+    grpNum = IntegerField('First Group Number', validators=[
+                          DataRequired(), intcheck])
+    grpNum2 = IntegerField('Second Group Number', validators=[
+                           DataRequired(), intcheck])
+
+    submit = SubmitField('Next')
+
+
+class Criteria(FlaskForm):
+    crit = SelectField('Criteria', choices=[
+                       ('compatible', 'Compatible'), ('incompatible', 'Incompatible')])
+
+
+class adminSettings(FlaskForm):
+    pers_weight = SelectField('Personality', choices=[('5', '5'), ('10', '10')])
+    ldrshp_weight = SelectField('Leadership', choices=[('5', '5'), ('10', '10')])
+    hobby_weight = SelectField('Hobby', choices=[('5', '5'), ('10', '10')])
+    democratic = TextAreaField('Democratic', validators= [Length(max=500)])
+    autocratic = TextAreaField('Autocratic', validators= [Length(max=500)])
+    laissezfaire = TextAreaField('Laissez-Faire', validators= [Length(max=500)])
+    ambivert = TextAreaField('Ambivert', validators= [Length(max=500)])
+    extrovert = TextAreaField('Extrovert', validators= [Length(max=500)])
+    introvert = TextAreaField('Introvert', validators= [Length(max=500)])
+    sports = TextAreaField('Sports', validators= [Length(max=500)])
+    music = TextAreaField('Music', validators= [Length(max=500)])
+    exercising = TextAreaField('Exercising', validators= [Length(max=500)])
+    reading = TextAreaField('Reading', validators= [Length(max=500)])
+    shopping = TextAreaField('Shopping', validators= [Length(max=500)])
+    writing = TextAreaField('Writing', validators= [Length(max=500)])
+    dancing = TextAreaField('Dancing', validators= [Length(max=500)])
+    arts = TextAreaField('Arts', validators= [Length(max=500)])
+    watchingTV = TextAreaField('Watching TV', validators= [Length(max=500)])
+    submit = SubmitField('Save')
