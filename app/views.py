@@ -41,6 +41,7 @@ mysql = MySQL(app)
 @app.route('/')
 def home():
     """Render website's home page."""
+   
     return render_template('home.html')
 
 
@@ -48,6 +49,184 @@ def home():
 def about():
     """Render the website's about page."""
     return render_template('about.html')
+
+
+@app.route('/admin/', methods=["GET", "POST"])
+def admin():
+    """Render the website's admin page."""
+    form = adminSettings()
+
+    mycursor = mysql.connection.cursor()
+    mycursor.execute('Select * from Dictionary')
+    definitions = mycursor.fetchone()
+
+
+    if request.method == "POST" and form.validate_on_submit():
+        pers_weight = request.form['pers_weight']
+        ldrshp_weight = request.form['ldrshp_weight']
+        hobby_weight = request.form['hobby_weight']
+        democratic = request.form['democratic']
+        autocratic = request.form['autocratic']
+        laissezfaire = request.form['laissezfaire']
+        ambivert = request.form['ambivert']
+        extrovert = request.form['extrovert']
+        introvert = request.form['introvert']
+        sports = request.form['sports']
+        music = request.form['music']
+        exercising = request.form['exercising']
+        reading = request.form['reading']
+        shopping = request.form['shopping']
+        writing = request.form['writing']
+        dancing = request.form['dancing']
+        arts = request.form['arts']
+        watchingTV = request.form['watchingTV']
+
+        mycursor = mysql.connection.cursor()
+
+        if pers_weight:
+            sql = "UPDATE Dictionary SET personality_weight = %s  WHERE dict_id = %s"
+            val = (pers_weight, 'D-01')
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+        
+        if ldrshp_weight:
+            sql = "UPDATE Dictionary SET leadership_weight = %s WHERE dict_id = %s"
+            val = (ldrshp_weight, 'D-01')
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+        
+        if hobby_weight:
+            sql = "UPDATE Dictionary SET hobby_weight = %s WHERE dict_id = %s"
+            val = (hobby_weight, 'D-01')
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+
+        if democratic:
+            sql = "UPDATE Dictionary SET democratic = %s WHERE dict_id = %s"
+            val = (democratic, 'D-01')
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+        
+        if autocratic:
+            sql = "UPDATE Dictionary SET autocratic = %s WHERE dict_id = %s"
+            val = (autocratic, 'D-01')
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+
+        
+        if laissezfaire:
+            sql = "UPDATE Dictionary SET laissez_faire = %s WHERE dict_id = %s"
+            val = (laissezfaire, 'D-01')
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+
+        if ambivert:
+            sql = "UPDATE Dictionary SET ambivert = %s WHERE dict_id = %s"
+            val = (ambivert, 'D-01')
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+
+        
+        if extrovert:
+            sql = "UPDATE Dictionary SET extrovert = %s WHERE dict_id = %s"
+            val = (extrovert, 'D-01')
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+        
+        
+        if introvert:
+            sql = "UPDATE Dictionary SET introvert = %s WHERE dict_id = %s"
+            val = (introvert, 'D-01')
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+        
+        if sports:
+            sql = "UPDATE Dictionary SET sports = %s WHERE dict_id = %s"
+            val = (sports, 'D-01')
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+        
+        if music:
+            sql = "UPDATE Dictionary SET music = %s WHERE dict_id = %s"
+            val = (music, 'D-01')
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+
+        if exercising:
+            sql = "UPDATE Dictionary SET exercising = %s WHERE dict_id = %s"
+            val = (exercising, 'D-01')
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+
+        if reading:
+            sql = "UPDATE Dictionary SET reading = %s WHERE dict_id = %s"
+            val = (reading, 'D-01')
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+
+
+        if shopping:
+            sql = "UPDATE Dictionary SET shopping = %s WHERE dict_id = %s"
+            val = (shopping, 'D-01')
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+
+        
+        if writing:
+            sql = "UPDATE Dictionary SET writing = %s WHERE dict_id = %s"
+            val = (writing, 'D-01')
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+
+
+        if dancing:
+            sql = "UPDATE Dictionary SET dancing = %s WHERE dict_id = %s"
+            val = (dancing, 'D-01')
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+        
+
+        if arts:
+            sql = "UPDATE Dictionary SET arts = %s WHERE dict_id = %s"
+            val = (arts, 'D-01')
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+        
+
+        if watchingTV:
+            sql = "UPDATE Dictionary SET watching_tv = %s WHERE dict_id = %s"
+            val = (watchingTV, 'D-01')
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+
+        flash('Settings Updated', 'success')
+
+    
+    return render_template('admin.html', form = form, definitions = definitions)
+
+@app.route('/admin/currentusers/', methods=["GET", "POST"])
+def allUsers():
+    mycursor = mysql.connection.cursor()
+    mycursor.execute('Select * from user WHERE user_id != %s', (session['id'],))
+    users = mycursor.fetchall()
+
+    return render_template('all_users.html', users = users)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -75,13 +254,15 @@ def login():
             session['first_name'] = user['first_name']
             session['last_name'] = user['last_name']
 
-            # Flash Success
-            flash('Login Successful', 'success')
+            if user['type'] == 'Administrator':
+                return redirect(url_for('admin'))
 
-            return redirect(url_for('dashboard', username=username))
+            else:
+                flash('Login Successful', 'success')
+                return redirect(url_for('dashboard', username=username))
 
         # Flash error message with incorrect username/password
-        flash(u'Invalid Credentials', 'error')
+        flash('Invalid Credentials', 'danger')
     return render_template("login.html", form=form)
 
 
@@ -99,8 +280,16 @@ def dashboard(username):
         else:
             mycursor.execute(
                 'SELECT * FROM Sets JOIN joinset ON sets.sid = joinset.sid WHERE joinset.user_id = %s ', (session['id'],))
+            
         getSets = mycursor.fetchall()
-    return render_template('dashbrd.html', groups=getSets, type=session.get('TYPE'))
+
+        if session.get('TYPE') == "Regular":
+            mycursor.execute(
+                'SELECT * FROM user JOIN pin_user ON user.user_id = pin_user.match_id WHERE pin_user.user_id = %s ', (session['id'],))
+            getFriends = mycursor.fetchall()
+    
+    
+    return render_template('dashbrd.html', groups=getSets, getFriends = getFriends, type=session.get('TYPE'))
 
 
 @app.route("/logout")
@@ -112,7 +301,6 @@ def logout():
     session.pop('type', None)
     session.pop('first_name', None)
     session.pop('last_name', None)
-    flash('Logged out Succesfully', 'success')
     return redirect(url_for('home'))
 
 

@@ -7,8 +7,13 @@
       {% if 'username' in session %}
       <div class="sidebar-header">
         <h4>
-          {{session['first_name']}} {{session['last_name']}} {%if
-          session['TYPE'] == "Regular"%}
+          {% if session['TYPE'] == "Administrator" %}
+            {{session['TYPE']}}
+          {% else %}
+
+          {{session['first_name']}} {{session['last_name']}} 
+          {% endif %}
+          {%if session['TYPE'] == "Regular"%}
 
           <a href="{{ url_for('aboutUser', typeUser = session.get('TYPE')) }}"
             ><img
@@ -31,43 +36,62 @@
         />
       </div>
 
-      <div class="abt">
+      <div class="abt px-5 text-left">
         <p>
           <b>About</b>
           <button class="btn recom" onclick="myFunction()">Edit</button>
         </p>
+
         <p id="abtP">
-          To edit, click the <b>'Edit' </b> button above to start typing! <br />
+          To edit, click the 
+          <b>'Edit' </b> 
+          button above to start typing! 
+          <br />
           Then click the pencil
           <img
             src="/static/images/edit (2).png"
             width="18"
             height="18"
-            class="d-inline-block align-top ml-1 mr-1"
+            class="d-inline-block align-top ml-1 mr-1 grow"
           />
           icon to tell us more about yourself so we can find your matches!
         </p>
       </div>
-      {% endif %} {% if session['TYPE'] == "Organizer" %}
+      {% endif %} 
+      
+      {% if session['TYPE'] == "Organizer" %}
+
+        </h4>
+      </div>
+
       <div>
         <img
-          src="/static/images/no_profilepic2.png"
+          src="../static/images/no_profilepic2.png"
           width="220"
           height="220"
           class="img-thumbnail"
+          alt="profile picture"
         />
       </div>
 
-      <div class="abt">
+      <div class="abt px-5 text-left">
         <p>
           <b>About</b>
           <button class="btn recom" onclick="myFunction()">Edit</button>
         </p>
+
         <p id="abtP">
-          To edit, click the <b>'Edit' </b> button above to start typing! <br />
-        </p>
+          To edit, click the 
+          <b>'Edit' </b> 
+          button above to start typing! 
+          <br />
+         
       </div>
-      {% endif %} {% endif %}
+
+    
+
+      {% endif %} 
+      {% endif %}
       <!-- this makes the about section editable -->
 
       <script>
@@ -92,9 +116,29 @@
           };
         }
       </script>
+       {% if session['TYPE'] == "Administrator" %}
+       <ul class="list-unstyled components mt-5">
+         <li>
+           <a
+             href="{{ url_for('admin') }}"
+             class="btn rec-button ml-0"
+             >Settings</a
+           >
+         </li>
+ 
+         <li>
+           <a
+             href="{{ url_for('allUsers') }}"
+             class="btn rec-button ml-0"
+             >Users</a
+           >
+         </li>
+       </ul>
+       {% endif %}
+
       {% if session['TYPE'] == "Organizer" %}
 
-      <ul class="list-unstyled components">
+      <ul class="list-unstyled components mt-4">
         <li>
           <a
             href="{{ url_for('dashboard', username = session.get('username')) }}"
@@ -104,7 +148,7 @@
         </li>
       </ul>
       {% endif %} {% if session['TYPE'] == "Regular" %}
-      <ul class="list-unstyled components">
+      <ul class="list-unstyled components mt-4">
         <li>
           <a
             href="{{ url_for('dashboard', username=session.get('username') )}}"
@@ -121,7 +165,12 @@
         </li>
       </ul>
       {% endif %}
-      <div class="socialmd">
+
+     
+
+
+      {% if session['TYPE'] != "Administrator" %}
+      <div class="socialmd mt-5">
         <a href="#">
           <img
             src="../static/images/facebook.png"
@@ -159,6 +208,8 @@
           />
         </a>
       </div>
+      {% endif %}
+
     </nav>
   </div>
   <div class="col-8">

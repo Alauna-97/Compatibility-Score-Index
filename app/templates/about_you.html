@@ -1,5 +1,5 @@
 {% extends "sidebar.html" %} {% block div %}
-<div class="register-form center-block less">
+<div class="register-form center-block less ml-5">
   {% if 'username' in session %}
   <div class="page_header">
     <h2 class="dash_header darken">Tell Us About Yourself</h2>
@@ -171,7 +171,7 @@
       </div>
 
       <div class="row my-2">
-        <div class="col mt-5 mb-4">
+        <div class="col mt-3 mb-5">
           {{ form.submit(class='btn btn-outline-success my-2 my-sm-0') }}
         </div>
       </div>

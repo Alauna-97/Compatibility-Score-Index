@@ -1,0 +1,300 @@
+{% extends "sidebar.html" %} {% block div %}
+<div class="register-form center-block less ml-5">
+  <div class = "page_header text-left">
+    <h2 class = "dash_header">Settings</h2>
+    <!-- <h4 class = "darken mt-4">Settings</h4> -->
+   
+</div>
+{% include 'flash_messages.html' %}
+  <form
+    class="card-user-reg mt-4 mb-0"
+    action="{{ url_for('admin') }}"
+    method="POST"
+  >
+    {{ form.csrf_token }}
+
+
+    <div class="ques-container mt-4">
+        <!-- <div class = "subheader leftheader"> -->
+            <p class = "subheader text-left">Adjust the weightings</p>
+        <!-- </div> -->
+
+      <div class="row mt-0">
+        <div class="col-4 pl-0">
+          <div class="form-group pl-0">
+            {{ form.pers_weight.label(class = "adminlabel") }} {{ form.pers_weight(class='form-control adminform') }} {% if
+            form.pers_weight.errors %}
+            <ul class="errors">
+              {% for error in form.pers_weight.errors %}
+              <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="col-4 pl-0">
+          <div class="form-group pl-0">
+            {{ form.ldrshp_weight.label(class = "adminlabel") }} {{ form.ldrshp_weight(class='form-control adminform') }}
+            {% if form.ldrshp_weight.errors %}
+            <ul class="errors">
+              {% for error in form.ldrshp_weight.errors %}
+              <li>Please select an option from the dropdown.</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="col-4 pl-0">
+            <div class="form-group pl-0">
+              {{ form.hobby_weight.label(class = "adminlabel") }} {{ form.hobby_weight(class='form-control adminform') }}
+              {% if form.hobby_weight.errors %}
+              <ul class="errors">
+                {% for error in form.hobby_weight.errors %}
+                <li>Please select an option from the dropdown.</li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="ques-container mt-5">
+            <!-- <div class = "subheader leftheader"> -->
+                <p class = "subheader leftheader mt-5 text-left">Redefine Defaults</p>
+            <!-- </div> -->
+    
+          <div class="row mt-0">
+            <div class="col-6 pl-0">
+              <div class="form-group pl-0">
+                {{ form.democratic.label(class = "adminlabel") }} 
+                {{ form.democratic(class='form-control adminform', placeholder = definitions['democratic'] ) }} 
+
+                {% if form.democratic.errors %}
+                <ul class="errors">
+                  {% for error in form.democratic.errors %}
+                  <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+    
+            <div class="col-6 pl-0">
+              <div class="form-group pl-0">
+                {{ form.autocratic.label(class = "adminlabel") }} {{ form.autocratic(class='form-control adminform', placeholder = definitions['autocratic']) }}
+                {% if form.autocratic.errors %}
+                <ul class="errors">
+                  {% for error in form.autocratic.errors %}
+                  <li>Please select an option from the dropdown.</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-6 pl-0">
+              <div class="form-group pl-0">
+                {{ form.laissezfaire.label(class = "adminlabel") }} {{ form.laissezfaire(class='form-control adminform', placeholder = definitions['laissez_faire']) }} {% if
+                form.laissezfaire.errors %}
+                <ul class="errors">
+                  {% for error in form.laissezfaire.errors %}
+                  <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+    
+            <div class="col-6 pl-0">
+              <div class="form-group pl-0">
+                {{ form.ambivert.label(class = "adminlabel") }} {{ form.ambivert(class='form-control adminform', placeholder = definitions['ambivert']) }}
+                {% if form.ambivert.errors %}
+                <ul class="errors">
+                  {% for error in form.ambivert.errors %}
+                  <li>Please select an option from the dropdown.</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+        </div>
+
+
+        <div class="row mt-3">
+            <div class="col-6 pl-0">
+              <div class="form-group pl-0">
+                {{ form.extrovert.label(class = "adminlabel") }} {{ form.extrovert(class='form-control adminform', placeholder = definitions['extrovert']) }} {% if
+                form.extrovert.errors %}
+                <ul class="errors">
+                  {% for error in form.extrovert.errors %}
+                  <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+    
+            <div class="col-6 pl-0">
+              <div class="form-group pl-0">
+                {{ form.introvert.label(class = "adminlabel") }} {{ form.introvert(class='form-control adminform', placeholder = definitions['introvert']) }}
+                {% if form.introvert.errors %}
+                <ul class="errors">
+                  {% for error in form.introvert.errors %}
+                  <li>Please select an option from the dropdown.</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+        </div>
+
+
+        <div class="row mt-3">
+            <div class="col-6 pl-0">
+              <div class="form-group pl-0">
+                {{ form.sports.label(class = "adminlabel") }} {{ form.sports(class='form-control adminform', placeholder = definitions['sports']) }} {% if
+                form.sports.errors %}
+                <ul class="errors">
+                  {% for error in form.sports.errors %}
+                  <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+    
+            <div class="col-6 pl-0">
+              <div class="form-group pl-0">
+                {{ form.music.label(class = "adminlabel") }} {{ form.music(class='form-control adminform', placeholder = definitions['music']) }}
+                {% if form.music.errors %}
+                <ul class="errors">
+                  {% for error in form.music.errors %}
+                  <li>Please select an option from the dropdown.</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+        </div>
+
+
+        <div class="row mt-3">
+            <div class="col-6 pl-0">
+              <div class="form-group pl-0">
+                {{ form.exercising.label(class = "adminlabel") }} {{ form.exercising(class='form-control adminform', placeholder = definitions['exercising']) }} {% if
+                form.exercising.errors %}
+                <ul class="errors">
+                  {% for error in form.exercising.errors %}
+                  <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+    
+            <div class="col-6 pl-0">
+              <div class="form-group pl-0">
+                {{ form.reading.label(class = "adminlabel") }} {{ form.reading(class='form-control adminform', placeholder = definitions['reading']) }}
+                {% if form.reading.errors %}
+                <ul class="errors">
+                  {% for error in form.reading.errors %}
+                  <li>Please select an option from the dropdown.</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-6 pl-0">
+              <div class="form-group pl-0">
+                {{ form.shopping.label(class = "adminlabel") }} {{ form.shopping(class='form-control adminform', placeholder = definitions['shopping']) }} {% if
+                form.shopping.errors %}
+                <ul class="errors">
+                  {% for error in form.shopping.errors %}
+                  <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+    
+            <div class="col-6 pl-0">
+              <div class="form-group pl-0">
+                {{ form.writing.label(class = "adminlabel") }} {{ form.writing(class='form-control adminform', placeholder = definitions['writing']) }}
+                {% if form.writing.errors %}
+                <ul class="errors">
+                  {% for error in form.writing.errors %}
+                  <li>Please select an option from the dropdown.</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-6 pl-0">
+              <div class="form-group pl-0">
+                {{ form.dancing.label(class = "adminlabel") }} {{ form.dancing(class='form-control adminform', placeholder = definitions['dancing']) }} {% if
+                form.dancing.errors %}
+                <ul class="errors">
+                  {% for error in form.dancing.errors %}
+                  <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+    
+            <div class="col-6 pl-0">
+              <div class="form-group pl-0">
+                {{ form.arts.label(class = "adminlabel") }} {{ form.arts(class='form-control adminform', placeholder = definitions['arts']) }}
+                {% if form.arts.errors %}
+                <ul class="errors">
+                  {% for error in form.arts.errors %}
+                  <li>Please select an option from the dropdown.</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-6 pl-0">
+              <div class="form-group pl-0">
+                {{ form.watchingTV.label(class = "adminlabel") }} {{ form.watchingTV(class='form-control adminform', placeholder = definitions['watching_tv']) }} {% if
+                form.watchingTV.errors %}
+                <ul class="errors">
+                  {% for error in form.watchingTV.errors %}
+                  <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+        </div>
+    </div>
+
+
+
+     
+
+      <div class="row my-2">
+        <div class="col mt-5 mb-4">
+          {{ form.submit(class='btn btn-outline-success my-2 my-sm-0') }}
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,4 +1,5 @@
 {% extends "base.html" %} {% block main %}
+
 <div class="register-form center-block">
   <img
     src="../static/images/Footer Logo.png"
@@ -6,6 +7,7 @@
     alt=""
   />
   <h2 class="mb-5 mt-3">Login</h2>
+  {% include 'flash_messages.html' %}
   <form
     action="{{ url_for('login') }}"
     method="post"

@@ -5,16 +5,11 @@
     class="d-inline-block align-top mt-5"
     alt=""
   />
-  <h2 class="mb-5 mt-3">User Registration - General</h2>
+  <h2 class="mb-5 mt-3">User Registration</h2>
   <form class="card-user-reg mb-5" method="POST">
     {{ form.csrf_token }}
     <div class="row my-2">
-      <div class="col title">
-        General
-      </div>
-      <div class="col about-you title">
-        <a href="{{ url_for('aboutUser', typeUser='Regular') }}">About You</a>
-      </div>
+    
     </div>
     <div class="form-body">
       <div class="row mt-5">
