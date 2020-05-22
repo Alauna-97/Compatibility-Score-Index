@@ -8,11 +8,13 @@ This file creates your application.
 from app import app, login_manager
 from flask_mysqldb import MySQL
 from flask import render_template, request, redirect, url_for, flash, session
-from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria, adminSettings
+from flask import jsonify
+from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria
 from werkzeug.security import check_password_hash
 
 import random
 import uuid
+import jyserver.Flask as js
 # import mysql.connector
 # mydb = mysql.connector.connect(
 #     host="localhost",
@@ -472,57 +474,50 @@ def members(sid):
     mycursor = mysql.connection.cursor()
     mycursor.execute('SELECT * from sets WHERE sid = %s', (sid,))
     fullSet = mycursor.fetchall()
-
     print(fullSet)
 
     form = Groupings()
-
+    x = 0
     if 'username' in session and session.get('TYPE') == "Organizer":
         mycursor = mysql.connection.cursor()
-        mycursor.execute('SELECT user.first_name, user.last_name from user JOIN regular JOIN joinset ON regular.user_id = user.user_id and regular.user_id = joinset.user_id and user.user_id=joinset.user_id WHERE joinset.sid = %s', (sid,))
-        getMembers = mycursor.fetchall()
+        mycursor.execute('SELECT username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user JOIN regular JOIN joinset ON regular.user_id = user.user_id and regular.user_id = joinset.user_id and user.user_id=joinset.user_id WHERE joinset.sid = %s', (sid,))
+        getMembers = list(mycursor.fetchall())
         print(getMembers)
-        print("")
-        print("")
         mbrsCopy = getMembers
 
         if request.method == "POST" and form.validate_on_submit():
+            criteria = form.grpBy.data              # Compatible or Incompatible
+            # Number of Persons in Each Group
+            numPersons = int(form.numPersons.data)
 
-            grpBy = form.grpBy.data
-            numPersons = form.numPersons.data
-
-            # THIS ONLY ALLOWS FOR THE GROUPS TO SHOW
+            # Total Amount of Persons in Set
             length = len(getMembers)
-            grpAmt = round(length/int(numPersons))
-            mini_gp = []
+            grpAmt = round(length/numPersons)       # How many Groups Formed
+            mini_gp = []                            # List with groups
 
+            mycursor = mysql.connection.cursor()
             for i in range(grpAmt):
-                mini_gp = mini_gp + [mbrsCopy[:grpAmt]]
-                mbrsCopy = mbrsCopy[grpAmt:]
-                # for p in mini_gp[i]:
-                #     print("")
-                # sug = SetUserGp(user_id=p[1].user_id,
-                #                 sid=set_name.sid, gp_num=i+1)
-                # db.session.add(sug)
-                # db.session.commit()
+                mini_gp = mini_gp + [mbrsCopy[:numPersons]]
+                mbrsCopy = mbrsCopy[numPersons:]
 
-            # sug = (db.session.query(
-            #     SetUserGp).filter_by(sid=set_name.sid).all())
+            # for user in mini_gp[i]:
+            #     # Insert a New Set for an Organizer
+            #     sql = "INSERT INTO SetUserGroup (user_id, sid, group_num) VALUES (%s, %s, %s)"
+            #     val = (user['user_id'], sid, i+1)
 
-            print("")
-            print("")
-            # print(sug)
-            # print("")
-            # print("")
-            # lst = []
-            # for p in sug:
-            #     lst = lst + [p.gp_num]
+            #     mycursor.execute(sql, val)
+            #     mysql.connection.commit()
+            #     mycursor = mysql.connection.cursor()
 
-            # sug = list(dict.fromkeys(lst))
-            # sug = getGroups + sug
-            # print(sug[-(grpAmt):])
+            mycursor.execute(
+                'SELECT * from setusergroup WHERE sid = %s', (sid,))
+            fullSet = mycursor.fetchall()
+            print()
+            print()
+            print(mini_gp)
 
-            # return render_template('miniGrps.html', set_name=set_name, numPersons=numPersons, grpAmt=grpAmt, mini_gp=mini_gp, sug=sug)
+            # print(fullSet)
+            return render_template('miniGrps.html', fullSet=fullSet, numPersons=numPersons, grpAmt=grpAmt, mini_gp=mini_gp)
     return render_template('members.html', sid=sid, form=form, fullSet=fullSet, getMembers=getMembers)
 
 
@@ -557,24 +552,29 @@ def recommend(username):
         crit = form.crit.data
         if crit == "compatible":
             mycursor.execute(
-                'SELECT first_name, last_name, scores.match_id, score from User JOIN Scores ON scores.match_id=user.user_id WHERE scores.user_id = %s ORDER BY score DESC', (session['id'],))
-            # matches = (db.session.query(Scores, User).join(Scores, Scores.other_id == User.user_id).filter_by(
-            #     user_id=current_user.user_id).order_by(Scores.score.desc()).limit(9).all())
+                'SELECT * from User JOIN Scores ON scores.primary_user=user.username WHERE scores.primary_user = %s ORDER BY score DESC', (session['username'],))
         else:
             mycursor.execute(
-                'SELECT first_name, last_name, scores.match_id, score from User JOIN Scores ON scores.match_id=user.user_id WHERE scores.user_id = %s ORDER BY score ASC', (session['id'],))
+                'SELECT * from User JOIN Scores ON scores.primary_user=user.username WHERE scores.primary_user = %s ORDER BY score ASC', (session['username'],))
 
         matches = list(mycursor.fetchmany(9))
         return render_template('recomnd.html', form=form, matches=matches)
 
     mycursor.execute(
-        'SELECT first_name, last_name, scores.match_id, score from User JOIN Scores ON scores.match_id=user.user_id WHERE scores.user_id = %s ORDER BY score DESC', (session['id'],))
+        'SELECT * from User JOIN Scores ON scores.primary_user=user.username WHERE scores.primary_user = %s ORDER BY score DESC', (session['username'],))
     matches = list(mycursor.fetchmany(9))
-    print(matches)
+    # message = {
+    #     'status': 200,
+    #     'message': 'OK',
+    #     'scores': matches
+    # }
+    # resp = jsonify(message)
+    # print(resp['scores'])
+    # print(matches)
     return render_template('recomnd.html', form=form, matches=matches)
 
 
-@app.route('/Regulars')
+@app.route('/1')
 def getRegularUsers():
     """Render website's home page."""
     mycursor = mysql.connection.cursor()
@@ -582,6 +582,34 @@ def getRegularUsers():
         'SELECT username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user join regular on user.user_id=regular.user_id')
     user = list(mycursor.fetchall())
     return '<p>' + str(user) + '</p>'
+
+
+@app.route('/users')
+def getUsers():
+    """Render website's home page."""
+    mycursor = mysql.connection.cursor()
+
+    mycursor.execute(
+        'SELECT username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user join regular on user.user_id=regular.user_id WHERE user.username = %s', (session['username'],))
+    cur_user = list(mycursor.fetchall())    # Current User
+
+    mycursor.execute(
+        'SELECT username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user join regular on user.user_id=regular.user_id WHERE NOT user.username = %s', (session['username'],))
+    other_users = list(mycursor.fetchall())     # All but current user
+
+    return '<p>' + str(cur_user) + '</p>' + '<p>' + str(other_users) + '</p>'
+
+
+@app.route('/definitions')
+def getDefinitions():
+    mycursor = mysql.connection.cursor()
+
+    # Definition of System Variables
+    mycursor.execute(
+        'SELECT personality_weight, leadership_weight, hobby_weight, democratic, autocratic, laissez_faire, ambivert, extrovert, introvert, sports, music, exercising, reading, shopping, writing, dancing, arts, watching_tv from Dictionary', )
+    definitions = list(mycursor.fetchall())
+
+    return '<p>' + str(definitions) + '</p>'
 
 
 def randomFeatures():

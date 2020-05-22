@@ -1,43 +1,192 @@
 {% extends "sidebar.html" %} {% block div %}
-<div class="page_header">
-  <h2 class="dash_header darken">Recommended Matches</h2>
-  <h3 class="dash_header2">Top 9 Matches</h3>
-  {% include 'flash_messages.html' %}
+<div>
+  <div class="page_header">
+    <h2 class="dash_header darken">Recommended Matches</h2>
+    <h3 class="dash_header2">Top 9 Matches</h3>
+    {% include 'flash_messages.html' %}
 
-  <span>
-    <img src="/static/images/multimedia.png" class="reload grow" />
-  </span>
-</div>
+    <span>
+      <img src="/static/images/multimedia.png" class="reload grow" />
+    </span>
+  </div>
 
-<div class="dropdown">
-  <form method="post" action="/recommend/{{session.get('username')}}">
-    <div class="row postn">
-      <div class="col-6">
-        {{ form.crit(class='btn mydropdown mb-1') }}
+  <div class="dropdown">
+    <form method="post" action="/recommend/{{session.get('username')}}">
+      <div class="row postn">
+        <div class="col-6">
+          {{ form.crit(class='btn mydropdown mb-1') }}
+        </div>
+
+        <div class="col-6 pl-0 pr-0">
+          <input type="submit" value="Go" class="btn ok-sml" />
+        </div>
       </div>
+    </form>
+  </div>
 
-      <div class="col-6 pl-0 pr-0">
-        <input type="submit" value="Go" class="btn ok-sml" />
+  <!-- RECOMMEND TILE LAYOUT -->
+  <div class="row pl-5 pr-4">
+    {% for match in matches %}
+    <div class="col-4">
+      <button
+        class="rmndTile"
+        data-toggle="modal"
+        data-target="#formgroupmodal"
+        data-id="{{ match.other_user }} {{ match.score }} {{ match.similarity_percentage }} {{ match.personality_score }} {{ match.leadership_score }} {{ match.hobby_score }} {{ match.gender_score }} {{ match.age_score }} {{ match.height_score }} {{ match.ethnicity_score }} {{ match.education_score }} {{ match.occupation_score }}"
+        id="getuser"
+      >
+        <span class="delete_" aria-hidden="true">&times;</span>
+
+        <span class="percentage"
+          >{{(match['similarity_percentage'])|round|int}} %</span
+        >
+        <div class="grp_title py-3">
+          {{match['other_user']}}
+        </div>
+      </button>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div
+    class="modal fade"
+    id="formgroupmodal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="PopUpTitle"></h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            onclick="randomizeData()"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row" id="formgroupmodalClick">
+            <div class="col">
+              <span id="nameHolder"></span>
+              <span class="ml-5" id="CSIHolder"></span>
+            </div>
+          </div>
+          <div class="hr-bar mt-1"></div>
+          <canvas id="myChart" width="450" height="250"></canvas>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+        </div>
       </div>
     </div>
-  </form>
-</div>
-
-<!-- RECOMMEND TILE LAYOUT -->
-<div class="row pl-5 pr-4">
-  {% for match in matches %}
-  <div class="col-4">
-    <button class="rmndTile">
-      <span class="delete_" aria-hidden="true">&times;</span>
-
-      <span class="percentage">{{(match['score']*100)|round|int}}%</span>
-
-      <div class="grp_title py-3">
-        {{match['first_name']}} {{match['last_name']}}
-      </div>
-    </button>
   </div>
-  {% endfor %}
+
+  <script>
+    $(document).on("click", "#getuser", function () {
+      var id = $(this).attr("data-id"); //data-id of button
+      var array = id.split(" ");
+      console.log(array);
+
+      $("#nameHolder").html(array[0]);
+      $("#CSIHolder").html(parseFloat(array[1]) * 10);
+
+      var ctx = document.getElementById("myChart");
+
+      //Global
+      Chart.defaults.scale.gridLines.drawOnChartArea = false;
+
+      let firstValues = [
+        parseFloat(array[3]) * 100,
+        parseFloat(array[4]) * 100,
+        parseFloat(array[5]) * 100,
+        parseFloat(array[6]) * 100,
+        parseFloat(array[7]) * 100,
+        parseFloat(array[8]) * 100,
+        parseFloat(array[9]) * 100,
+        parseFloat(array[10]) * 100,
+        parseFloat(array[11]) * 100,
+        parseFloat(array[12]) * 100,
+      ];
+      let firstlabels = [
+        "Personality",
+        "Leadership",
+        "Hobby",
+        "Sex",
+        "Age",
+        "Height",
+        "Ethnicity",
+        "Education",
+        "Occupation",
+      ];
+      initial = {
+        labels: firstlabels,
+        datasets: [
+          {
+            label: "Scores",
+            data: firstValues,
+            backgroundColor: ["#4E77D2", "#7EA2F3", "#ABC5FE", "#D8E4FF"],
+            borderColor: ["#4E77D2", "#7EA2F3", "#ABC5FE", "#D8E4FF"],
+            borderWidth: 1,
+            maxBarThickness: 16,
+          },
+        ],
+      };
+
+      var myChart = new Chart(ctx, {
+        type: "horizontalBar",
+        data: initial,
+        options: {
+          responsive: false,
+          maintainAspectRatio: this.maintainAspectRatio,
+          title: {
+            display: true,
+            text: "Stats",
+            fontSize: 18,
+          },
+          legend: {
+            display: false,
+            labels: {
+              // This more specific font property overrides the global property
+              fontColor: "rgba(0, 0, 0, 0.8)",
+              fontFamily: "Monserrat",
+              fontsize: 16,
+              fontColor: "red",
+            },
+          },
+          tooltips: {
+            enabled: false,
+          },
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+              },
+            ],
+            xAxes: [
+              {
+                stacked: true,
+                scaleLabel: {
+                  labelString: "Compatibility",
+                  display: true,
+                  fontSize: 16,
+                },
+              },
+            ],
+          },
+        },
+      });
+    });
+  </script>
 </div>
 
 {% endblock %}

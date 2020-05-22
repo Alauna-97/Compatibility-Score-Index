@@ -1,8 +1,8 @@
 {% extends "sidebar.html" %} {% block div %}
 <div>
   <div class="page_header">
-    <h2 class="dash_header">{{set_name.set_name}}</h2>
-    <h3 class="dash_header">{{set_name.purpose}}</h3>
+    <h2 class="dash_header">{{ fullSet['set_name'] }}</h2>
+    <h3 class="dash_header">{{ fullSet['purpose'] }}</h3>
     <h4 class="dash_header2">{{grpAmt}} Groups of {{numPersons}}: <button class=" btn recom">Disband Groups</button></h2>
   </div>
 
@@ -22,17 +22,17 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="PopUpTitle">-</h5>
+        <h5 class="modal-title" id="PopUpTitle"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="randomizeData()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <div class="row" id="formgroupmodalClick">
-          {% for i in mini_gp[group_num] %}
-          {{ group_num }}
+          
+          {% for i in mini_gp[ 1 ] %} 
             <div class="col">
-              {{i[1].first_name}} {{i[1].last_name}}
+              {{i['first_name']}} {{i['last_name']}}   
             </div>  
           {% endfor %}
         </div>    
@@ -45,15 +45,27 @@
       </div>
     </div>
   </div>
-</div>
+
 
 <script>
+  // var app = new Vue({
+  //   el: '#formgroupmodalClick',
+  //   data: {
+  //     group_nums: 0, 
+  //     message: 'Hello Vue!'},
+  //   methods: {
+  //     changeTitle() {
+  //       this.group_nums = 0
+  //     }
+  //   },
+  //   delimiters: ['[[',']]']
+  // });
+
   function changeText(id) {
     document.getElementById('PopUpTitle').innerHTML = id;
     group_num = parseInt(id.replace(/[^0-9]/g, ''));
     return group_num;
   }
-
 
   var ctx = document.getElementById("myChart");
 
@@ -142,4 +154,5 @@
     return rand;
   }
 </script>
+</div>  
 {% endblock %}

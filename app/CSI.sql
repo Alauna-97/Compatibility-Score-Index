@@ -78,12 +78,22 @@ create table SetUserGroup (
 );
 
 create table Scores(
-    user_id int not null,
-    match_id int not null,
-    score decimal (3, 2),
-    primary key (user_id, match_id),
-    foreign key (user_id) references Regular(user_id) on delete cascade on update cascade,
-    foreign key (match_id) references Regular(user_id) on delete cascade on update cascade
+    primary_user varchar(30),
+    other_user varchar(30),
+    score decimal (10, 9),
+    similarity_percentage decimal (10, 7),
+    personality_score decimal (4, 3),
+    leadership_score decimal (4, 3),
+    hobby_score decimal (4, 3),
+    gender_score decimal (4, 3),
+    age_score decimal (4, 3),
+    height_score decimal (4, 3),
+    ethnicity_score decimal (4, 3),
+    education_score decimal (4, 3),
+    occupation_score decimal (4, 3),
+    primary key (primary_user, other_user),
+    foreign key (primary_user) references User(username) on delete cascade on update cascade,
+    foreign key (other_user) references User(username) on delete cascade on update cascade
 );
 
 create table pin_user (
