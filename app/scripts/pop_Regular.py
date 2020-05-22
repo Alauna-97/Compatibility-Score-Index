@@ -58,5 +58,5 @@ def populateReg(records):
 
 
 if __name__ == '__main__':
-    populateReg(16)
+    populateReg()
     print("Regular Users Added!")

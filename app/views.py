@@ -13,6 +13,7 @@ from werkzeug.security import check_password_hash
 
 import random
 import uuid
+import jyserver.Flask as js
 # import mysql.connector
 # mydb = mysql.connector.connect(
 #     host="localhost",
@@ -284,13 +285,15 @@ def members(sid):
     mycursor = mysql.connection.cursor()
     mycursor.execute('SELECT * from sets WHERE sid = %s', (sid,))
     fullSet = mycursor.fetchall()
+    print(fullSet)
 
     form = Groupings()
-
+    x = 0
     if 'username' in session and session.get('TYPE') == "Organizer":
         mycursor = mysql.connection.cursor()
-        mycursor.execute('SELECT user.first_name, user.last_name, user.user_id from user JOIN regular JOIN joinset ON regular.user_id = user.user_id and regular.user_id = joinset.user_id and user.user_id=joinset.user_id WHERE joinset.sid = %s', (sid,))
-        getMembers = mycursor.fetchall()
+        mycursor.execute('SELECT username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user JOIN regular JOIN joinset ON regular.user_id = user.user_id and regular.user_id = joinset.user_id and user.user_id=joinset.user_id WHERE joinset.sid = %s', (sid,))
+        getMembers = list(mycursor.fetchall())
+        print(getMembers)
         mbrsCopy = getMembers
 
         if request.method == "POST" and form.validate_on_submit():
@@ -320,6 +323,10 @@ def members(sid):
             mycursor.execute(
                 'SELECT * from setusergroup WHERE sid = %s', (sid,))
             fullSet = mycursor.fetchall()
+            print()
+            print()
+            print(mini_gp)
+
             # print(fullSet)
             return render_template('miniGrps.html', fullSet=fullSet, numPersons=numPersons, grpAmt=grpAmt, mini_gp=mini_gp)
     return render_template('members.html', sid=sid, form=form, fullSet=fullSet, getMembers=getMembers)
@@ -356,16 +363,16 @@ def recommend(username):
         crit = form.crit.data
         if crit == "compatible":
             mycursor.execute(
-                'SELECT first_name, last_name, scores.match_id, score from User JOIN Scores ON scores.match_id=user.user_id WHERE scores.user_id = %s ORDER BY score DESC', (session['id'],))
+                'SELECT * from User JOIN Scores ON scores.primary_user=user.username WHERE scores.primary_user = %s ORDER BY score DESC', (session['username'],))
         else:
             mycursor.execute(
-                'SELECT first_name, last_name, scores.match_id, score from User JOIN Scores ON scores.match_id=user.user_id WHERE scores.user_id = %s ORDER BY score ASC', (session['id'],))
+                'SELECT * from Usesr JOIN Scores ON scores.primary_user=user.username WHERE scores.primary_user = %s ORDER BY score ASC', (session['username'],))
 
         matches = list(mycursor.fetchmany(9))
         return render_template('recomnd.html', form=form, matches=matches)
 
     mycursor.execute(
-        'SELECT first_name, last_name, scores.match_id, score from User JOIN Scores ON scores.match_id=user.user_id WHERE scores.user_id = %s ORDER BY score DESC', (session['id'],))
+        'SELECT * from User JOIN Scores ON scores.primary_user=user.username WHERE scores.primary_user = %s ORDER BY score DESC', (session['username'],))
     matches = list(mycursor.fetchmany(9))
     print(matches)
     return render_template('recomnd.html', form=form, matches=matches)
@@ -381,24 +388,32 @@ def getRegularUsers():
     return '<p>' + str(user) + '</p>'
 
 
-@app.route('/2')
-def getCurrentUser():
+@app.route('/users')
+def getUsers():
     """Render website's home page."""
     mycursor = mysql.connection.cursor()
+
     mycursor.execute(
         'SELECT username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user join regular on user.user_id=regular.user_id WHERE user.username = %s', (session['username'],))
-    user = list(mycursor.fetchall())
-    return '<p>' + str(user) + '</p>'
+    cur_user = list(mycursor.fetchall())    # Current User
 
-
-@app.route('/3')
-def getRegularUsersButCurrent():
-    """Render website's home page."""
-    mycursor = mysql.connection.cursor()
     mycursor.execute(
         'SELECT username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user join regular on user.user_id=regular.user_id WHERE NOT user.username = %s', (session['username'],))
-    user = list(mycursor.fetchall())
-    return '<p>' + str(user) + '</p>'
+    other_users = list(mycursor.fetchall())     # All but current user
+
+    return '<p>' + str(cur_user) + '</p>' + '<p>' + str(other_users) + '</p>'
+
+
+@app.route('/definitions')
+def getDefinitions():
+    mycursor = mysql.connection.cursor()
+
+    # Definition of System Variables
+    mycursor.execute(
+        'SELECT personality_weight, leadership_weight, hobby_weight, democratic, autocratic, laissez_faire, ambivert, extrovert, introvert, sports, music, exercising, reading, shopping, writing, dancing, arts, watching_tv from Dictionary', )
+    definitions = list(mycursor.fetchall())
+
+    return '<p>' + str(definitions) + '</p>'
 
 
 def randomFeatures():

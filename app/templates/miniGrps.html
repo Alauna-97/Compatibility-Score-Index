@@ -29,8 +29,9 @@
       </div>
       <div class="modal-body">
         <div class="row" id="formgroupmodalClick">
+          
           {% for i in mini_gp[ 1 ] %} 
-            <div class="col"> [[ group_nums ]]
+            <div class="col">
               {{i['first_name']}} {{i['last_name']}}   
             </div>  
           {% endfor %}
@@ -44,28 +45,27 @@
       </div>
     </div>
   </div>
-</div>
+
 
 <script>
-  var app = new Vue({
-    el: '#formgroupmodalClick',
-    data: {
-      group_nums: 0, 
-      message: 'Hello Vue!'},
-    methods: {
-      changeTitle() {
-        this.group_nums = 0
-      }
-    },
-    delimiters: ['[[',']]']
-  });
+  // var app = new Vue({
+  //   el: '#formgroupmodalClick',
+  //   data: {
+  //     group_nums: 0, 
+  //     message: 'Hello Vue!'},
+  //   methods: {
+  //     changeTitle() {
+  //       this.group_nums = 0
+  //     }
+  //   },
+  //   delimiters: ['[[',']]']
+  // });
 
   function changeText(id) {
     document.getElementById('PopUpTitle').innerHTML = id;
     group_num = parseInt(id.replace(/[^0-9]/g, ''));
     return group_num;
   }
-
 
   var ctx = document.getElementById("myChart");
 
@@ -154,4 +154,5 @@
     return rand;
   }
 </script>
+</div>  
 {% endblock %}
