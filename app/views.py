@@ -51,6 +51,12 @@ def about():
     return render_template('about.html')
 
 
+@app.route('/testimonies/')
+def testimonies():
+    """Render the website's about page."""
+    return render_template('testimonies.html')
+
+
 @app.route('/admin/', methods=["GET", "POST"])
 def admin():
     """Render the website's admin page."""
