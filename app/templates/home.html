@@ -1,6 +1,6 @@
-{% extends "base.html" %} {% block main %}
+{% extends "base.html" %} {% block mains %}
 
-<div class="row">
+<div class="row relative">
   <div class="col-8 mine">
     <div
       id="carouselExampleSlidesOnly"
@@ -34,9 +34,212 @@
   </div>
 
   <div class="col-5 slide-info">
-    <h1>Connect</h1>
-    <h1>Network</h1>
-    <h1>Build Friendships</h1>
+    <div class = "top-marg">
+      <div class = "ml-5 mt-5 mb-3">
+        <h1>Connect</h1>
+        <img src="/static/images/down-arrow.png" height = "30" width="30" class = "mt-2 ml-6">
+      </div>
+      
+    
+      <div class = "mb-3 ml-5">
+        <h1>Network</h1>
+        <img src="/static/images/down-arrow.png" height = "30" width="30" class = "mt-2 ml-6">
+      </div>
+      
+      <div class = "mb-5 ml-5">
+        <h1>Build Friendships</h1>
+      </div>
+
+      <a href="{{ url_for('registerAs') }}" class = "btn btn-basic ml-5 px-5 py-2">Join Now</a>
+
+    </div>
+  
+  </div>
+
+  <img src="/static/images/next.png" height = "40" width="40" class = "absolute mid-pos">
+
+
+</div>
+
+
+<div class = "margin-space">
+  <div class = "sub-head-home">
+    Discover the possibilities with <br> Réseau
+  </div>
+  
+  <div class = "row pr-5">
+    <div class = "col-6 pr-5">
+      <div class = "panel2-sub mb-4">
+        Organize Teams
+      </div>
+      <div class = "lh-2">
+        Are you a lecturer, manager or just someone who needs to create
+        efficient groups?  <br> With Réseau you will be able to create sets and form groups 
+        within them. These groups are generated from a list of compatible persons or 
+        even non-compatible persons if you so desire.
+      </div>
+      <a href="{{ url_for('about', _anchor='orgnzr-frnd') }}" class = "btn btn-basic white mt-4 px-4 py-2">Learn More</a>
+
+    </div>
+
+    <div class = "col-6 pr-4">
+      <div class = "panel2-sub mb-4">
+        Build Friendships
+      </div>
+      <div class = "lh-2">
+        Are you tired of shallow friendships and connections?
+        Use Réseau to find the perfect match for you! <br>
+        Enter the necessary information about yourself and receive a list of compatible
+        or even incompatible users. You can pin them and view the compatibility breakdown 
+        between each other.
+      </div>
+
+      <a href="{{ url_for('about', _anchor='orgnzr-frnd') }}"  class = "btn btn-basic white mt-4 px-4 py-2">Learn More</a>
+      
+    </div>
+ </div>
+</div>
+
+<div class = "faded-banner">
+ <div class = "overlay row pb-4">
+   <div class = "col-6 margin-space mt-5  mr-0 font-white lh-2">
+      <div class = "mb-4 panel2-sub font-white">
+        Who We Are
+      </div>
+      <p>
+        We are a team of 4 developers who has a passion for creating new and exciting things.
+        Our venture started in University where Reseau was taken on as our final year project.
+        Now we provide it as a service and hope to help many persons with finding companions and 
+        great team members. Thank you <br>
+        <b>~ Team CSI </b>
+      </p>
+    
+      <a href="{{ url_for('about',  _anchor='meetTeam') }}"  class = "btn btn-basic white white-border lilac mt-4 px-4 py-2">Meet The Team</a>
+      
+    </div>
+
+    <div class = "col-5 ml-4 font-white lh-2">
+      <img
+            class="d-block radius-2 mt-5"
+            src="/static/images/team.png"
+            alt="Team Pic"
+            height="400"
+            width="534"
+      />
+    </div>
+  </div>
+</div>
+   
+<div class = "margin-space mt-5 ml-0">
+  <div class = "sub-head-home text-center">
+    You're in good company
+  </div>
+  <div class = "mb-4 panel2-sub text-center no-bold-black">
+    Click on the users' pictures to view their experience with Réseau!
+  </div>
+
+  <div class = "row w-75 pr-4 text-center pb-2 ml-10">
+    <div class = "col-3">
+     <a href="{{ url_for('testimonies', _anchor='first-test') }}">
+       <img
+            class="d-block radius-2 mt-5 grow"
+            src="/static/images/testimony_1.jpeg"
+            alt="Team Pic"
+            height="268"
+            width="180"
+      />
+
+      </a>
+    </div>
+
+    <div class = "col-3">
+      <a href="{{ url_for('testimonies', _anchor='secnd-test') }}">
+      <img
+            class="d-block radius-2 mt-5 grow"
+            src="/static/images/testimony_2.jpg"
+            alt="Team Pic"
+            height="268"
+            width="180"
+      />
+      </a>
+    </div>
+
+    <div class = "col-3">
+      <a href="{{ url_for('testimonies', _anchor='third-test') }}">
+        <img
+              class="d-block radius-2 mt-5 grow"
+              src="/static/images/testimony_3.jpg"
+              alt="Team Pic"
+              height="268"
+              width="180"
+        />
+      </a>
+    </div>
+
+    <div class = "col-3">
+      <a href="{{ url_for('testimonies', _anchor='fourth-test') }}">
+        <img
+              class="d-block radius-2 mt-5 grow"
+              src="/static/images/testimony_4.jpg"
+              alt="Team Pic"
+              height="268"
+              width="180"
+        />
+      </a>
+    </div>
+  </div>
+</div>
+
+
+
+<div class = "row backdrop py-4">
+  <div class = "margin-space col-6 my-5 panel2-sub thin font-white">
+    Don't miss out on creating envy worthy teams and creating the best friendships you'll ever have.
+  </div>
+
+  <div class = "col-5 my-5">
+    <div class = "row">
+      <div class = "col-6 text-right">
+        <a href="{{ url_for('registerAs') }}"  class = "btn btn-basic white white-border mt-4 px-5 py-3">Join Now</a>
+      </div>
+  
+      <div class = "col-6">
+        
+        <button class = "btn btn-basic mt-4 ml-0 px-5 py-3" data-toggle="modal" data-target="#contactmodal">
+          Contact Us
+        </button>
+
+      </div>
+    </div>
+    
+
+  </div>
+</div>
+
+
+<!-- MODAL FOR CONTACT US -->
+<div class="modal fade" id="contactmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="PopUpTitle">Contact:</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body text-center">
+       
+        <p>
+          Department of Computing <br>
+          University of the West Indies Mona <br>
+          Kingston, Jamaica
+        </p>
+          <p>Tel: (876) 702-4455</p>
+        </p>
+
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

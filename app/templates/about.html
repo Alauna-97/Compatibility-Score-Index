@@ -1,9 +1,164 @@
-{% extends "base.html" %} {% block main %}
-<h1 class="page-header">About</h1>
-<p>
-  This web app is about finding matches amongst perons within the same space.
-  Compatibility Score Index was invented through four students within the
-  Faculty of Science and Technology; namely: Horaince McCalla, Garfield Grant,
-  Jada-Rae Brown, and Lanai Nevers.
-</p>
+{% extends "base.html" %} {% block mains %}
+
+  <div class="slide-info mt-0">
+      <div class = "mb-5 ml-5 py-5 text-center">
+        <h1 class = "banner-head-home text-white">About Réseau</h1>
+     
+            <img
+            class="mt-3 opct"
+            src="/static/images/Footer Logo.png"
+            alt="Team Pic"
+            height="88"
+            width="88"
+            />
+
+          </div> 
+      </div>
+  </div>
+
+  <div class = "margin-space2 row pb-2">
+    <div class = "pr-5">
+      <div class = "sub-head-home">
+        Background - CSI
+      </div>
+      <p class = "lh-2 mt-4 pr-5">
+        During this technological era, a number of advancements have been made 
+        to facilitate ease of meeting persons for the sole benefit of forming 
+        partnerships. It was with this in mind where the development of 
+        <b>Compatibility Score Index </b> stemmed. <br>
+        It is our passion to go beyond the outer features of a person and 
+        focus on his/her unique attributes for the purpose of providing an 
+        accurate and yet efficient system. <br>
+        Our system seeks to present to 
+        the user a set of compatible persons based on 
+        <b>Age,
+        Gender,
+        Height,
+        Hobby,
+        Ethnicity,
+        Personality Type,
+        Leadership Style,
+        Education Level and
+        Occupation	</b>;
+        instead of focusing solely on the outer appearances to determine 
+        compatibility. It is desired that this will assist in breaking down 
+        the barriers of accessible matching for future generations.
+        <br>
+        From CSI birthded <b>Réseau</b>, the web application that will assist users
+        with all these aspects.
+      </p>
+    
+    </div>
+  </div>
+
+
+<div class = "margin-space row" id= "orgnzr-frnd">
+  <div class = "col-6 pr-5">
+    <div class = "sub-head-home">
+      Organize Teams
+    </div>
+    <p class = "lh-2 mt-4 pr-5">
+      An organizer is an individual who organizes groups.
+      Organizers are able to create sets and form groups within them.
+      These groups are generated from a list 
+      of compatible persons or even non-compatible persons if 
+      they so desire. <br> <br>
+      After the creation of these groups, the organizer can 
+      then view the groups as mentioned above, as well as manage each group 
+      by being able to make changes to each if necessary. 
+      
+    </p>
+  
+  </div>
+
+  <div class = "col-6 pr-5">
+    <div class = "sub-head-home">
+      Build Friendships
+    </div>
+    <p class = "lh-2 mt-4 pr-5">
+      A regular user enters the necessary information about themselves in order 
+      to generate a list of other users who fall under compatible and/or non-compatible
+      in relation to them. From this list the user may pin/add that user to their list of
+      friends as well as view the breakdown of compatibility among those persons. <br>
+      <br>
+      In addition, this user will aslo be allowed to join sets formed by organizers
+      once given the 'group code' and be placed in groups.
+
+    </p>
+  
+  </div>
+</div>
+
+<hr class = "mx-8 w-15">
+
+<div class ="margin-space mb-4" id= "meetTeam">
+  <div class = "sub-head-home">
+    Meet Team CSI
+  </div>
+</div>
+
+
+<div class = "gray-banner">
+      <div class = "row w-75 pr-4 text-center pb-2 ml-10">
+        <div class = "col-3 imgtext-container">
+          <img
+                class="d-block radius-2 mt-5"
+                src="/static/images/no_profilepic.png"
+                alt="Team Pic"
+                height="268"
+                width="226"
+          />
+
+
+          <div class = "name-label text-center">
+            Lanai Nevers
+          </div>
+
+        </div>
+    
+        <div class = "col-3">
+          <img
+                class="d-block radius-2 mt-5"
+                src="/static/images/no_profilepic.png"
+                alt="Team Pic"
+                height="268"
+                width="226"
+          />
+
+          <div class = "name-label text-center">
+            Jada-Rae Brown
+          </div>
+        </div>
+    
+        <div class = "col-3">
+          <img
+                class="d-block radius-2 mt-5"
+                src="/static/images/no_profilepic.png"
+                alt="Team Pic"
+                height="268"
+                width="226"
+          />
+          <div class = "name-label text-center">
+            Garfield Grant
+          </div>
+        </div>
+
+  
+    
+        <div class = "col-3">
+          <img
+                class="d-block radius-2 mt-5"
+                src="/static/images/no_profilepic.png"
+                alt="Team Pic"
+                height="268"
+                width="226"
+          />
+          <div class = "name-label text-center">
+            Horaine McCalla
+          </div>
+        </div>
+
+      </div>
+  </div> 
+
 {% endblock %}
