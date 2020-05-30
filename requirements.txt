@@ -3,8 +3,8 @@
 # ----------------------
 flask
 Flask-WTF
-Flask-SQLAlchemy
-Flask-Migrate
+# Flask-SQLAlchemy
+# Flask-Migrate
 Flask-Script
 Flask-Login
 psycopg2
