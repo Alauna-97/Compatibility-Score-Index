@@ -547,13 +547,13 @@ def run():
     # CSI Magic
     # comp_list is the variable for the list returned by CSI
     # how many persons are we submitting to the database 25 ???
-
+    mycursor = mysql.connection.cursor()
     mycursor.execute(
-        'DELETE from Score WHERE `userA username` = %s', (session['username'],))
+        'DELETE from Scores WHERE `userA username` = %s', (session['username'],))
 
+    # Index 0 has in the 25 or so people to write to the db
     for user in comp_list[0]:
         # insert response to database
-        mycursor = mysql.connection.cursor()
         sql = "INSERT INTO Scores (`userA username`, `userB username`, CSI, percentage, personality_score, leadership_score, hobby_score, gender_score, age_score, height_score, ethnicity_score, education_score, occupation_score, con_personality_score, con_leadership_score, con_hobby_score, con_gender_score, con_age_score, con_height_score, con_ethnicity_score, con_education_score, con_occupation_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
         # userA username has an extra space
@@ -562,30 +562,30 @@ def run():
 
         mycursor.execute(sql, val)
         mysql.connection.commit()
-    return redirect(url_for('recommend', username=session.get('username'))
+    return redirect(url_for('recommend', username=session.get('username')))
 
 
 def randomFeatures():
     # These are random features for the regular user
-    sex=random.choice(
+    sex = random.choice(
         ['Female', 'Male'])
-    pref_sex=random.choice(
+    pref_sex = random.choice(
         ['Female', 'Male'])
-    height=random.randint(142, 198)
-    age=random.randint(22, 35)
-    leadership=random.choice(
+    height = random.randint(142, 198)
+    age = random.randint(22, 35)
+    leadership = random.choice(
         ['Autocratic', 'Laissez-Faire', 'Democratic'])
-    hobby=random.choice(
+    hobby = random.choice(
         ['Sports', 'Music', 'Exercising', 'Shopping', 'Dancing', 'Watching-TV', 'Reading', 'Writing', 'Arts'])
-    ethnicity=random.choice(
+    ethnicity = random.choice(
         ['Black', 'White', 'Chinese', 'Indian', 'Hispanic'])
-    pref_ethnicity=random.choice(
+    pref_ethnicity = random.choice(
         ['Black', 'White', 'Chinese', 'Indian', 'Hispanic'])
-    occupation=random.choice(
+    occupation = random.choice(
         ['Business', 'Science', 'Technology', 'Construction', 'Communication', 'Law'])
-    education=random.choice(
+    education = random.choice(
         ['Bachelors', 'Masters', 'PhD', 'Diploma', 'Associate Degree'])
-    personality=random.choice(['Introvert', 'Extrovert', 'Ambivert'])
+    personality = random.choice(['Introvert', 'Extrovert', 'Ambivert'])
 
     return [sex, age, height, leadership, ethnicity, personality, education, hobby, occupation, pref_sex, pref_ethnicity]
 
@@ -616,7 +616,7 @@ def unauthorized():
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):
     """Send your static text file."""
-    file_dot_text=file_name + '.txt'
+    file_dot_text = file_name + '.txt'
     return app.send_static_file(file_dot_text)
 
 # Flash errors from the form if validation fails
@@ -637,8 +637,8 @@ def add_header(response):
     Add headers to both force latest IE rendering engine or Chrome Frame,
     and also to cache the rendered page for 10 minutes.
     """
-    response.headers['X-UA-Compatible']='IE=Edge,chrome=1'
-    response.headers['Cache-Control']='public, max-age=0'
+    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+    response.headers['Cache-Control'] = 'public, max-age=0'
     return response
 
 
