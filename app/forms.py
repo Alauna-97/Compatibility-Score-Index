@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectField, SubmitField, IntegerField,TextAreaField
+from wtforms import StringField, PasswordField, SelectField, SubmitField, IntegerField, TextAreaField
 from wtforms.validators import InputRequired, Email, DataRequired, Length, EqualTo
 
 
@@ -93,8 +93,9 @@ class Groupings(FlaskForm):
     grpBy = SelectField('Criteria', choices=[(
         0, 'Select an option'), ('compatible', 'Compatible'), ('uncompatible', 'Uncompatible')])
 
-    numPersons = SelectField('Amount', choices=[(
-        0, 'Select an option'), ('2', 'two'), ('3', 'three'), ('4', 'four'), ('5', 'five')])
+    numPersons = StringField('Number of Persons: ', validators=[DataRequired()])
+
+    group_num = StringField('Group Number: ', validators=[DataRequired()])
 
     submit = SubmitField('Create')
 
@@ -104,6 +105,7 @@ def intcheck(self, field):
         val = int(field.data)
     except ValueError:
         raise ValidationError('Must be a number')
+
 
 class TranferGrp(FlaskForm):
     # NOT WOKRING :(
@@ -121,22 +123,24 @@ class Criteria(FlaskForm):
 
 
 class adminSettings(FlaskForm):
-    pers_weight = SelectField('Personality', choices=[('5', '5'), ('10', '10')])
-    ldrshp_weight = SelectField('Leadership', choices=[('5', '5'), ('10', '10')])
+    pers_weight = SelectField('Personality', choices=[
+                              ('5', '5'), ('10', '10')])
+    ldrshp_weight = SelectField('Leadership', choices=[
+                                ('5', '5'), ('10', '10')])
     hobby_weight = SelectField('Hobby', choices=[('5', '5'), ('10', '10')])
-    democratic = TextAreaField('Democratic', validators= [Length(max=500)])
-    autocratic = TextAreaField('Autocratic', validators= [Length(max=500)])
-    laissezfaire = TextAreaField('Laissez-Faire', validators= [Length(max=500)])
-    ambivert = TextAreaField('Ambivert', validators= [Length(max=500)])
-    extrovert = TextAreaField('Extrovert', validators= [Length(max=500)])
-    introvert = TextAreaField('Introvert', validators= [Length(max=500)])
-    sports = TextAreaField('Sports', validators= [Length(max=500)])
-    music = TextAreaField('Music', validators= [Length(max=500)])
-    exercising = TextAreaField('Exercising', validators= [Length(max=500)])
-    reading = TextAreaField('Reading', validators= [Length(max=500)])
-    shopping = TextAreaField('Shopping', validators= [Length(max=500)])
-    writing = TextAreaField('Writing', validators= [Length(max=500)])
-    dancing = TextAreaField('Dancing', validators= [Length(max=500)])
-    arts = TextAreaField('Arts', validators= [Length(max=500)])
-    watchingTV = TextAreaField('Watching TV', validators= [Length(max=500)])
+    democratic = TextAreaField('Democratic', validators=[Length(max=500)])
+    autocratic = TextAreaField('Autocratic', validators=[Length(max=500)])
+    laissezfaire = TextAreaField('Laissez-Faire', validators=[Length(max=500)])
+    ambivert = TextAreaField('Ambivert', validators=[Length(max=500)])
+    extrovert = TextAreaField('Extrovert', validators=[Length(max=500)])
+    introvert = TextAreaField('Introvert', validators=[Length(max=500)])
+    sports = TextAreaField('Sports', validators=[Length(max=500)])
+    music = TextAreaField('Music', validators=[Length(max=500)])
+    exercising = TextAreaField('Exercising', validators=[Length(max=500)])
+    reading = TextAreaField('Reading', validators=[Length(max=500)])
+    shopping = TextAreaField('Shopping', validators=[Length(max=500)])
+    writing = TextAreaField('Writing', validators=[Length(max=500)])
+    dancing = TextAreaField('Dancing', validators=[Length(max=500)])
+    arts = TextAreaField('Arts', validators=[Length(max=500)])
+    watchingTV = TextAreaField('Watching TV', validators=[Length(max=500)])
     submit = SubmitField('Save')

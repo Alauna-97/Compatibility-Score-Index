@@ -7,34 +7,34 @@
   </div>
 
   <div class="row">
-    {% for i in range(1, mini_gp|length + 1) %}
     <div class="col-4 mb-4">
-      <button class="grp-tile" data-toggle="modal" data-target="#formgroupmodal" data-id="{{mini_gp[i]}}" id="getMembers">
+      <button class="grp-tile" data-toggle="modal" data-target="#formgroupmodal" data-id="{{ cur_set.CSI }} {{ cur_set.percentage }} {{ cur_set.personality_score }} {{ cur_set.leadership_score }} {{ cur_set.hobby_score }} {{ cur_set.gender_score }} {{ cur_set.age_score }} {{ cur_set.height_score }} {{ cur_set.ethnicity_score }} {{ cur_set.education_score }} {{ cur_set.occupation_score }}" id="getMembers">
         <div class="py-3">
-          Group {{i}}
+          Group {{group_num}}
         </div>
       </button>
     </div>
-    {% endfor %}
   </div>
 </div>
 <div class="modal fade" id="formgroupmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="PopUpTitle"></h5>
+        <h6 class="modal-title row" id="PopUpTitle">
+        {% for i in mems %} 
+          <div class="col">
+            {{i['first_name']}}  {{i['last_name']}}  
+          </div>  
+        {% endfor %}
+        </h6> 
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="randomizeData()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <div class="row" id="formgroupmodalClick">
-          
-          {% for i in mini_gp[ 1 ] %} 
-            <div class="col">
-              {{i['first_name']}} {{i['last_name']}}   
-            </div>  
-          {% endfor %}
+          <span class="ml-2" id="CSIHolder"></span>
+              <span class="ml-5">Max: 9</span>
         </div>    
       <div class="hr-bar mt-1"></div>
       <canvas id="myChart" width="450" height="250"></canvas>
@@ -48,106 +48,111 @@
 
 
 <script>
-   $(document).on("click", "#getMembers", function () {
+    $(document).on("click", "#getMembers", function () {
       var id = $(this).attr("data-id"); //data-id of button
       var array = id.split(" ");
-      console.log(array);
+      console.log(array)
+      score = parseFloat(array[0]).toFixed(5);
+      $("#CSIHolder").html("CSI Score: " + score);
 
-      $("#nameHolder").html(array[0]);
-   });
+      var ctx = document.getElementById("myChart");
 
-  function changeText(id) {
-    document.getElementById('PopUpTitle').innerHTML = id;
-    group_num = parseInt(id.replace(/[^0-9]/g, ''));
-    return group_num;
-  }
+      //Global
+      Chart.defaults.scale.gridLines.drawOnChartArea = false;
 
-  var ctx = document.getElementById("myChart");
-
-  //Global
-  // Chart.defaults.global.defaultFontFamily = "Monserrat";
-  // Chart.defaults.global.defaultFontSize = 17;
-  Chart.defaults.scale.gridLines.drawOnChartArea = false;
-
-  let firstValues = [90, 75, 80, 95];
-  let firstlabels = ["Ethnicity", "Age", "Leadership", "Personality"];
-  let seclabels = ["Ethnicity", "Age", "Leadership", "Personality", "Education", "Field", "Gender", "Height", "Hobbies"];
-  initial = {
+      let firstValues = [
+        parseFloat(array[1]) * 100,
+        parseFloat(array[2]) * 100,
+        parseFloat(array[3]) * 100,
+        parseFloat(array[4]) * 100,
+        parseFloat(array[5]) * 100,
+        parseFloat(array[6]) * 100,
+        parseFloat(array[7]) * 100,
+        parseFloat(array[8]) * 100,
+        parseFloat(array[9]) * 100,
+        parseFloat(array[10]) * 100,
+      ];
+      let firstlabels = [
+        "Personality",
+        "Leadership",
+        "Hobby",
+        "Sex",
+        "Age",
+        "Height",
+        "Ethnicity",
+        "Education",
+        "Occupation",
+      ];
+      initial = {
         labels: firstlabels,
         datasets: [
           {
             label: "Scores",
             data: firstValues,
-            backgroundColor: ["#4E77D2", "#7EA2F3", "#ABC5FE", "#D8E4FF"],
+            backgroundColor: [
+              "#4E77D2",
+              "#7EA2F3",
+              "#ABC5FE",
+              "#D8E4FF",
+              "#4E77D2",
+              "#7EA2F3",
+              "#ABC5FE",
+              "#D8E4FF",
+            ],
             borderColor: ["#4E77D2", "#7EA2F3", "#ABC5FE", "#D8E4FF"],
             borderWidth: 1,
             maxBarThickness: 16,
-        },
-      ]
-    };
-
-  var myChart = new Chart(ctx, {
-    type: "horizontalBar",
-    data: initial,
-    options: {
-      responsive: false,
-      maintainAspectRatio: this.maintainAspectRatio,
-      title: {
-        display: true,
-        text: "Stats",
-        fontSize: 18,
-      },
-      legend: {
-        display: false,
-        labels: {
-          // This more specific font property overrides the global property
-          fontColor: "rgba(0, 0, 0, 0.8)",
-          fontFamily: "Monserrat",
-          fontsize: 16,
-          fontColor: "red"
-        },
-      },
-      tooltips: {
-        enabled: false,
-      },
-      scales: {
-        yAxes: [
-          {
-            ticks: {
-              beginAtZero: true,
-            },
           },
         ],
-        xAxes: [
-          {
-            stacked: true,
-            scaleLabel: {
-              labelString: "Compatibility",
-              display: true,
-              fontSize: 16,
-            }
+      };
+
+      var myChart = new Chart(ctx, {
+        type: "horizontalBar",
+        data: initial,
+        options: {
+          responsive: false,
+          maintainAspectRatio: this.maintainAspectRatio,
+          title: {
+            display: true,
+            text: "Stats",
+            fontSize: 18,
           },
-        ]
-      },
-    },
-  });
+          legend: {
+            display: false,
+            labels: {
+              // This more specific font property overrides the global property
+              fontColor: "rgba(0, 0, 0, 0.8)",
+              fontFamily: "Monserrat",
+              fontsize: 16,
+              fontColor: "red",
+            },
+          },
+          tooltips: {
+            enabled: false,
+          },
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+              },
+            ],
+            xAxes: [
+              {
+                stacked: true,
+                scaleLabel: {
+                  labelString: "Compatibility",
+                  display: true,
+                  fontSize: 16,
+                },
+              },
+            ],
+          },
+        },
+      });
+    });
+  </script>
+</div>
 
-  function randomizeData() {
-    let newfirstValues = firstValues.map(x => Math.floor(Math.random() * 80));
-    let newfirstlabels = getRandom(seclabels, 4)
-    initial.datasets[0].data = newfirstValues;
-    initial.labels = newfirstlabels;
-    myChart.update();
-  };
-
-  function getRandom(arr, size) {
-    var copy = arr.slice(0), rand = [];
-    for (var i = 0; i < size && i < copy.length; i++) {
-      var index = Math.floor(Math.random() * copy.length);
-      rand.push(copy.splice(index, 1)[0]);
-    }
-    return rand;
-  }
-</script>
-</div>  
 {% endblock %}
