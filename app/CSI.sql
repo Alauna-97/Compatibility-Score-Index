@@ -12,6 +12,7 @@ drop table IF EXISTS Scores;
 drop table IF EXISTS pin_user;
 drop table IF EXISTS Administrator;
 drop table IF EXISTS Dictionary;
+drop table IF EXISTS Biography;
 
 
 create table User(
@@ -134,6 +135,14 @@ create table Dictionary (
     watching_tv varchar(500),
     primary key (dict_id),
     foreign key (admin_id) references Administrator (admin_id) on delete cascade on update cascade
+);
+
+create table Biography (
+    user_id int auto_increment not null, 
+    pro_photo varchar(30),
+    about varchar(200),
+    primary key(user_id),
+    foreign key (user_id) references User(user_id) on delete cascade
 );
 
 

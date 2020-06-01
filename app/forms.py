@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SelectField, SubmitField, IntegerField,TextAreaField
 from wtforms.validators import InputRequired, Email, DataRequired, Length, EqualTo
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 
 class LoginForm(FlaskForm):
@@ -139,4 +140,11 @@ class adminSettings(FlaskForm):
     dancing = TextAreaField('Dancing', validators= [Length(max=500)])
     arts = TextAreaField('Arts', validators= [Length(max=500)])
     watchingTV = TextAreaField('Watching TV', validators= [Length(max=500)])
+    submit = SubmitField('Save')
+
+
+
+class Profile_About(FlaskForm):
+    profPic = FileField(validators=[FileAllowed(['jpg', 'png', 'Images only!'])])
+    about = TextAreaField(validators=[Length(max=100, message=('Max 200 Characters'))])
     submit = SubmitField('Save')

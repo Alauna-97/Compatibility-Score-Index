@@ -6,7 +6,7 @@
     {% include 'flash_messages.html' %}
 
     <span>
-      <img src="/static/images/multimedia.png" class="reload grow" />
+      <img src="/static/images/multimedia.png" class="reload grow" data-toggle="tooltip" data-placement="right" title="Click to Re-run" />
     </span>
   </div>
 
@@ -72,10 +72,19 @@
         </div>
         <div class="modal-body">
           <div class="row" id="formgroupmodalClick">
-            <div class="col">
-              <span id="nameHolder"></span>
+            <div class="col text-center">
+
+              <p class = "csimatch" id="nameHolder"></p>
+
+              <span> CSI Score: </span>
               <span class="ml-5" id="CSIHolder"></span>
-            </div>
+
+              <div>
+                <a href="#" class = "btn btn-primary mt-3 mb-3">pin user</a>
+              </div>
+
+            </div>          
+
           </div>
           <div class="hr-bar mt-1"></div>
           <canvas id="myChart" width="450" height="250"></canvas>
@@ -88,6 +97,9 @@
       </div>
     </div>
   </div>
+
+
+
 
   <script>
     $(document).on("click", "#getuser", function () {

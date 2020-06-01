@@ -34,13 +34,10 @@
       </li>
     </ul>
 
+   
+
     <ul class="navbar-nav">
       {% if 'username' in session %}
-      <li class="nav-item">
-        <form method="post" action="{{ url_for('result') }}" class="mt-1 mr-3">
-          <input type="text" class="form-control search" placeholder="Search..." />
-        </form>
-      </li>
 
       <div class="dropdown nav-item">
         <button
@@ -88,6 +85,7 @@
         </div>
       </div>
       {% else %}
+      
       <li class="nav-item">
         <a
           class="btn btn-outline-success my-2 my-sm-0"
@@ -103,6 +101,7 @@
         >
       </li>
       {% endif %}
+      
     </ul>
   </div>
 </nav>

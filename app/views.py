@@ -4,13 +4,14 @@ Jinja2 Documentation:    http://jinja.pocoo.org/2/documentation/
 Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
-
+import os
 from app import app, login_manager
 from flask_mysqldb import MySQL
 from flask import render_template, request, redirect, url_for, flash, session
 from flask import jsonify
-from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria
+from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria, Profile_About
 from werkzeug.security import check_password_hash
+from werkzeug.utils import secure_filename
 
 import random
 import uuid
@@ -272,13 +273,14 @@ def login():
     return render_template("login.html", form=form)
 
 
-@app.route('/dashboard/<username>')
+@app.route('/dashboard/<username>', methods=["GET", "POST"])
 def dashboard(username):
-    """Render the website's dashboard page."""
+    """Render the website's dashboard page.""" 
     if 'username' in session:
         mycursor = mysql.connection.cursor()
         mycursor.execute('Select * from user WHERE username = %s', (username,))
-        user = mycursor.fetchone()
+        user = mycursor.fetchone()   
+    
 
         if session.get('TYPE') == "Organizer":
             mycursor.execute(
@@ -293,9 +295,56 @@ def dashboard(username):
             mycursor.execute(
                 'SELECT * FROM user JOIN pin_user ON user.user_id = pin_user.match_id WHERE pin_user.user_id = %s ', (session['id'],))
             getFriends = mycursor.fetchall()
+        
+        mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
+        biography = mycursor.fetchone()
     
     
-    return render_template('dashbrd.html', groups=getSets, getFriends = getFriends, type=session.get('TYPE'))
+    return render_template('dashbrd.html', groups=getSets, type=session.get('TYPE'), biography = biography)
+
+@app.route("/edit/<username>", methods=["GET", "POST"])
+def edit_info(username):
+    PropicForm = Profile_About()
+    mycursor = mysql.connection.cursor()
+
+    mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
+    biography = mycursor.fetchone()
+       
+    if request.method == "POST" and PropicForm.validate_on_submit():      
+        profPic = request.files['profPic']
+        about = PropicForm.about.data
+
+        filename = secure_filename(profPic.filename)
+
+        if filename != "": #INCASE THEY RE-EDIT AND DONT UPLOAD A PHOTO
+            profPic.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+
+        if biography != None:
+            if filename != "" and about != "": #IF PERSON UPDATES BOTH
+                sql = "UPDATE Biography SET pro_photo = %s, about = %s WHERE user_id = %s"
+                val = (filename, about, session['id'])
+            elif filename != "": #IF PERSON UPDATES PHOTO ONLY
+                sql = "UPDATE Biography SET pro_photo = %s WHERE user_id = %s"
+                val = (filename, session['id'])
+            else: #IF PERSON UPDATES ABOUT ONLY
+                sql = "UPDATE Biography SET about = %s WHERE user_id = %s"
+                val = (about, session['id'])
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+
+        else: #EDIT FOR THE FIRST TIME
+            sql = "INSERT INTO Biography (user_id, pro_photo, about) VALUES (%s, %s, %s)"
+            val = (session['id'], filename, about)
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+            
+        flash('Your edits were saved', 'success')
+        redirect(url_for('dashboard',  username=session.get('username')) )
+        
+    return render_template('edit.html', PropicForm=PropicForm, biography=biography)
+
 
 
 @app.route("/logout")
@@ -412,6 +461,7 @@ def createSet(username):
     # If user is logged in session and is an organizer
     if 'username' in session and session.get('TYPE') == "Organizer":
         mycursor = mysql.connection.cursor()
+        
         if request.method == "POST" and form.validate_on_submit():
             set_name = form.set_name.data
             purpose = form.purpose.data
@@ -524,14 +574,18 @@ def members(sid):
 
             # print(fullSet)
             return render_template('miniGrps.html', fullSet=fullSet, numPersons=numPersons, grpAmt=grpAmt, mini_gp=mini_gp)
-    return render_template('members.html', sid=sid, form=form, fullSet=fullSet, getMembers=getMembers)
+
+            mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
+            biography = mycursor.fetchone()
+    return render_template('members.html', sid=sid, form=form, fullSet=fullSet, getMembers=getMembers, biography = biography)
 
 
 @app.route('/about/<typeUser>', methods=["GET", "POST"])
 def aboutUser(typeUser):
     form = AboutYou()
+    mycursor = mysql.connection.cursor()
+
     if request.method == "POST" and form.validate_on_submit():
-        mycursor = mysql.connection.cursor()
 
         sql = """UPDATE Regular SET sex = %s, age = %s, height = %s, leadership = %s, ethnicity = %s, personality = %s, education = %s, hobby = %s, occupation = %s, pref_sex = %s, pref_ethnicity = %s WHERE user_id = %s"""
         val = (request.form['sex'], request.form['age'],
@@ -546,13 +600,18 @@ def aboutUser(typeUser):
         return redirect(url_for("dashboard", username=session.get('username')))
 
         # if form entry is invalid, redirected to the same page to fill in required details
-    return render_template('about_you.html', form=form)
+
+    mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
+    biography = mycursor.fetchone()   
+
+    return render_template('about_you.html', form=form , biography = biography)
 
 
 @app.route('/recommend/<username>', methods=['GET', 'POST'])
 def recommend(username):
     """Render the website's recommended matches page."""
     form = Criteria()
+   
     mycursor = mysql.connection.cursor()
     if request.method == "POST" and 'logged_in' in session:
         crit = form.crit.data
@@ -577,7 +636,12 @@ def recommend(username):
     # resp = jsonify(message)
     # print(resp['scores'])
     # print(matches)
-    return render_template('recomnd.html', form=form, matches=matches)
+
+    mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
+    biography = mycursor.fetchone()
+
+    return render_template('recomnd.html', form=form, matches=matches, biography = biography)
+
 
 
 @app.route('/1')
