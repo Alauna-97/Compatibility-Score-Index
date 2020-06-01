@@ -8,16 +8,8 @@ import os
 from app import app, login_manager
 from flask_mysqldb import MySQL
 from flask import render_template, request, redirect, url_for, flash, session
-<<<<<<< HEAD
-<<<<<<< HEAD
 from flask import jsonify
-from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria, Profile_About
-=======
-from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria
->>>>>>> 9e2a19ea7f26d842cec3e9b0d4e502a72f5e2ee9
-=======
-from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria, GroupNum
->>>>>>> 6155d840ba8a93267b58d79f5679093d3c0a3e4d
+from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria, Profile_About, GroupNum
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 
@@ -285,11 +277,9 @@ def dashboard(username):
             mycursor.execute(
                 'SELECT * FROM user JOIN pin_user ON user.user_id = pin_user.match_id WHERE pin_user.user_id = %s ', (session['id'],))
             getFriends = mycursor.fetchall()
-<<<<<<< HEAD
         
         mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
         biography = mycursor.fetchone()
-    
     
     return render_template('dashbrd.html', groups=getSets, type=session.get('TYPE'), biography = biography)
 
@@ -336,10 +326,6 @@ def edit_info(username):
         
     return render_template('edit.html', PropicForm=PropicForm, biography=biography)
 
-=======
-
-    return render_template('dashbrd.html', groups=getSets, type=session.get('TYPE'))
->>>>>>> 9e2a19ea7f26d842cec3e9b0d4e502a72f5e2ee9
 
 
 @app.route("/logout")
@@ -563,7 +549,6 @@ def members(sid):
                     mycursor.execute(sql, val)
                     mysql.connection.commit()
 
-<<<<<<< HEAD
             mycursor.execute(
                 'SELECT * from setusergroup WHERE sid = %s', (sid,))
             fullSet = mycursor.fetchall()
@@ -572,7 +557,7 @@ def members(sid):
             mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
             biography = mycursor.fetchone()
     return render_template('members.html', sid=sid, form=form, fullSet=fullSet, getMembers=getMembers, biography = biography)
-=======
+
                 sql = "INSERT INTO SetGroupScore (sid, group_num, CSI, percentage, personality_score, leadership_score, hobby_score, gender_score, age_score, height_score, ethnicity_score, education_score, occupation_score, con_personality_score, con_leadership_score, con_hobby_score, con_gender_score, con_age_score, con_height_score, con_ethnicity_score, con_education_score, con_occupation_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
                 val = (sid, i+1, result['CSI'],  result['Percentage'], result['personality_score'], result['leadership_score'], result['hobby_score'], result['gender_score'], result['age_score'], result['height_score'], result['ethnicity_score'], result['education_score'],
@@ -583,7 +568,7 @@ def members(sid):
 
             return render_template('miniGrps.html', fullSet=fullSet[0], numPersons=numPersons, grpAmt=grpAmt)
     return render_template('members.html', sid=sid, form=form, fullSet=fullSet, getMembers=getMembers)
->>>>>>> 6155d840ba8a93267b58d79f5679093d3c0a3e4d
+
 
 
 @app.route('/Group/<sid>', methods=["GET", "POST"])
@@ -653,7 +638,7 @@ def recommend(username):
         matches = list(mycursor.fetchall())
         return render_template('recomnd.html', form=form, matches=matches)
     mycursor.execute(
-<<<<<<< HEAD
+
         'SELECT * from User JOIN Scores ON scores.primary_user=user.username WHERE scores.primary_user = %s ORDER BY score DESC', (session['username'],))
     matches = list(mycursor.fetchmany(9))
     # message = {
@@ -670,11 +655,6 @@ def recommend(username):
 
     return render_template('recomnd.html', form=form, matches=matches, biography = biography)
 
-=======
-        'SELECT * from Scores WHERE `userA username` = %s ORDER BY percentage DESC LIMIT 0,9', (session['username'],))
-    matches = list(mycursor.fetchall())
-    return render_template('recomnd.html', form=form, matches=matches)
->>>>>>> 9e2a19ea7f26d842cec3e9b0d4e502a72f5e2ee9
 
 
 @app.route('/run')
