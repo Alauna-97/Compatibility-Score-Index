@@ -93,11 +93,16 @@ class Groupings(FlaskForm):
     grpBy = SelectField('Criteria', choices=[(
         0, 'Select an option'), ('compatible', 'Compatible'), ('uncompatible', 'Uncompatible')])
 
-    numPersons = StringField('Number of Persons: ', validators=[DataRequired()])
-
-    group_num = StringField('Group Number: ', validators=[DataRequired()])
+    numPersons = IntegerField('Number of Persons: ',
+                             validators=[DataRequired()])
 
     submit = SubmitField('Create')
+
+
+class GroupNum(FlaskForm):
+    group_num = StringField('Group Number: ', validators=[DataRequired()])
+
+    submit = SubmitField('Get')
 
 
 def intcheck(self, field):

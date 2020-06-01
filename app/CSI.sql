@@ -69,11 +69,11 @@ create table joinSet(
 );
 
 create table SetUserGroup (
-    user_id int not null,
+    username varchar(30),
     sid int not null,
     group_num int not null,
-    primary key (user_id, sid, group_num),
-    foreign key (user_id) references Regular(user_id) on delete cascade,
+    primary key (username, sid, group_num),
+    foreign key (username) references Regular(username) on delete cascade,
     foreign key (sid) references Sets(sid) on delete cascade
 );
 

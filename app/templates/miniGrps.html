@@ -4,155 +4,21 @@
     <h2 class="dash_header">{{ fullSet['set_name'] }}</h2>
     <h3 class="dash_header">{{ fullSet['purpose'] }}</h3>
     <h4 class="dash_header2">{{grpAmt}} Groups of {{numPersons}}: <button class=" btn recom">Disband Groups</button></h2>
+    <h4 class = "grp_header ml-3">
+            <a href = "{{ url_for('groupMembers', sid = fullSet['sid']) }}" class=" btn recom">Show Members</a>
+    </h4>
   </div>
 
   <div class="row">
+    {% for i in range(1, grpAmt + 1) %}
     <div class="col-4 mb-4">
-      <button class="grp-tile" data-toggle="modal" data-target="#formgroupmodal" data-id="{{ cur_set.CSI }} {{ cur_set.percentage }} {{ cur_set.personality_score }} {{ cur_set.leadership_score }} {{ cur_set.hobby_score }} {{ cur_set.gender_score }} {{ cur_set.age_score }} {{ cur_set.height_score }} {{ cur_set.ethnicity_score }} {{ cur_set.education_score }} {{ cur_set.occupation_score }}" id="getMembers">
+      <button class="member-tile" data-toggle="modal" data-target="#formgroupmodal" id="getMembers">
         <div class="py-3">
-          Group {{group_num}}
+          Group {{i}}
         </div>
       </button>
     </div>
+    {% endfor %}
   </div>
 </div>
-<div class="modal fade" id="formgroupmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h6 class="modal-title row" id="PopUpTitle">
-        {% for i in mems %} 
-          <div class="col">
-            {{i['first_name']}}  {{i['last_name']}}  
-          </div>  
-        {% endfor %}
-        </h6> 
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="randomizeData()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row" id="formgroupmodalClick">
-          <span class="ml-2" id="CSIHolder"></span>
-              <span class="ml-5">Max: 9</span>
-        </div>    
-      <div class="hr-bar mt-1"></div>
-      <canvas id="myChart" width="450" height="250"></canvas>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="randomizeData()">Close</button>
-        <button type="button" class="btn btn-primary" onclick="randomizeData()" >Explore</button>        
-      </div>
-    </div>
-  </div>
-
-
-<script>
-    $(document).on("click", "#getMembers", function () {
-      var id = $(this).attr("data-id"); //data-id of button
-      var array = id.split(" ");
-      console.log(array)
-      score = parseFloat(array[0]).toFixed(5);
-      $("#CSIHolder").html("CSI Score: " + score);
-
-      var ctx = document.getElementById("myChart");
-
-      //Global
-      Chart.defaults.scale.gridLines.drawOnChartArea = false;
-
-      let firstValues = [
-        parseFloat(array[1]) * 100,
-        parseFloat(array[2]) * 100,
-        parseFloat(array[3]) * 100,
-        parseFloat(array[4]) * 100,
-        parseFloat(array[5]) * 100,
-        parseFloat(array[6]) * 100,
-        parseFloat(array[7]) * 100,
-        parseFloat(array[8]) * 100,
-        parseFloat(array[9]) * 100,
-        parseFloat(array[10]) * 100,
-      ];
-      let firstlabels = [
-        "Personality",
-        "Leadership",
-        "Hobby",
-        "Sex",
-        "Age",
-        "Height",
-        "Ethnicity",
-        "Education",
-        "Occupation",
-      ];
-      initial = {
-        labels: firstlabels,
-        datasets: [
-          {
-            label: "Scores",
-            data: firstValues,
-            backgroundColor: [
-              "#4E77D2",
-              "#7EA2F3",
-              "#ABC5FE",
-              "#D8E4FF",
-              "#4E77D2",
-              "#7EA2F3",
-              "#ABC5FE",
-              "#D8E4FF",
-            ],
-            borderColor: ["#4E77D2", "#7EA2F3", "#ABC5FE", "#D8E4FF"],
-            borderWidth: 1,
-            maxBarThickness: 16,
-          },
-        ],
-      };
-
-      var myChart = new Chart(ctx, {
-        type: "horizontalBar",
-        data: initial,
-        options: {
-          responsive: false,
-          maintainAspectRatio: this.maintainAspectRatio,
-          title: {
-            display: true,
-            text: "Stats",
-            fontSize: 18,
-          },
-          legend: {
-            display: false,
-            labels: {
-              // This more specific font property overrides the global property
-              fontColor: "rgba(0, 0, 0, 0.8)",
-              fontFamily: "Monserrat",
-              fontsize: 16,
-              fontColor: "red",
-            },
-          },
-          tooltips: {
-            enabled: false,
-          },
-          scales: {
-            yAxes: [
-              {
-                ticks: {
-                  beginAtZero: true,
-                },
-              },
-            ],
-            xAxes: [
-              {
-                stacked: true,
-                scaleLabel: {
-                  labelString: "Compatibility",
-                  display: true,
-                  fontSize: 16,
-                },
-              },
-            ],
-          },
-        },
-      });
-    });
-  </script>
-</div>
-
 {% endblock %}

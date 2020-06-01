@@ -1,0 +1,167 @@
+{% extends "sidebar.html" %} {% block div %}
+<div>
+  <div class="page_header">
+    <h2 class="dash_header">{{ fullSet['set_name'] }}</h2>
+    <h3 class="dash_header">{{ fullSet['purpose'] }}</h3>
+  </div>
+  <form
+    method="post"
+    action="{{ url_for('groupMembers', sid = fullSet['sid']) }}"
+  >
+    {{ numb.csrf_token }}
+    <div class="form-body-login">
+      <div class="row my-2">
+        <div class="col">
+          <div class="form-group row">
+            {{ numb.group_num.label(class='control-label') }}
+            <div class="col-sm-7">
+              {{ numb.group_num(class='form-control') }}
+            </div>
+            <div class="col-6 pl-0 pr-0">
+              <input type="submit" value="Go" class="btn ok-sml" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% if mems %}
+<div class="row">
+      {% for member in mems %}
+      <div class="col-4 mb-4">
+        <button class="member-tile">
+          <div class="py-3">
+            {{ member['first_name']}} {{member['last_name']}}
+          </div>
+        </button>
+      </div>
+      {% endfor %}
+    </div>
+    <button
+      id="Lanai"
+      data-id="{{ cur_set.CSI }} {{ cur_set.percentage }} {{
+        cur_set.personality_score }} {{ cur_set.leadership_score }} {{
+        cur_set.hobby_score }} {{ cur_set.gender_score }} {{ cur_set.age_score }} {{
+        cur_set.height_score }} {{ cur_set.ethnicity_score }} {{
+        cur_set.education_score }} {{ cur_set.occupation_score }}"
+      id="getuser"
+      class="btn recom"
+      onclick="document.getElementById('Lanai').style.display ='none';"
+    >
+      View More Details
+    </button>
+
+    <canvas id="myChart" width="800" height="350" class="mb-4"></canvas>
+  </div>
+
+  <script>
+    $(document).on("click", "#Lanai", function () {
+      var id = $(this).attr("data-id"); //data-id of button
+      var array = id.split(" ");
+
+      $("#nameHolder").html(array[0]);
+      score = parseFloat(array[1]).toFixed(5);
+      $("#CSIHolder").html("CSI Score: " + score);
+
+      var ctx = document.getElementById("myChart");
+
+      //Global
+      Chart.defaults.scale.gridLines.drawOnChartArea = false;
+
+      let firstValues = [
+        parseFloat(array[3]) * 100,
+        parseFloat(array[4]) * 100,
+        parseFloat(array[5]) * 100,
+        parseFloat(array[6]) * 100,
+        parseFloat(array[7]) * 100,
+        parseFloat(array[8]) * 100,
+        parseFloat(array[9]) * 100,
+        parseFloat(array[10]) * 100,
+        parseFloat(array[11]) * 100,
+        parseFloat(array[12]) * 100,
+      ];
+      let firstlabels = [
+        "Personality",
+        "Leadership",
+        "Hobby",
+        "Sex",
+        "Age",
+        "Height",
+        "Ethnicity",
+        "Education",
+        "Occupation",
+      ];
+      initial = {
+        labels: firstlabels,
+        datasets: [
+          {
+            label: "Scores",
+            data: firstValues,
+            backgroundColor: [
+              "#4E77D2",
+              "#7EA2F3",
+              "#ABC5FE",
+              "#D8E4FF",
+              "#4E77D2",
+              "#7EA2F3",
+              "#ABC5FE",
+              "#D8E4FF",
+            ],
+            borderColor: ["#4E77D2", "#7EA2F3", "#ABC5FE", "#D8E4FF"],
+            borderWidth: 1,
+            maxBarThickness: 16,
+          },
+        ],
+      };
+
+      var myChart = new Chart(ctx, {
+        type: "horizontalBar",
+        data: initial,
+        options: {
+          responsive: false,
+          maintainAspectRatio: this.maintainAspectRatio,
+          title: {
+            display: true,
+            text: "Stats",
+            fontSize: 18,
+          },
+          legend: {
+            display: false,
+            labels: {
+              // This more specific font property overrides the global property
+              fontColor: "rgba(0, 0, 0, 0.8)",
+              fontFamily: "Monserrat",
+              fontsize: 16,
+              fontColor: "red",
+            },
+          },
+          tooltips: {
+            enabled: false,
+          },
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+              },
+            ],
+            xAxes: [
+              {
+                stacked: true,
+                scaleLabel: {
+                  labelString: "Compatibility",
+                  display: true,
+                  fontSize: 16,
+                },
+              },
+            ],
+          },
+        },
+      });
+    });
+  </script>
+</div>
+{% endif %}
+{% endblock %}
