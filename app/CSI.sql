@@ -13,6 +13,8 @@ drop table IF EXISTS pin_user;
 drop table IF EXISTS Administrator;
 drop table IF EXISTS Dictionary;
 drop table IF EXISTS Biography;
+drop table IF EXISTS SetUserGroup;
+drop table IF EXISTS SetGroupScore;
 
 
 create table User(
