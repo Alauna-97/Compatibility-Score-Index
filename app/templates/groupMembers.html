@@ -8,22 +8,17 @@
     method="post"
     action="{{ url_for('groupMembers', sid = fullSet['sid']) }}"
   >
-    {{ numb.csrf_token }}
-    <div class="form-body-login">
-      <div class="row my-2">
-        <div class="col">
-          <div class="form-group row">
-            {{ numb.group_num.label(class='control-label') }}
-            <div class="col-sm-7">
-              {{ numb.group_num(class='form-control') }}
+  {{ numb.csrf_token }}
+          <div class="row">
+            {{ numb.group_num.label(class='control-label mr-2') }}
+            <div>
+              {{ numb.group_num(class='mydropdown') }}
             </div>
-            <div class="col-6 pl-0 pr-0">
+
+            <div>
               <input type="submit" value="Go" class="btn ok-sml" />
             </div>
           </div>
-        </div>
-      </div>
-    </div>
   </form>
 </div>
 {% if mems %}
