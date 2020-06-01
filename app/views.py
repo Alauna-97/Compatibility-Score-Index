@@ -548,16 +548,7 @@ def members(sid):
 
                     mycursor.execute(sql, val)
                     mysql.connection.commit()
-
-            mycursor.execute(
-                'SELECT * from setusergroup WHERE sid = %s', (sid,))
-            fullSet = mycursor.fetchall()
-            return render_template('miniGrps.html', fullSet=fullSet, numPersons=numPersons, grpAmt=grpAmt, mini_gp=mini_gp)
-
-            mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
-            biography = mycursor.fetchone()
-    return render_template('members.html', sid=sid, form=form, fullSet=fullSet, getMembers=getMembers, biography = biography)
-
+            
                 sql = "INSERT INTO SetGroupScore (sid, group_num, CSI, percentage, personality_score, leadership_score, hobby_score, gender_score, age_score, height_score, ethnicity_score, education_score, occupation_score, con_personality_score, con_leadership_score, con_hobby_score, con_gender_score, con_age_score, con_height_score, con_ethnicity_score, con_education_score, con_occupation_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
                 val = (sid, i+1, result['CSI'],  result['Percentage'], result['personality_score'], result['leadership_score'], result['hobby_score'], result['gender_score'], result['age_score'], result['height_score'], result['ethnicity_score'], result['education_score'],
@@ -567,7 +558,11 @@ def members(sid):
                 mysql.connection.commit()
 
             return render_template('miniGrps.html', fullSet=fullSet[0], numPersons=numPersons, grpAmt=grpAmt)
-    return render_template('members.html', sid=sid, form=form, fullSet=fullSet, getMembers=getMembers)
+            
+        mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
+        biography = mycursor.fetchone()
+
+    return render_template('members.html', sid=sid, form=form, fullSet=fullSet, getMembers=getMembers, biography = biography)
 
 
 
