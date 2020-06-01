@@ -7,8 +7,14 @@
 
     <span>
       <a href="{{ url_for('run') }}">
-        <img src="/static/images/multimedia.png" class="reload grow" data-toggle="tooltip" data-placement="right" title="Click to Re-run" />
-        </a>
+        <img
+          src="/static/images/multimedia.png"
+          class="reload grow"
+          data-toggle="tooltip"
+          data-placement="right"
+          title="Click to Re-run"
+        />
+      </a>
     </span>
   </div>
 
@@ -65,6 +71,7 @@
             class="close"
             data-dismiss="modal"
             aria-label="Close"
+            onclick="location.reload()"
           >
             <span aria-hidden="true">&times;</span>
           </button>
@@ -72,10 +79,8 @@
         <div class="modal-body">
           <div class="row" id="formgroupmodalClick">
             <div class="col text-center">
-
-              <p class = "csimatch" id="nameHolder"></p>
-
-              <span> CSI Score: </span>
+              <p class="csimatch" id="nameHolder"></p>
+              <span class="" id="PercentageHolder"></span>
               <span class="ml-5" id="CSIHolder"></span>
               <span class="ml-5">Max: 9</span>
             </div>
@@ -84,7 +89,12 @@
           <canvas id="myChart" width="450" height="250"></canvas>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+            onclick="location.reload()"
+          >
             Close
           </button>
         </div>
@@ -92,15 +102,13 @@
     </div>
   </div>
 
-
-
-
   <script>
     $(document).on("click", "#getuser", function () {
       var id = $(this).attr("data-id"); //data-id of button
       var array = id.split(" ");
 
       $("#nameHolder").html(array[0]);
+      $("#PercentageHolder").html("Similarity: " + array[2] + "%");
       score = parseFloat(array[1]).toFixed(5);
       $("#CSIHolder").html("CSI Score: " + score);
 
