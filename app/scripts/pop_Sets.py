@@ -14,7 +14,6 @@ mycursor = mydb.cursor()
 
 
 def populateSet(records):
-
     # creating a new organizer
     sql = "INSERT INTO User (user_id, type, first_name, last_name, username, email, password) VALUES (%s, %s, %s, %s, %s, %s, %s)"
     val = (1, "Organizer", "Carl", "Beckford",
@@ -80,9 +79,9 @@ def populateSet(records):
     for i in range(3, records):
         def populateScores(username):
             x = random.uniform(2, 9)
-            sql = "INSERT INTO Scores (primary_user, other_user, score, similarity_percentage, personality_score, leadership_score, hobby_score, gender_score, age_score, height_score, ethnicity_score, education_score, occupation_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            val = ("Lanai", username, x, x*10, random.random(), random.random(
-            ), random.random(), random.random(), random.random(), random.random(), random.random(), random.random(), random.random())
+            sql = "INSERT INTO Scores (`userA username`, `userB username`, CSI, percentage, personality_score, leadership_score, hobby_score, gender_score, age_score, height_score, ethnicity_score, education_score, occupation_score, con_personality_score, con_leadership_score, con_hobby_score, con_gender_score, con_age_score, con_height_score, con_ethnicity_score, con_education_score, con_occupation_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            val = ("Lanai", username, x, x*10, random.random(), random.random(), random.random(), random.random(), random.random(), random.random(), random.random(),
+                   random.random(), random.random(), random.random(), random.random(), random.random(), random.random(), random.random(), random.random(), random.random(), random.random(), random.random())
 
             mycursor.execute(sql, val)
             mydb.commit()
@@ -130,15 +129,12 @@ def populateSet(records):
         mydb.commit()
 
         # add them to set
-
         sql = "INSERT INTO joinSet (user_id, sid) VALUES (%s, %s)"
         val = (i, 1)
 
         mycursor.execute(sql, val)
         mydb.commit()
         populateScores(username)
-
-        print(i)
 
 
 if __name__ == '__main__':

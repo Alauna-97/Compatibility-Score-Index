@@ -6,7 +6,9 @@
     {% include 'flash_messages.html' %}
 
     <span>
-      <img src="/static/images/multimedia.png" class="reload grow" data-toggle="tooltip" data-placement="right" title="Click to Re-run" />
+      <a href="{{ url_for('run') }}">
+        <img src="/static/images/multimedia.png" class="reload grow" data-toggle="tooltip" data-placement="right" title="Click to Re-run" />
+        </a>
     </span>
   </div>
 
@@ -32,16 +34,14 @@
         class="rmndTile"
         data-toggle="modal"
         data-target="#formgroupmodal"
-        data-id="{{ match.other_user }} {{ match.score }} {{ match.similarity_percentage }} {{ match.personality_score }} {{ match.leadership_score }} {{ match.hobby_score }} {{ match.gender_score }} {{ match.age_score }} {{ match.height_score }} {{ match.ethnicity_score }} {{ match.education_score }} {{ match.occupation_score }}"
+        data-id="{{ match['userB username'] }} {{ match.CSI }} {{ match.percentage }} {{ match.personality_score }} {{ match.leadership_score }} {{ match.hobby_score }} {{ match.gender_score }} {{ match.age_score }} {{ match.height_score }} {{ match.ethnicity_score }} {{ match.education_score }} {{ match.occupation_score }}"
         id="getuser"
       >
         <span class="delete_" aria-hidden="true">&times;</span>
 
-        <span class="percentage"
-          >{{(match['similarity_percentage'])|round|int}} %</span
-        >
+        <span class="percentage">{{(match['percentage'])|round|int}} %</span>
         <div class="grp_title py-3">
-          {{match['other_user']}}
+          {{match['userB username']}}
         </div>
       </button>
     </div>
@@ -65,7 +65,6 @@
             class="close"
             data-dismiss="modal"
             aria-label="Close"
-            onclick="randomizeData()"
           >
             <span aria-hidden="true">&times;</span>
           </button>
@@ -78,13 +77,8 @@
 
               <span> CSI Score: </span>
               <span class="ml-5" id="CSIHolder"></span>
-
-              <div>
-                <a href="#" class = "btn btn-primary mt-3 mb-3">pin user</a>
-              </div>
-
-            </div>          
-
+              <span class="ml-5">Max: 9</span>
+            </div>
           </div>
           <div class="hr-bar mt-1"></div>
           <canvas id="myChart" width="450" height="250"></canvas>
@@ -105,10 +99,10 @@
     $(document).on("click", "#getuser", function () {
       var id = $(this).attr("data-id"); //data-id of button
       var array = id.split(" ");
-      console.log(array);
 
       $("#nameHolder").html(array[0]);
-      $("#CSIHolder").html(parseFloat(array[1]) * 10);
+      score = parseFloat(array[1]).toFixed(5);
+      $("#CSIHolder").html("CSI Score: " + score);
 
       var ctx = document.getElementById("myChart");
 
@@ -144,7 +138,16 @@
           {
             label: "Scores",
             data: firstValues,
-            backgroundColor: ["#4E77D2", "#7EA2F3", "#ABC5FE", "#D8E4FF"],
+            backgroundColor: [
+              "#4E77D2",
+              "#7EA2F3",
+              "#ABC5FE",
+              "#D8E4FF",
+              "#4E77D2",
+              "#7EA2F3",
+              "#ABC5FE",
+              "#D8E4FF",
+            ],
             borderColor: ["#4E77D2", "#7EA2F3", "#ABC5FE", "#D8E4FF"],
             borderWidth: 1,
             maxBarThickness: 16,

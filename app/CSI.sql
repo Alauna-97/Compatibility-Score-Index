@@ -79,10 +79,10 @@ create table SetUserGroup (
 );
 
 create table Scores(
-    primary_user varchar(30),
-    other_user varchar(30),
-    score decimal (10, 9),
-    similarity_percentage decimal (10, 7),
+    `userA username` varchar(30),
+    `userB username` varchar(30),
+    CSI decimal (10, 9),
+    percentage decimal (4, 1),
     personality_score decimal (4, 3),
     leadership_score decimal (4, 3),
     hobby_score decimal (4, 3),
@@ -92,9 +92,18 @@ create table Scores(
     ethnicity_score decimal (4, 3),
     education_score decimal (4, 3),
     occupation_score decimal (4, 3),
-    primary key (primary_user, other_user),
-    foreign key (primary_user) references User(username) on delete cascade on update cascade,
-    foreign key (other_user) references User(username) on delete cascade on update cascade
+    con_personality_score int,
+    con_leadership_score int,
+    con_hobby_score int,
+    con_gender_score int,
+    con_age_score int,
+    con_height_score int,
+    con_ethnicity_score int,
+    con_education_score int,
+    con_occupation_score int,
+    primary key (`userA username`, `userB username`),
+    foreign key (`userA username`) references User(username) on delete cascade on update cascade,
+    foreign key (`userB username`) references User(username) on delete cascade on update cascade
 );
 
 create table pin_user (

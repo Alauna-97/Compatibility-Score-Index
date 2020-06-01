@@ -2,10 +2,10 @@ header {
   background: #6b92e8;
 }
 
-@media (min-width: 1200px){
-.container {
+@media (min-width: 1200px) {
+  .container {
     max-width: 1270px;
-}
+  }
 }
 
 .row {
@@ -50,24 +50,22 @@ a.navbar-brand.ml-1 {
   color: white;
 }
 
-a.navbar-brand.ml-1:hover{
-  color: rgba(0,0,0,.9);
+a.navbar-brand.ml-1:hover {
+  color: rgba(0, 0, 0, 0.9);
 }
 
-
-.grow { 
-  transition: all .2s ease-in-out; 
+.grow {
+  transition: all 0.2s ease-in-out;
 }
-.grow:hover { 
-  transform: scale(1.2); 
+.grow:hover {
+  transform: scale(1.2);
 }
 
-
-.relative{
+.relative {
   position: relative;
 }
 
-.absolute{
+.absolute {
   position: absolute;
 }
 /************************************** Navigation Area **************************************/
@@ -141,7 +139,7 @@ a.navbar-brand.ml-1:hover{
   background-color: #fff;
 }
 
-.form-control.search{
+.form-control.search {
   width: 460px;
 }
 
@@ -254,12 +252,12 @@ footer h5 {
   color: #fff;
 }
 
-.mid-pos{
+.mid-pos {
   top: 45%;
   right: 33rem;
 }
 
-.top-marg{
+.top-marg {
   margin-top: 6rem;
   margin-left: 3rem;
 }
@@ -287,56 +285,51 @@ footer h5 {
   border-color: #0b1e61;
 }
 
-.margin-space{
+.margin-space {
   margin-left: 5rem;
   margin-top: 4rem;
   margin-bottom: 4.5rem;
-  
 }
 
-.margin-space2{
+.margin-space2 {
   margin-left: 6rem;
   margin-top: 4rem;
   margin-bottom: 4.5rem;
 }
 
-.sub-head-home{
+.sub-head-home {
   font-style: normal;
   font-weight: normal;
   font-size: 32px;
   line-height: 40px;
   letter-spacing: -0.015em;
-  color: #0E267A;
- }
+  color: #0e267a;
+}
 
-
-
- .panel2-sub{
+.panel2-sub {
   font-family: Montserrat;
   font-style: normal;
   font-size: 24px;
   line-height: 36px;
   font-weight: bolder;
   letter-spacing: -0.015em;
-  color: #2449CB;
+  color: #2449cb;
   margin-top: 2.5rem;
-  
- }
-
- .lh-2{
-   line-height: 2rem;
- }
-
- .btn-basic.white.white-border{
-   border-color: #fff;
- }
-
- 
- .btn-basic.white.white-border.lilac{
-  color: #6171CE;
 }
 
- .btn-basic.white {
+.lh-2 {
+  line-height: 2rem;
+}
+
+.btn-basic.white.white-border {
+  border-color: #fff;
+}
+
+.btn-basic.white.white-border.lilac {
+  color: #6171ce;
+}
+
+.btn-basic.white {
   color: #0e267a;
   font-weight: 600;
   background-color: #fff;
@@ -350,87 +343,82 @@ footer h5 {
 }
 
 .faded-banner {
-  background-image: url('/static/images/all-hands-in-sml.jpg');
+  background-image: url("/static/images/all-hands-in-sml.jpg");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   height: 100%;
   overflow: hidden;
-  color: #FFFFFF
+  color: #ffffff;
 }
 
-.overlay{
+.overlay {
   background: rgba(111, 145, 230, 0.85);
   overflow: hidden;
   height: 100%;
   z-index: 2;
 }
 
-.font-white{
-  color:rgba(255, 255, 255, 0.9);
-
+.font-white {
+  color: rgba(255, 255, 255, 0.9);
 }
 
-.radius-2{
+.radius-2 {
   border-radius: 6px;
 }
 
-.no-bold-black{
+.no-bold-black {
   font-weight: 500;
   color: rgba(0, 0, 0, 0.8);
 }
 
-.mx-8{
+.mx-8 {
   margin-right: 10rem;
   margin-left: 10rem;
 }
 
-.ml-10{
+.ml-10 {
   margin-left: 13rem;
 }
 
-.ml-6{
+.ml-6 {
   margin-left: 4.5rem;
 }
-.backdrop{
-  background-color: #173DC1;
+.backdrop {
+  background-color: #173dc1;
 }
 
-.thin.font-white{
+.thin.font-white {
   font-weight: lighter;
 }
 
-
-
-
 /********************************************** ABOUT ******************************************/
-.banner-head-home{
+.banner-head-home {
   font-style: normal;
   font-weight: normal;
   font-size: 48px;
   line-height: 40px;
   letter-spacing: -0.015em;
-  color: #0E267A;
- }
+  color: #0e267a;
+}
 
-.opct{
+.opct {
   opacity: 0.86;
 }
 
-
 .gray-banner {
-  background: #F1F1F1;
+  background: #f1f1f1;
   background-size: 100% 100%;
   height: 100%;
   overflow: hidden;
 }
 
-.name-label{
+.name-label {
   font-family: Montserrat;
   font-weight: bold;
   font-size: 16px;
   line-height: 30px;
   letter-spacing: -0.015em;
-  color: #0E267A;
+  color: #0e267a;
   text-align: left;
   margin-top: 1rem;
   margin-bottom: 5rem;
@@ -642,7 +630,11 @@ div.register-form form.card-user-reg div.form-group {
 .form-control.sel {
   width: 299px;
   margin-bottom: 1rem;
-  background: linear-gradient( 90deg, rgb(161, 238, 255) -313.56%, rgb(255, 201, 225) 398.31% );
+  background: linear-gradient(
+    90deg,
+    rgb(161, 238, 255) -313.56%,
+    rgb(255, 201, 225) 398.31%
+  );
 }
 
 .form-control.sel#height {
@@ -736,9 +728,8 @@ div.register-form form.card-user-reg div.form-group {
   resize: none;
 }
 
-
-.rec-button{
-  background: #FFFFFF;
+.rec-button {
+  background: #ffffff;
   border-radius: 23px;
   border: none;
   text-align: left;
@@ -752,10 +743,9 @@ div.register-form form.card-user-reg div.form-group {
   color: black;
 }
 
-
-.rec-button:hover{
-  background: linear-gradient(90deg, #31D2F7 -313.56%, #FFAED2 398.31%);
-  color:#fff;
+.rec-button:hover {
+  background: linear-gradient(90deg, #31d2f7 -313.56%, #ffaed2 398.31%);
+  color: #fff;
   opacity: 1;
 }
 
@@ -845,8 +835,12 @@ div.register-form form.card-user-reg div.form-group {
   width: 240px;
   height: 240px;
   margin-bottom: 1.5rem;
-  margin-left:1rem;
-  background: linear-gradient(88.74deg, rgb(76, 219, 252) -173.8%, rgb(252, 154, 196) 271.63%);
+  margin-left: 1rem;
+  background: linear-gradient(
+    88.74deg,
+    rgb(76, 219, 252) -173.8%,
+    rgb(252, 154, 196) 271.63%
+  );
   /* opacity: 0.6; */
   border-radius: 6px;
   position: relative;
@@ -856,9 +850,8 @@ div.register-form form.card-user-reg div.form-group {
   border: 1px solid transparent;
   line-height: 1;
   border-radius: 0.25rem;
-  transition:  0.5s; 
+  transition: 0.5s;
   /* transition: color 0.15s ease-in-out, background 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; */
-
 }
 
 .row.extra-marg {
@@ -866,7 +859,11 @@ div.register-form form.card-user-reg div.form-group {
 }
 
 .tile:hover {
-  background: linear-gradient(40.74deg, rgb(76, 219, 252) -173.8%, rgb(252, 154, 196) 271.63%);
+  background: linear-gradient(
+    40.74deg,
+    rgb(76, 219, 252) -173.8%,
+    rgb(252, 154, 196) 271.63%
+  );
   /* opacity: 0.8; */
 }
 
@@ -947,14 +944,13 @@ div.register-form form.card-user-reg div.form-group {
   border: 1px solid #0e267a;
 }
 
-
-.frndTile{
+.frndTile {
   width: 240px;
   height: 90px;
   margin-bottom: 1.5rem;
   margin-left: 1rem;
   /* background-image: url(slideshow1.jpg); */
-  background-color: #AEBBFF;
+  background-color: #aebbff;
   /* opacity: 0.6; */
   border-radius: 6px;
   position: relative;
@@ -969,11 +965,10 @@ div.register-form form.card-user-reg div.form-group {
 */
 }
 
-.frndTile:hover{
-  background-color: #AEBBFF;
+.frndTile:hover {
+  background-color: #aebbff;
   opacity: 0.8;
 }
-
 
 /* .col-4.grid-spacing {
   max-width: 30%;
@@ -1130,39 +1125,38 @@ img.reload {
 }
 /********* ADMIN ***************/
 
-.subheader{
+.subheader {
   font-size: 18px;
   color: #7e7e7e;
 }
 
-.adminlabel{
-  color: #6B92E8;
+.adminlabel {
+  color: #6b92e8;
 }
 
-.adminform{
-  width:90%;
-  background-color: #F4F4F4;
+.adminform {
+  width: 90%;
+  background-color: #f4f4f4;
   resize: none;
 }
 
-
-.table-header{
+.table-header {
   background: #383535;
   border-radius: 6px;
   font-size: 16px;
   color: #fff;
 }
 
-.table-data{
-  background: #F4F4F4;
+.table-data {
+  background: #f4f4f4;
   border: none;
   border-radius: 6px;
   font-size: 16px;
-  color: #6B92E8;
+  color: #6b92e8;
   margin-top: 0.5rem;
 }
 
-.scrollable{
+.scrollable {
   overflow: scroll;
   height: 400px;
   border-top: none;
@@ -1179,15 +1173,14 @@ img.reload {
 ::-webkit-scrollbar-track {
   border-radius: 10px;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #ececec; 
+  background: #ececec;
   border-radius: 2rem;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #d8d8d8; 
+  background: #d8d8d8;
 }
-

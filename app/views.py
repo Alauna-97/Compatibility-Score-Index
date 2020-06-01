@@ -8,23 +8,17 @@ import os
 from app import app, login_manager
 from flask_mysqldb import MySQL
 from flask import render_template, request, redirect, url_for, flash, session
+<<<<<<< HEAD
 from flask import jsonify
 from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria, Profile_About
+=======
+from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria
+>>>>>>> 9e2a19ea7f26d842cec3e9b0d4e502a72f5e2ee9
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 
 import random
 import uuid
-import jyserver.Flask as js
-# import mysql.connector
-# mydb = mysql.connector.connect(
-#     host="localhost",
-#     user="root",
-#     passwd="",
-#     database="csi"
-# )
-
-# mycursor = mydb.cursor()
 
 ###
 # Routing for your application.
@@ -42,7 +36,7 @@ mysql = MySQL(app)
 @app.route('/')
 def home():
     """Render website's home page."""
-   
+
     return render_template('home.html')
 
 
@@ -66,7 +60,6 @@ def admin():
     mycursor = mysql.connection.cursor()
     mycursor.execute('Select * from Dictionary')
     definitions = mycursor.fetchone()
-
 
     if request.method == "POST" and form.validate_on_submit():
         pers_weight = request.form['pers_weight']
@@ -95,13 +88,13 @@ def admin():
             val = (pers_weight, 'D-01')
             mycursor.execute(sql, val)
             mysql.connection.commit()
-        
+
         if ldrshp_weight:
             sql = "UPDATE Dictionary SET leadership_weight = %s WHERE dict_id = %s"
             val = (ldrshp_weight, 'D-01')
             mycursor.execute(sql, val)
             mysql.connection.commit()
-        
+
         if hobby_weight:
             sql = "UPDATE Dictionary SET hobby_weight = %s WHERE dict_id = %s"
             val = (hobby_weight, 'D-01')
@@ -115,7 +108,7 @@ def admin():
 
             mycursor.execute(sql, val)
             mysql.connection.commit()
-        
+
         if autocratic:
             sql = "UPDATE Dictionary SET autocratic = %s WHERE dict_id = %s"
             val = (autocratic, 'D-01')
@@ -123,7 +116,6 @@ def admin():
             mycursor.execute(sql, val)
             mysql.connection.commit()
 
-        
         if laissezfaire:
             sql = "UPDATE Dictionary SET laissez_faire = %s WHERE dict_id = %s"
             val = (laissezfaire, 'D-01')
@@ -138,29 +130,27 @@ def admin():
             mycursor.execute(sql, val)
             mysql.connection.commit()
 
-        
         if extrovert:
             sql = "UPDATE Dictionary SET extrovert = %s WHERE dict_id = %s"
             val = (extrovert, 'D-01')
 
             mycursor.execute(sql, val)
             mysql.connection.commit()
-        
-        
+
         if introvert:
             sql = "UPDATE Dictionary SET introvert = %s WHERE dict_id = %s"
             val = (introvert, 'D-01')
 
             mycursor.execute(sql, val)
             mysql.connection.commit()
-        
+
         if sports:
             sql = "UPDATE Dictionary SET sports = %s WHERE dict_id = %s"
             val = (sports, 'D-01')
 
             mycursor.execute(sql, val)
             mysql.connection.commit()
-        
+
         if music:
             sql = "UPDATE Dictionary SET music = %s WHERE dict_id = %s"
             val = (music, 'D-01')
@@ -182,7 +172,6 @@ def admin():
             mycursor.execute(sql, val)
             mysql.connection.commit()
 
-
         if shopping:
             sql = "UPDATE Dictionary SET shopping = %s WHERE dict_id = %s"
             val = (shopping, 'D-01')
@@ -190,7 +179,6 @@ def admin():
             mycursor.execute(sql, val)
             mysql.connection.commit()
 
-        
         if writing:
             sql = "UPDATE Dictionary SET writing = %s WHERE dict_id = %s"
             val = (writing, 'D-01')
@@ -198,14 +186,12 @@ def admin():
             mycursor.execute(sql, val)
             mysql.connection.commit()
 
-
         if dancing:
             sql = "UPDATE Dictionary SET dancing = %s WHERE dict_id = %s"
             val = (dancing, 'D-01')
 
             mycursor.execute(sql, val)
             mysql.connection.commit()
-        
 
         if arts:
             sql = "UPDATE Dictionary SET arts = %s WHERE dict_id = %s"
@@ -213,7 +199,6 @@ def admin():
 
             mycursor.execute(sql, val)
             mysql.connection.commit()
-        
 
         if watchingTV:
             sql = "UPDATE Dictionary SET watching_tv = %s WHERE dict_id = %s"
@@ -224,16 +209,17 @@ def admin():
 
         flash('Settings Updated', 'success')
 
-    
-    return render_template('admin.html', form = form, definitions = definitions)
+    return render_template('admin.html', form=form, definitions=definitions)
+
 
 @app.route('/admin/currentusers/', methods=["GET", "POST"])
 def allUsers():
     mycursor = mysql.connection.cursor()
-    mycursor.execute('Select * from user WHERE user_id != %s', (session['id'],))
+    mycursor.execute('Select * from user WHERE user_id != %s',
+                     (session['id'],))
     users = mycursor.fetchall()
 
-    return render_template('all_users.html', users = users)
+    return render_template('all_users.html', users=users)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -288,13 +274,14 @@ def dashboard(username):
         else:
             mycursor.execute(
                 'SELECT * FROM Sets JOIN joinset ON sets.sid = joinset.sid WHERE joinset.user_id = %s ', (session['id'],))
-            
+
         getSets = mycursor.fetchall()
 
         if session.get('TYPE') == "Regular":
             mycursor.execute(
                 'SELECT * FROM user JOIN pin_user ON user.user_id = pin_user.match_id WHERE pin_user.user_id = %s ', (session['id'],))
             getFriends = mycursor.fetchall()
+<<<<<<< HEAD
         
         mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
         biography = mycursor.fetchone()
@@ -345,6 +332,10 @@ def edit_info(username):
         
     return render_template('edit.html', PropicForm=PropicForm, biography=biography)
 
+=======
+
+    return render_template('dashbrd.html', groups=getSets, type=session.get('TYPE'))
+>>>>>>> 9e2a19ea7f26d842cec3e9b0d4e502a72f5e2ee9
 
 
 @app.route("/logout")
@@ -530,15 +521,12 @@ def members(sid):
     mycursor = mysql.connection.cursor()
     mycursor.execute('SELECT * from sets WHERE sid = %s', (sid,))
     fullSet = mycursor.fetchall()
-    print(fullSet)
 
     form = Groupings()
-    x = 0
     if 'username' in session and session.get('TYPE') == "Organizer":
         mycursor = mysql.connection.cursor()
         mycursor.execute('SELECT username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user JOIN regular JOIN joinset ON regular.user_id = user.user_id and regular.user_id = joinset.user_id and user.user_id=joinset.user_id WHERE joinset.sid = %s', (sid,))
         getMembers = list(mycursor.fetchall())
-        print(getMembers)
         mbrsCopy = getMembers
 
         if request.method == "POST" and form.validate_on_submit():
@@ -568,11 +556,6 @@ def members(sid):
             mycursor.execute(
                 'SELECT * from setusergroup WHERE sid = %s', (sid,))
             fullSet = mycursor.fetchall()
-            print()
-            print()
-            print(mini_gp)
-
-            # print(fullSet)
             return render_template('miniGrps.html', fullSet=fullSet, numPersons=numPersons, grpAmt=grpAmt, mini_gp=mini_gp)
 
             mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
@@ -617,15 +600,14 @@ def recommend(username):
         crit = form.crit.data
         if crit == "compatible":
             mycursor.execute(
-                'SELECT * from User JOIN Scores ON scores.primary_user=user.username WHERE scores.primary_user = %s ORDER BY score DESC', (session['username'],))
+                'SELECT * from Scores WHERE `userA username` = %s ORDER BY percentage DESC LIMIT 9', (session['username'],))
         else:
             mycursor.execute(
-                'SELECT * from User JOIN Scores ON scores.primary_user=user.username WHERE scores.primary_user = %s ORDER BY score ASC', (session['username'],))
-
-        matches = list(mycursor.fetchmany(9))
+                'SELECT * from Scores WHERE `userA username` = %s ORDER BY percentage ASC LIMIT 9', (session['username'],))
+        matches = list(mycursor.fetchall())
         return render_template('recomnd.html', form=form, matches=matches)
-
     mycursor.execute(
+<<<<<<< HEAD
         'SELECT * from User JOIN Scores ON scores.primary_user=user.username WHERE scores.primary_user = %s ORDER BY score DESC', (session['username'],))
     matches = list(mycursor.fetchmany(9))
     # message = {
@@ -642,44 +624,34 @@ def recommend(username):
 
     return render_template('recomnd.html', form=form, matches=matches, biography = biography)
 
+=======
+        'SELECT * from Scores WHERE `userA username` = %s ORDER BY percentage DESC LIMIT 0,9', (session['username'],))
+    matches = list(mycursor.fetchall())
+    return render_template('recomnd.html', form=form, matches=matches)
+>>>>>>> 9e2a19ea7f26d842cec3e9b0d4e502a72f5e2ee9
 
 
-@app.route('/1')
-def getRegularUsers():
-    """Render website's home page."""
+@app.route('/run')
+def run():
+    # CSI Magic
+    # comp_list is the variable for the list returned by CSI
+    # how many persons are we submitting to the database 25 ???
     mycursor = mysql.connection.cursor()
     mycursor.execute(
-        'SELECT username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user join regular on user.user_id=regular.user_id')
-    user = list(mycursor.fetchall())
-    return '<p>' + str(user) + '</p>'
+        'DELETE from Scores WHERE `userA username` = %s', (session['username'],))
 
+    # Index 0 has in the 25 or so people to write to the db
+    for user in comp_list[0]:
+        # insert response to database
+        sql = "INSERT INTO Scores (`userA username`, `userB username`, CSI, percentage, personality_score, leadership_score, hobby_score, gender_score, age_score, height_score, ethnicity_score, education_score, occupation_score, con_personality_score, con_leadership_score, con_hobby_score, con_gender_score, con_age_score, con_height_score, con_ethnicity_score, con_education_score, con_occupation_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
-@app.route('/users')
-def getUsers():
-    """Render website's home page."""
-    mycursor = mysql.connection.cursor()
+        # userA username has an extra space
+        val = (user['userA username '], user['userB username'], user['CSI'], int((user['CSI'] / 9) * 100), user['personality_score'], user['leadership_score'], user['hobby_score'], user['gender_score'], user['age_score'], user['height_score'], user['ethnicity_score'], user['education_score'],
+               user['occupation_score'], user['con_personality_score'], user['con_leadership_score'], user['con_hobby_score'], user['con_gender_score'], user['con_age_score'], user['con_height_score'], user['con_ethnicity_score'], user['con_education_score'], user['con_occupation_score'])
 
-    mycursor.execute(
-        'SELECT username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user join regular on user.user_id=regular.user_id WHERE user.username = %s', (session['username'],))
-    cur_user = list(mycursor.fetchall())    # Current User
-
-    mycursor.execute(
-        'SELECT username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user join regular on user.user_id=regular.user_id WHERE NOT user.username = %s', (session['username'],))
-    other_users = list(mycursor.fetchall())     # All but current user
-
-    return '<p>' + str(cur_user) + '</p>' + '<p>' + str(other_users) + '</p>'
-
-
-@app.route('/definitions')
-def getDefinitions():
-    mycursor = mysql.connection.cursor()
-
-    # Definition of System Variables
-    mycursor.execute(
-        'SELECT personality_weight, leadership_weight, hobby_weight, democratic, autocratic, laissez_faire, ambivert, extrovert, introvert, sports, music, exercising, reading, shopping, writing, dancing, arts, watching_tv from Dictionary', )
-    definitions = list(mycursor.fetchall())
-
-    return '<p>' + str(definitions) + '</p>'
+        mycursor.execute(sql, val)
+        mysql.connection.commit()
+    return redirect(url_for('recommend', username=session.get('username')))
 
 
 def randomFeatures():
