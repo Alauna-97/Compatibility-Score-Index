@@ -74,8 +74,7 @@ create table SetUserGroup (
     sid int not null,
     group_num int not null,
     primary key (username, sid, group_num),
-    foreign key (username) references Regular(username) on delete cascade,
-    foreign key (sid) references Sets(sid) on delete cascade
+    foreign key (username) references User(username) on delete cascade
 );
 
 create table Scores(
@@ -130,7 +129,7 @@ create table SetGroupScore(
     con_education_score int,
     con_occupation_score int,
     primary key (sid, group_num),
-    foreign key (sid) references SetUserGroup(sid) on delete cascade on update cascade
+    foreign key (sid) references Sets(sid) on delete cascade on update cascade
 );
 
 create table pin_user (
