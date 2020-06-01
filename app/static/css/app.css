@@ -231,6 +231,16 @@ footer h5 {
   text-align: center;
 }
 
+
+.footer-link{
+  color: rgb(96, 170, 255);
+}
+
+.footer-link:hover{
+  color: #fff;
+  text-decoration: none;
+}
+
 /********************************************* HOME *************************************************/
 .slide {
   height: 580px;
@@ -414,6 +424,83 @@ footer h5 {
   margin-bottom: 5rem;
 }
 
+/***  FOR HOVER EFFECT ***/
+.hovereffect {
+  width: 100%;
+  height: 100%;
+  float: left;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  cursor: default;
+}
+
+.hovereffect .overlay2 {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+  top: 1rem;
+  left: 0;
+}
+
+.hovereffect img {
+  display: block;
+  position: relative;
+  -webkit-transition: all 0.4s ease-in;
+  transition: all 0.4s ease-in;
+}
+
+.hovereffect:hover img {
+  filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0 0 0 1 0" /><feGaussianBlur stdDeviation="3" /></filter></svg>#filter');
+  filter: grayscale(1) blur(3px);
+  -webkit-filter: grayscale(1) blur(3px);
+  -webkit-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  transform: scale(1.2);
+}
+
+.hovereffect h2 {
+  text-align: center;
+  position: relative;
+  font-size: 17px;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.hovereffect a.info {
+  display: inline-block;
+  text-decoration: none;
+  padding: 7px 14px;
+  border: 1px solid #fff;
+  margin: 50px 0 0 0;
+  background-color: transparent;
+}
+
+.hovereffect a.info:hover {
+  box-shadow: 0 0 5px #fff;
+}
+
+.hovereffect a.info, .hovereffect h2 {
+  -webkit-transform: scale(0.7);
+  -ms-transform: scale(0.7);
+  transform: scale(0.7);
+  -webkit-transition: all 0.4s ease-in;
+  transition: all 0.4s ease-in;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  color: #fff;
+}
+
+.hovereffect:hover a.info, .hovereffect:hover h2 {
+  opacity: 1;
+  filter: alpha(opacity=100);
+  -webkit-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+}
+
+
 /******************************** User Registration Form Region ********************************/
 .register-form.center-block {
   text-align: center;
@@ -596,6 +683,7 @@ div.register-form form.card-user-reg div.form-group {
   background-color: rgba(236, 236, 236, 0.5);
   padding-left: 0rem;
   padding-top: 4rem;
+  padding-bottom: 4rem;
 }
 
 .sidebar-header {
@@ -619,7 +707,7 @@ div.register-form form.card-user-reg div.form-group {
   border: 1px solid #dee2e6;
   border-radius: 0.25rem;
   max-width: 100%;
-  height: auto;
+  max-height: 220px;
 }
 
 .abt {
@@ -637,6 +725,7 @@ div.register-form form.card-user-reg div.form-group {
   box-shadow: 0px 0px 4px #4195fc;
   border-radius: 6%;
   padding: 1rem;
+  resize: none;
 }
 
 .rec-button {
@@ -693,6 +782,40 @@ div.register-form form.card-user-reg div.form-group {
   }
 }
 
+
+.sleeve {
+  margin-right: 1.8rem;
+  padding: 1rem 3.75rem;
+  position: absolute;
+  right: 37.5rem;
+  top: 23.5rem;
+  /* background: #2b68c2; */
+  color: #fff;
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+
+.browse-hidden {
+  position: absolute;
+  z-index: 1000;
+  opacity: 0;
+  cursor: pointer;
+  right: 0;
+  top: 0;
+  height: 100%;
+  font-size: 24px;
+  width: 100%;
+}
+
+.sleeve-title {
+  position: absolute;
+  top: 0.3rem;
+  right: 1.5rem;
+  font-size: 15px;
+}
 /******************************** FOR DASHBOARD ********************************/
 .dash_header {
   font-weight: 600;
@@ -751,9 +874,20 @@ div.register-form form.card-user-reg div.form-group {
   right: 0px;
   left: 0px;
   bottom: 0px;
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255,0.6);
   color: black;
 }
+
+.rmndTile .grp_title {
+  padding-left: 1rem;
+  padding-right: 7px;
+  position: absolute;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
+  background-color: rgba(255, 255, 255,0.6);
+  color: black;
+} 
 
 .tl {
   padding-top: 1rem;
@@ -861,12 +995,13 @@ h5#PopUpTitle {
 }
 
 .hr-bar {
-  height: 40px;
+  height: 10px;
   background: linear-gradient(
     90deg,
     rgba(255, 113, 175, 0.9) -151.77%,
     rgba(49, 210, 247, 0.9) 191.91%
   );
+  border-radius: 6px;
 }
 
 .dropdown > .btn-outline-success.dropdown-toggle {
@@ -983,6 +1118,11 @@ img.reload {
   color: #0e267a;
 }
 
+
+.csimatch{
+  font-weight: 800;
+  font-size: 24px;
+}
 /********* ADMIN ***************/
 
 .subheader {

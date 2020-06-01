@@ -25,45 +25,81 @@
           </a>
         </h4>
       </div>
-
-      <div>
-        <img
-          src="../static/images/no_profilepic.png"
-          width="220"
-          height="220"
-          class="img-thumbnail"
-          alt="profile picture"
-        />
-      </div>
-
-      <div class="abt px-5 text-left">
-        <p>
-          <b>About</b>
-          <button class="btn recom" onclick="myFunction()">Edit</button>
-        </p>
-
-        <p id="abtP">
-          To edit, click the 
-          <b>'Edit' </b> 
-          button above to start typing! 
-          <br />
-          Then click the pencil
+      {% if biography.pro_photo %}
+        <div>
           <img
-            src="/static/images/edit (2).png"
-            width="18"
-            height="18"
-            class="d-inline-block align-top ml-1 mr-1 grow"
+            src="{{ url_for('static', filename='uploads/' + biography.pro_photo) }}"
+            width="220"
+            height="220"
+            class="img-thumbnail"
+            alt="profile picture"
           />
-          icon to tell us more about yourself so we can find your matches!
-        </p>
-      </div>
-      {% endif %} 
+        </div>
+      {% else %}
+        <div>
+          <img
+            src="../static/images/no_profilepic.png"
+            width="220"
+            height="220"
+            class="img-thumbnail"
+            alt="profile picture"
+          />
+        </div>
+      {% endif %}
+
+      {% if biography.about %}
+
+        <div class="abt px-5 text-left">
+          <p>
+            <b>About</b>
+            <a class="btn recom" href = "{{ url_for('edit_info', username=session.get('username')) }}" >Edit</a>
+          </p>
+
+          <p id="abtP">
+           {{biography.about}}
+          </p>
+        </div>
+
+      {% else %}
+        <div class="abt px-5 text-left">
+          <p>
+            <b>About</b>
+            <a class="btn recom" href = "{{ url_for('edit_info', username=session.get('username')) }}" >Edit</a>
+          </p>
+
+          <p id="abtP">
+            To edit your side-bar, click the 
+            <b>'Edit' </b> 
+            button above. 
+            <br />
+            Then click the pencil
+            <img
+              src="/static/images/edit (2).png"
+              width="18"
+              height="18"
+              class="d-inline-block align-top ml-1 mr-1 grow"
+            />
+            icon to tell us more about yourself so we can find your matches!
+          </p>
+        </div>
+      {% endif %}
+    {% endif %} 
       
       {% if session['TYPE'] == "Organizer" %}
 
         </h4>
       </div>
-
+      {% if biography.pro_photo %}
+      <div>
+        <img
+          src="{{ url_for('static', filename='uploads/' + biography.pro_photo) }}"
+          width="220"
+          height="220"
+          class="img-thumbnail"
+          alt="profile picture"
+        />
+      </div>
+    {% else %}
       <div>
         <img
           src="../static/images/no_profilepic.png"
@@ -74,48 +110,43 @@
         />
       </div>
 
+    {% endif %}
+
+    {% if biography.about %}
+
+    <div class="abt px-5 text-left">
+      <p>
+        <b>About</b>
+        <a class="btn recom" href = "{{ url_for('edit_info', username=session.get('username')) }}" >Edit</a>
+      </p>
+
+      <p id="abtP">
+       {{biography.about}}
+      </p>
+    </div>
+
+  {% else %}
       <div class="abt px-5 text-left">
         <p>
           <b>About</b>
-          <button class="btn recom" onclick="myFunction()">Edit</button>
+          <a class="btn recom" href = "{{ url_for('edit_info', username=session.get('username')) }}" >Edit</a>
         </p>
 
         <p id="abtP">
-          To edit, click the 
+          To edit your side-bar, click the
           <b>'Edit' </b> 
-          button above to start typing! 
+          button above! 
           <br />
          
       </div>
+    {% endif %}
 
     
 
       {% endif %} 
       {% endif %}
-      <!-- this makes the about section editable -->
+     
 
-      <script>
-        function myFunction() {
-          document.getElementById("abtP").contentEditable = true;
-          document.getElementById("abtP").className = "abtP2";
-
-          document.getElementById("abtP").onkeypress = function (event) {
-            if (event.keyCode == 13 || event.which == 13) {
-              var editElem = document.getElementById("abtP");
-
-              //get the edited element content
-              var userVersion = editElem.innerHTML;
-              //save the content to local storage
-              localStorage.userEdits = userVersion;
-
-              //write a confirmation to the user
-              document.getElementById("abtP").innerHTML = userVersion;
-              document.getElementById("abtP").contentEditable = false;
-              document.getElementById("abtP").className = "";
-            }
-          };
-        }
-      </script>
        {% if session['TYPE'] == "Administrator" %}
        <ul class="list-unstyled components mt-5">
          <li>
@@ -157,58 +188,13 @@
           >
         </li>
 
-        <li>
-          <button class="btn rec-button">Friends</button>
-        </li>
-        <li>
-          <button class="btn rec-button">Messages</button>
-        </li>
       </ul>
       {% endif %}
 
      
 
 
-      {% if session['TYPE'] != "Administrator" %}
-      <div class="socialmd mt-5">
-        <a href="#">
-          <img
-            src="../static/images/facebook.png"
-            width="24"
-            height="24"
-            class="d-inline-block align-top mr-4"
-            alt=""
-          />
-        </a>
-        <a href="#"
-          ><img
-            src="../static/images/linkedin.png"
-            width="24"
-            height="24"
-            class="d-inline-block align-top mr-4"
-            alt=""
-          />
-        </a>
-        <a href="#"
-          ><img
-            src="../static/images/instagram.png"
-            width="24"
-            height="24"
-            class="d-inline-block align-top mr-4"
-            alt=""
-          />
-        </a>
-        <a href="#"
-          ><img
-            src="../static/images/email.png"
-            width="24"
-            height="24"
-            class="d-inline-block align-top mr-4"
-            alt=""
-          />
-        </a>
-      </div>
-      {% endif %}
+
 
     </nav>
   </div>

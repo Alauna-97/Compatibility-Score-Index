@@ -7,8 +7,8 @@
 
     <span>
       <a href="{{ url_for('run') }}">
-        <img src="/static/images/multimedia.png" class="reload grow"
-      /></a>
+        <img src="/static/images/multimedia.png" class="reload grow" data-toggle="tooltip" data-placement="right" title="Click to Re-run" />
+        </a>
     </span>
   </div>
 
@@ -71,8 +71,11 @@
         </div>
         <div class="modal-body">
           <div class="row" id="formgroupmodalClick">
-            <div class="col">
-              <span id="nameHolder"></span>
+            <div class="col text-center">
+
+              <p class = "csimatch" id="nameHolder"></p>
+
+              <span> CSI Score: </span>
               <span class="ml-5" id="CSIHolder"></span>
               <span class="ml-5">Max: 9</span>
             </div>
@@ -88,6 +91,9 @@
       </div>
     </div>
   </div>
+
+
+
 
   <script>
     $(document).on("click", "#getuser", function () {
