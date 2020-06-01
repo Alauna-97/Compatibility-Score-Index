@@ -257,12 +257,11 @@ def login():
 
 @app.route('/dashboard/<username>', methods=["GET", "POST"])
 def dashboard(username):
-    """Render the website's dashboard page.""" 
+    """Render the website's dashboard page."""
     if 'username' in session:
         mycursor = mysql.connection.cursor()
         mycursor.execute('Select * from user WHERE username = %s', (username,))
-        user = mycursor.fetchone()   
-    
+        user = mycursor.fetchone()
 
         if session.get('TYPE') == "Organizer":
             mycursor.execute(
@@ -277,55 +276,56 @@ def dashboard(username):
             mycursor.execute(
                 'SELECT * FROM user JOIN pin_user ON user.user_id = pin_user.match_id WHERE pin_user.user_id = %s ', (session['id'],))
             getFriends = mycursor.fetchall()
-        
-        mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
+
+        mycursor.execute(
+            'Select * from Biography WHERE user_id = %s', (session['id'],))
         biography = mycursor.fetchone()
-    
-    return render_template('dashbrd.html', groups=getSets, type=session.get('TYPE'), biography = biography)
+
+    return render_template('dashbrd.html', groups=getSets, type=session.get('TYPE'), biography=biography)
+
 
 @app.route("/edit/<username>", methods=["GET", "POST"])
 def edit_info(username):
     PropicForm = Profile_About()
     mycursor = mysql.connection.cursor()
 
-    mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
+    mycursor.execute(
+        'Select * from Biography WHERE user_id = %s', (session['id'],))
     biography = mycursor.fetchone()
-       
-    if request.method == "POST" and PropicForm.validate_on_submit():      
+
+    if request.method == "POST" and PropicForm.validate_on_submit():
         profPic = request.files['profPic']
         about = PropicForm.about.data
 
         filename = secure_filename(profPic.filename)
 
-        if filename != "": #INCASE THEY RE-EDIT AND DONT UPLOAD A PHOTO
+        if filename != "":  # INCASE THEY RE-EDIT AND DONT UPLOAD A PHOTO
             profPic.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-
         if biography != None:
-            if filename != "" and about != "": #IF PERSON UPDATES BOTH
+            if filename != "" and about != "":  # IF PERSON UPDATES BOTH
                 sql = "UPDATE Biography SET pro_photo = %s, about = %s WHERE user_id = %s"
                 val = (filename, about, session['id'])
-            elif filename != "": #IF PERSON UPDATES PHOTO ONLY
+            elif filename != "":  # IF PERSON UPDATES PHOTO ONLY
                 sql = "UPDATE Biography SET pro_photo = %s WHERE user_id = %s"
                 val = (filename, session['id'])
-            else: #IF PERSON UPDATES ABOUT ONLY
+            else:  # IF PERSON UPDATES ABOUT ONLY
                 sql = "UPDATE Biography SET about = %s WHERE user_id = %s"
                 val = (about, session['id'])
 
             mycursor.execute(sql, val)
             mysql.connection.commit()
 
-        else: #EDIT FOR THE FIRST TIME
+        else:  # EDIT FOR THE FIRST TIME
             sql = "INSERT INTO Biography (user_id, pro_photo, about) VALUES (%s, %s, %s)"
             val = (session['id'], filename, about)
             mycursor.execute(sql, val)
             mysql.connection.commit()
-            
-        flash('Your edits were saved', 'success')
-        redirect(url_for('dashboard',  username=session.get('username')) )
-        
-    return render_template('edit.html', PropicForm=PropicForm, biography=biography)
 
+        flash('Your edits were saved', 'success')
+        redirect(url_for('dashboard',  username=session.get('username')))
+
+    return render_template('edit.html', PropicForm=PropicForm, biography=biography)
 
 
 @app.route("/logout")
@@ -442,7 +442,7 @@ def createSet(username):
     # If user is logged in session and is an organizer
     if 'username' in session and session.get('TYPE') == "Organizer":
         mycursor = mysql.connection.cursor()
-        
+
         if request.method == "POST" and form.validate_on_submit():
             set_name = form.set_name.data
             purpose = form.purpose.data
@@ -513,6 +513,9 @@ def members(sid):
     fullSet = mycursor.fetchall()
 
     form = Groupings()
+    mycursor.execute(
+        'Select * from Biography WHERE user_id = %s', (session['id'],))
+    biography = mycursor.fetchone()
     if 'username' in session and session.get('TYPE') == "Organizer":
         mycursor.execute('SELECT user.user_id, username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user JOIN regular JOIN joinset ON regular.user_id = user.user_id and regular.user_id = joinset.user_id and user.user_id=joinset.user_id WHERE joinset.sid = %s', (sid,))
         getMembers = list(mycursor.fetchall())
@@ -527,48 +530,37 @@ def members(sid):
             # How many Groups Formed
             grpAmt = round(len(getMembers)/numPersons)
 
-            mycursor.execute(
-                'DELETE from SetUserGroup WHERE sid = %s', (sid,))
+            # mycursor.execute(
+            #     'DELETE from SetUserGroup WHERE sid = %s', (sid,))
 
-            mycursor.execute(
-                'DELETE from SetGroupScore WHERE sid = %s', (sid,))
+            # mycursor.execute(
+            #     'DELETE from SetGroupScore WHERE sid = %s', (sid,))
 
+            # # CSI MAGIC
 
+            # for i in range(grpAmt):
+            #     sql = "INSERT INTO SetUserGroup (username, sid, group_num) VALUES (%s, %s, %s)"
+            #     val = (results[i][0]['userA username '], sid, i+1)
 
-            # CSI MAGIC
-            for i in range(grpAmt):
-                sql = "INSERT INTO SetUserGroup (username, sid, group_num) VALUES (%s, %s, %s)"
-                val = (results[i][0]['userA username '], sid, i+1)
+            #     mycursor.execute(sql, val)
+            #     mysql.connection.commit()
+            #     for result in results[i]:
+            #         sql = "INSERT INTO SetUserGroup (username, sid, group_num) VALUES (%s, %s, %s)"
+            #         val = (result['userB username'], sid, i+1)
 
-                mycursor.execute(sql, val)
-                mysql.connection.commit()
-                for result in results[i]:
-                    sql = "INSERT INTO SetUserGroup (username, sid, group_num) VALUES (%s, %s, %s)"
-                    val = (result['userB username'], sid, i+1)
+            #         mycursor.execute(sql, val)
+            #         mysql.connection.commit()
 
-                    mycursor.execute(sql, val)
-                    mysql.connection.commit()
+            #     sql = "INSERT INTO SetGroupScore (sid, group_num, CSI, percentage, personality_score, leadership_score, hobby_score, gender_score, age_score, height_score, ethnicity_score, education_score, occupation_score, con_personality_score, con_leadership_score, con_hobby_score, con_gender_score, con_age_score, con_height_score, con_ethnicity_score, con_education_score, con_occupation_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
-            mycursor.execute(
-                'SELECT * from setusergroup WHERE sid = %s', (sid,))
-            fullSet = mycursor.fetchall()
-            return render_template('miniGrps.html', fullSet=fullSet, numPersons=numPersons, grpAmt=grpAmt, mini_gp=mini_gp)
+            #     val = (sid, i+1, result['CSI'],  result['Percentage'], result['personality_score'], result['leadership_score'], result['hobby_score'], result['gender_score'], result['age_score'], result['height_score'], result['ethnicity_score'], result['education_score'],
+            #            result['occupation_score'], result['con_personality_score'], result['con_leadership_score'], result['con_hobby_score'], result['con_gender_score'], result['con_age_score'], result['con_height_score'], result['con_ethnicity_score'], result['con_education_score'], result['con_occupation_score'])
 
-            mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
-            biography = mycursor.fetchone()
-    return render_template('members.html', sid=sid, form=form, fullSet=fullSet, getMembers=getMembers, biography = biography)
+            #     mycursor.execute(sql, val)
+            #     mysql.connection.commit()
 
-                sql = "INSERT INTO SetGroupScore (sid, group_num, CSI, percentage, personality_score, leadership_score, hobby_score, gender_score, age_score, height_score, ethnicity_score, education_score, occupation_score, con_personality_score, con_leadership_score, con_hobby_score, con_gender_score, con_age_score, con_height_score, con_ethnicity_score, con_education_score, con_occupation_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-
-                val = (sid, i+1, result['CSI'],  result['Percentage'], result['personality_score'], result['leadership_score'], result['hobby_score'], result['gender_score'], result['age_score'], result['height_score'], result['ethnicity_score'], result['education_score'],
-                       result['occupation_score'], result['con_personality_score'], result['con_leadership_score'], result['con_hobby_score'], result['con_gender_score'], result['con_age_score'], result['con_height_score'], result['con_ethnicity_score'], result['con_education_score'], result['con_occupation_score'])
-
-                mycursor.execute(sql, val)
-                mysql.connection.commit()
-
-            return render_template('miniGrps.html', fullSet=fullSet[0], numPersons=numPersons, grpAmt=grpAmt)
-    return render_template('members.html', sid=sid, form=form, fullSet=fullSet, getMembers=getMembers)
-
+            return render_template('miniGrps.html', fullSet=fullSet[0], numPersons=numPersons, grpAmt=grpAmt, biography=biography)
+    return render_template('members.html', sid=sid, form=form, fullSet=fullSet, getMembers=getMembers, biography=biography)
 
 
 @app.route('/Group/<sid>', methods=["GET", "POST"])
@@ -578,6 +570,10 @@ def groupMembers(sid):
     mycursor = mysql.connection.cursor()
     mycursor.execute('SELECT * from sets WHERE sid = %s', (sid,))
     fullSet = mycursor.fetchall()
+
+    mycursor.execute(
+        'Select * from Biography WHERE user_id = %s', (session['id'],))
+    biography = mycursor.fetchone()
 
     if request.method == "POST" and numb.validate_on_submit():
         group_num = int(numb.group_num.data)
@@ -590,8 +586,8 @@ def groupMembers(sid):
             'SELECT * from SetUserGroup JOIN SetGroupScore ON SetGroupScore.sid = SetUserGroup.sid AND SetGroupScore.group_num = SetUserGroup.group_num WHERE SetUserGroup.sid = %s AND SetGroupScore.group_num = %s', (sid, group_num, ))
         cur_set = mycursor.fetchall()
 
-        return render_template('groupMembers.html', group_num=group_num, mems=mems, cur_set=cur_set[0], fullSet=fullSet[0], numb=numb)
-    return render_template('groupMembers.html', fullSet=fullSet[0], numb=numb)
+        return render_template('groupMembers.html', group_num=group_num, mems=mems, cur_set=cur_set[0], fullSet=fullSet[0], numb=numb, biography=biography)
+    return render_template('groupMembers.html', fullSet=fullSet[0], numb=numb, biography=biography)
 
 
 @app.route('/about/<typeUser>', methods=["GET", "POST"])
@@ -615,17 +611,18 @@ def aboutUser(typeUser):
 
         # if form entry is invalid, redirected to the same page to fill in required details
 
-    mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
-    biography = mycursor.fetchone()   
+    mycursor.execute(
+        'Select * from Biography WHERE user_id = %s', (session['id'],))
+    biography = mycursor.fetchone()
 
-    return render_template('about_you.html', form=form , biography = biography)
+    return render_template('about_you.html', form=form, biography=biography)
 
 
 @app.route('/recommend/<username>', methods=['GET', 'POST'])
 def recommend(username):
     """Render the website's recommended matches page."""
     form = Criteria()
-   
+
     mycursor = mysql.connection.cursor()
     if request.method == "POST" and 'logged_in' in session:
         crit = form.crit.data
@@ -641,20 +638,11 @@ def recommend(username):
 
         'SELECT * from User JOIN Scores ON scores.primary_user=user.username WHERE scores.primary_user = %s ORDER BY score DESC', (session['username'],))
     matches = list(mycursor.fetchmany(9))
-    # message = {
-    #     'status': 200,
-    #     'message': 'OK',
-    #     'scores': matches
-    # }
-    # resp = jsonify(message)
-    # print(resp['scores'])
-    # print(matches)
-
-    mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
+    mycursor.execute(
+        'Select * from Biography WHERE user_id = %s', (session['id'],))
     biography = mycursor.fetchone()
 
-    return render_template('recomnd.html', form=form, matches=matches, biography = biography)
-
+    return render_template('recomnd.html', form=form, matches=matches, biography=biography)
 
 
 @app.route('/run')
