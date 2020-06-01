@@ -69,11 +69,11 @@ create table joinSet(
 );
 
 create table SetUserGroup (
-    user_id int not null,
+    username varchar(30),
     sid int not null,
     group_num int not null,
-    primary key (user_id, sid, group_num),
-    foreign key (user_id) references Regular(user_id) on delete cascade,
+    primary key (username, sid, group_num),
+    foreign key (username) references Regular(username) on delete cascade,
     foreign key (sid) references Sets(sid) on delete cascade
 );
 
@@ -103,6 +103,33 @@ create table Scores(
     primary key (`userA username`, `userB username`),
     foreign key (`userA username`) references User(username) on delete cascade on update cascade,
     foreign key (`userB username`) references User(username) on delete cascade on update cascade
+);
+
+create table SetGroupScore(
+    sid int not null,
+    group_num int not null,
+    CSI decimal (10, 9),
+    percentage decimal (4, 1),
+    personality_score decimal (4, 3),
+    leadership_score decimal (4, 3),
+    hobby_score decimal (4, 3),
+    gender_score decimal (4, 3),
+    age_score decimal (4, 3),
+    height_score decimal (4, 3),
+    ethnicity_score decimal (4, 3),
+    education_score decimal (4, 3),
+    occupation_score decimal (4, 3),
+    con_personality_score int,
+    con_leadership_score int,
+    con_hobby_score int,
+    con_gender_score int,
+    con_age_score int,
+    con_height_score int,
+    con_ethnicity_score int,
+    con_education_score int,
+    con_occupation_score int,
+    primary key (sid, group_num),
+    foreign key (sid) references SetUserGroup(sid) on delete cascade on update cascade
 );
 
 create table pin_user (
