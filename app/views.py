@@ -231,7 +231,6 @@ def login():
         mycursor.execute(
             'SELECT * FROM user WHERE username = %s AND password = %s', (username, form.password.data,))
         user = mycursor.fetchone()
-        print(user)
 
         # If existing user
         if user:
@@ -636,7 +635,7 @@ def recommend(username):
         return render_template('recomnd.html', form=form, matches=matches)
     mycursor.execute(
 
-        'SELECT * from User JOIN Scores ON scores.primary_user=user.username WHERE scores.primary_user = %s ORDER BY score DESC', (session['username'],))
+        'SELECT * from User JOIN Scores ON scores.`userA username`=user.username WHERE scores.`userA username` = %s ORDER BY CSI DESC', (session['username'],))
     matches = list(mycursor.fetchmany(9))
     mycursor.execute(
         'Select * from Biography WHERE user_id = %s', (session['id'],))

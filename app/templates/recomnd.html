@@ -7,8 +7,14 @@
 
     <span>
       <a href="{{ url_for('run') }}">
-        <img src="/static/images/multimedia.png" class="reload grow" data-toggle="tooltip" data-placement="right" title="Click to Re-run" />
-        </a>
+        <img
+          src="/static/images/multimedia.png"
+          class="reload grow"
+          data-toggle="tooltip"
+          data-placement="right"
+          title="Click to Re-run"
+        />
+      </a>
     </span>
   </div>
 
@@ -72,10 +78,8 @@
         <div class="modal-body">
           <div class="row" id="formgroupmodalClick">
             <div class="col text-center">
-
-              <p class = "csimatch" id="nameHolder"></p>
-
-              <span> CSI Score: </span>
+              <p class="csimatch" id="nameHolder"></p>
+              <span class="" id="PercentageHolder"></span>
               <span class="ml-5" id="CSIHolder"></span>
               <span class="ml-5">Max: 9</span>
             </div>
@@ -92,15 +96,13 @@
     </div>
   </div>
 
-
-
-
   <script>
     $(document).on("click", "#getuser", function () {
       var id = $(this).attr("data-id"); //data-id of button
       var array = id.split(" ");
 
       $("#nameHolder").html(array[0]);
+      $("#PercentageHolder").html("Similarity: " + array[2] + "%");
       score = parseFloat(array[1]).toFixed(5);
       $("#CSIHolder").html("CSI Score: " + score);
 
