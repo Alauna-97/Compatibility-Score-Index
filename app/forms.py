@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectField, SubmitField, IntegerField,TextAreaField
+from wtforms import StringField, PasswordField, SelectField, SubmitField, IntegerField, TextAreaField
 from wtforms.validators import InputRequired, Email, DataRequired, Length, EqualTo
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 
@@ -94,10 +94,16 @@ class Groupings(FlaskForm):
     grpBy = SelectField('Criteria', choices=[(
         0, 'Select an option'), ('compatible', 'Compatible'), ('uncompatible', 'Uncompatible')])
 
-    numPersons = SelectField('Amount', choices=[(
-        0, 'Select an option'), ('2', 'two'), ('3', 'three'), ('4', 'four'), ('5', 'five')])
+    numPersons = IntegerField('Number of Persons: ',
+                             validators=[DataRequired()])
 
     submit = SubmitField('Create')
+
+
+class GroupNum(FlaskForm):
+    group_num = StringField('Group Number: ', validators=[DataRequired()])
+
+    submit = SubmitField('Get')
 
 
 def intcheck(self, field):
@@ -105,6 +111,7 @@ def intcheck(self, field):
         val = int(field.data)
     except ValueError:
         raise ValidationError('Must be a number')
+
 
 class TranferGrp(FlaskForm):
     # NOT WOKRING :(
@@ -122,8 +129,10 @@ class Criteria(FlaskForm):
 
 
 class adminSettings(FlaskForm):
-    pers_weight = SelectField('Personality', choices=[('5', '5'), ('10', '10')])
-    ldrshp_weight = SelectField('Leadership', choices=[('5', '5'), ('10', '10')])
+    pers_weight = SelectField('Personality', choices=[
+                              ('5', '5'), ('10', '10')])
+    ldrshp_weight = SelectField('Leadership', choices=[
+                                ('5', '5'), ('10', '10')])
     hobby_weight = SelectField('Hobby', choices=[('5', '5'), ('10', '10')])
     democratic = TextAreaField('Democratic', validators= [Length(max=500)])
     autocratic = TextAreaField('Autocratic', validators= [Length(max=500)])

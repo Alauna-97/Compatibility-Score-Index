@@ -9,11 +9,15 @@ from app import app, login_manager
 from flask_mysqldb import MySQL
 from flask import render_template, request, redirect, url_for, flash, session
 <<<<<<< HEAD
+<<<<<<< HEAD
 from flask import jsonify
 from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria, Profile_About
 =======
 from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria
 >>>>>>> 9e2a19ea7f26d842cec3e9b0d4e502a72f5e2ee9
+=======
+from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria, GroupNum
+>>>>>>> 6155d840ba8a93267b58d79f5679093d3c0a3e4d
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 
@@ -524,35 +528,42 @@ def members(sid):
 
     form = Groupings()
     if 'username' in session and session.get('TYPE') == "Organizer":
-        mycursor = mysql.connection.cursor()
-        mycursor.execute('SELECT username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user JOIN regular JOIN joinset ON regular.user_id = user.user_id and regular.user_id = joinset.user_id and user.user_id=joinset.user_id WHERE joinset.sid = %s', (sid,))
+        mycursor.execute('SELECT user.user_id, username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user JOIN regular JOIN joinset ON regular.user_id = user.user_id and regular.user_id = joinset.user_id and user.user_id=joinset.user_id WHERE joinset.sid = %s', (sid,))
         getMembers = list(mycursor.fetchall())
-        mbrsCopy = getMembers
 
-        if request.method == "POST" and form.validate_on_submit():
-            criteria = form.grpBy.data              # Compatible or Incompatible
+        if request.method == "POST" and form.validate_on_submit() and int(form.numPersons.data) <= len(getMembers):
+            criteria = form.grpBy.data    # Compatible or Incompatible
             # Number of Persons in Each Group
             numPersons = int(form.numPersons.data)
 
             # Total Amount of Persons in Set
             length = len(getMembers)
-            grpAmt = round(length/numPersons)       # How many Groups Formed
-            mini_gp = []                            # List with groups
+            # How many Groups Formed
+            grpAmt = round(len(getMembers)/numPersons)
 
-            mycursor = mysql.connection.cursor()
+            mycursor.execute(
+                'DELETE from SetUserGroup WHERE sid = %s', (sid,))
+
+            mycursor.execute(
+                'DELETE from SetGroupScore WHERE sid = %s', (sid,))
+
+
+
+            # CSI MAGIC
             for i in range(grpAmt):
-                mini_gp = mini_gp + [mbrsCopy[:numPersons]]
-                mbrsCopy = mbrsCopy[numPersons:]
+                sql = "INSERT INTO SetUserGroup (username, sid, group_num) VALUES (%s, %s, %s)"
+                val = (results[i][0]['userA username '], sid, i+1)
 
-            # for user in mini_gp[i]:
-            #     # Insert a New Set for an Organizer
-            #     sql = "INSERT INTO SetUserGroup (user_id, sid, group_num) VALUES (%s, %s, %s)"
-            #     val = (user['user_id'], sid, i+1)
+                mycursor.execute(sql, val)
+                mysql.connection.commit()
+                for result in results[i]:
+                    sql = "INSERT INTO SetUserGroup (username, sid, group_num) VALUES (%s, %s, %s)"
+                    val = (result['userB username'], sid, i+1)
 
-            #     mycursor.execute(sql, val)
-            #     mysql.connection.commit()
-            #     mycursor = mysql.connection.cursor()
+                    mycursor.execute(sql, val)
+                    mysql.connection.commit()
 
+<<<<<<< HEAD
             mycursor.execute(
                 'SELECT * from setusergroup WHERE sid = %s', (sid,))
             fullSet = mycursor.fetchall()
@@ -561,6 +572,41 @@ def members(sid):
             mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
             biography = mycursor.fetchone()
     return render_template('members.html', sid=sid, form=form, fullSet=fullSet, getMembers=getMembers, biography = biography)
+=======
+                sql = "INSERT INTO SetGroupScore (sid, group_num, CSI, percentage, personality_score, leadership_score, hobby_score, gender_score, age_score, height_score, ethnicity_score, education_score, occupation_score, con_personality_score, con_leadership_score, con_hobby_score, con_gender_score, con_age_score, con_height_score, con_ethnicity_score, con_education_score, con_occupation_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+
+                val = (sid, i+1, result['CSI'],  result['Percentage'], result['personality_score'], result['leadership_score'], result['hobby_score'], result['gender_score'], result['age_score'], result['height_score'], result['ethnicity_score'], result['education_score'],
+                       result['occupation_score'], result['con_personality_score'], result['con_leadership_score'], result['con_hobby_score'], result['con_gender_score'], result['con_age_score'], result['con_height_score'], result['con_ethnicity_score'], result['con_education_score'], result['con_occupation_score'])
+
+                mycursor.execute(sql, val)
+                mysql.connection.commit()
+
+            return render_template('miniGrps.html', fullSet=fullSet[0], numPersons=numPersons, grpAmt=grpAmt)
+    return render_template('members.html', sid=sid, form=form, fullSet=fullSet, getMembers=getMembers)
+>>>>>>> 6155d840ba8a93267b58d79f5679093d3c0a3e4d
+
+
+@app.route('/Group/<sid>', methods=["GET", "POST"])
+def groupMembers(sid):
+    numb = GroupNum()
+
+    mycursor = mysql.connection.cursor()
+    mycursor.execute('SELECT * from sets WHERE sid = %s', (sid,))
+    fullSet = mycursor.fetchall()
+
+    if request.method == "POST" and numb.validate_on_submit():
+        group_num = int(numb.group_num.data)
+
+        mycursor.execute(
+            'SELECT first_name, last_name, user.username from User JOIN SetUserGroup on SetUserGroup.username = user.username WHERE group_num = %s ', (group_num, ))
+        mems = mycursor.fetchall()
+
+        mycursor.execute(
+            'SELECT * from SetUserGroup JOIN SetGroupScore ON SetGroupScore.sid = SetUserGroup.sid AND SetGroupScore.group_num = SetUserGroup.group_num WHERE SetUserGroup.sid = %s AND SetGroupScore.group_num = %s', (sid, group_num, ))
+        cur_set = mycursor.fetchall()
+
+        return render_template('groupMembers.html', group_num=group_num, mems=mems, cur_set=cur_set[0], fullSet=fullSet[0], numb=numb)
+    return render_template('groupMembers.html', fullSet=fullSet[0], numb=numb)
 
 
 @app.route('/about/<typeUser>', methods=["GET", "POST"])
