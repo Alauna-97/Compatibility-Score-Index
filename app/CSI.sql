@@ -106,6 +106,8 @@ create table Scores(
 );
 
 create table SetGroupScore(
+    `userA username` varchar(30),
+    `userB username` varchar(30),
     sid int not null,
     group_num int not null,
     CSI decimal (10, 9),
@@ -128,7 +130,7 @@ create table SetGroupScore(
     con_ethnicity_score int,
     con_education_score int,
     con_occupation_score int,
-    primary key (sid, group_num),
+    primary key (sid, group_num, `userA username`, `userB username`),
     foreign key (sid) references Sets(sid) on delete cascade on update cascade
 );
 
