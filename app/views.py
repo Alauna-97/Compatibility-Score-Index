@@ -8,7 +8,6 @@ import os
 from app import app, login_manager
 from flask_mysqldb import MySQL
 from flask import render_template, request, redirect, url_for, flash, session
-from flask import jsonify
 from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria, Profile_About, GroupNum
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
@@ -668,6 +667,20 @@ def run():
         mysql.connection.commit()
     return redirect(url_for('recommend', username=session.get('username')))
 
+@app.route('/users')
+def getUsers():
+    """Render website's home page."""
+    mycursor = mysql.connection.cursor()
+
+    mycursor.execute(
+        'SELECT username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user join regular on user.user_id=regular.user_id WHERE user.username = %s', (session['username'],))
+    cur_user = list(mycursor.fetchall())    # Current User
+
+    mycursor.execute(
+        'SELECT username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user join regular on user.user_id=regular.user_id WHERE NOT user.username = %s', (session['username'],))
+    other_users = list(mycursor.fetchall())     # All but current user
+
+    return '<p>' + str(cur_user) + '</p>' + '<p>' + str(other_users) + '</p>'
 
 def randomFeatures():
     # These are random features for the regular user
