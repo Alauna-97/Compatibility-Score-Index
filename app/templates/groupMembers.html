@@ -2,8 +2,73 @@
 <div>
   <div class="page_header">
     <h2 class="dash_header">{{ fullSet['set_name'] }}</h2>
-    <h3 class="grp_header basic-heading mt-4">Purpose: {{ fullSet['purpose'] }}</h3>
+    <h3 class="grp_header basic-heading mt-4">Purpose: {{ fullSet['purpose'] }} </h3>
+
+      <a class="ml-0">
+          <img
+          src="/static/images/transfer.png"
+          class="reload grow"
+          
+          data-toggle="modal" 
+          data-target="#transferModal" 
+          id="transferMembers"
+        />
+      </a>
   </div>
+
+<!-- MODAL TO TRANSFER MEMBERS -->
+  <div class="modal fade" id="transferModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="PopUpTitle">Transfer a Member</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <form
+          method="post"
+          action="{{ url_for('groupMembers', sid = fullSet['sid']) }}"
+        >
+
+        {{ transfer.csrf_token }}
+        <div class="row">
+          <div class = "col-6">
+            {{ transfer.first_name.label(class='control-label mr-2') }}
+            {{ transfer.first_name(class='mydropdown mr-2') }}
+          </div>
+          <div class = "col-6">
+            {{ transfer.last_name.label(class='control-label mx-2') }}
+            {{ transfer.last_name(class='mydropdown') }}
+          </div>
+        </div>
+          
+        <div class="row mt-4 mb-3">
+          <div class = "col-6">
+            {{ transfer.group_number.label(class='control-label mr-2') }}
+            {{ transfer.group_number(class='mydropdown') }}
+          </div>
+
+        </div>
+         
+
+       
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          
+            <input type="submit" value="Save" class="btn btn-primary" />
+         
+        </div>
+        
+      </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'flash_messages.html' %}
   <br>
 <br>
   <form
@@ -22,6 +87,9 @@
             </div>
           </div>
   </form>
+  <br>
+  <br>
+
 </div>
 <br>
 <span class="" id="PercentageHolder"></span>

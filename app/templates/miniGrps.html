@@ -5,7 +5,7 @@
     <h3 class="grp_header basic-heading mt-4"> Purpose: {{ fullSet['purpose'] }}</h3>
     <a href = "{{ url_for('groupMembers', sid = fullSet['sid']) }}" class=" btn btn-secondary">Show Members</a>
   
-    <h4 class="dash_header2 mb-4">{{grpAmt}} Groups of {{numPersons}}: <button class="btn recom">Disband Groups</button></h2>
+    <h4 class="dash_header2 mb-4">{{grpAmt}} Groups of {{numPersons}}: <a href="{{ url_for('disband', sid=fullSet['sid']) }}" class="btn recom">Disband Groups</a></h2>
     
   </div>
 

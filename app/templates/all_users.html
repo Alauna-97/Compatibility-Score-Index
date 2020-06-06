@@ -3,11 +3,11 @@
   <div class = "page_header text-left">
     <h2 class = "dash_header mb-5">Current Users</h2>
   </div>
-
+  {% include 'flash_messages.html' %}
   <div class = "card px-5 py-0 scrollable">
     <div class = "card table-header">
         <div class = "row">
-            <div class = "col-4">
+            <div class = "col-3">
                 Username
             </div>
 
@@ -15,8 +15,12 @@
                 Email
             </div>
 
-            <div class = "col-4">
+            <div class = "col-3">
                 User Type
+            </div>
+
+            <div class = "col-2">
+               
             </div>
 
         </div>
@@ -26,7 +30,7 @@
 {% for user in users %}
     <div class = "card table-data">
         <div class = "row">
-            <div class = "col-4">
+            <div class = "col-3">
                 {{ user['username'] }}
             </div>
 
@@ -34,8 +38,12 @@
                 {{ user['email'] }}
             </div>
 
-            <div class = "col-4">
+            <div class = "col-3">
                 {{ user['type'] }}
+            </div>
+
+            <div class = "col-2">
+                <a href="{{ url_for('deleteUser', user_id= user['user_id']) }}" class = "btn btn-danger"> Remove </a>
             </div>
 
         </div>

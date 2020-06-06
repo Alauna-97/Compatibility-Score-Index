@@ -12,7 +12,7 @@
           class="reload grow"
           data-toggle="tooltip"
           data-placement="right"
-          title="Click to Re-run"
+          title="Click to Run"
         />
       </a>
     </span>
@@ -32,6 +32,30 @@
     </form>
   </div>
 
+  {% if not matches %}
+  <div class = "alert alert-primary mt-5">
+    Currently No Matches, possible reasons:
+    <ul class="mt-2">
+      <li class = "bullets"> You have not clicked the Run button  
+        <img
+        src="/static/images/multimedia.png"
+        class="ml-1 grow"
+        width="20"
+        height="20"
+      />
+    </li>
+      <li class = "bullets"> We don't have any information on you, go to Dashboard and click the
+        <img
+        src="/static/images/edit (2).png"
+        class="ml-1 grow"
+        width="20"
+        height="20"
+      />
+    </li>
+      <li class = "bullets"> There are currently no users in the system</li>
+    </ul>
+</div>
+  {% else %}
   <!-- RECOMMEND TILE LAYOUT -->
   <div class="row pl-5 pr-4">
     {% for match in matches %}
@@ -53,6 +77,7 @@
     </div>
     {% endfor %}
   </div>
+  {% endif %}
 
   <div
     class="modal fade"
