@@ -11,7 +11,7 @@ import math
 from app import app, login_manager
 from flask_mysqldb import MySQL
 from flask import render_template, request, redirect, url_for, flash, session
-from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria, Profile_About, GroupNum, AboutFriend, adminSettings
+from app.forms import LoginForm, SignUp, Groupings, newSet, joinNewSet, AboutYou, Criteria, Profile_About, GroupNum, AboutFriend, adminSettings, TranferGrp
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 
@@ -266,9 +266,15 @@ def dashboard(username):
         user = mycursor.fetchone()
 
         if session.get('TYPE') == "Organizer":
+            mycursor.callproc('GetSetCount', (session['id'], ))
+            for result in mycursor:
+                result = result['count(distinct sid)']
             mycursor.execute(
                 'SELECT * FROM sets WHERE organizer = %s ', (session['id'],))
         else:
+            mycursor.callproc('GetGroupCount', (session['id'], ))
+            for result in mycursor:
+                result = result['count(distinct sid)']
             mycursor.execute(
                 'SELECT * FROM Sets JOIN joinset ON sets.sid = joinset.sid WHERE joinset.user_id = %s ', (session['id'],))
 
@@ -283,7 +289,7 @@ def dashboard(username):
             'Select * from Biography WHERE user_id = %s', (session['id'],))
         biography = mycursor.fetchone()
 
-    return render_template('dashbrd.html', groups=getSets, type=session.get('TYPE'), biography=biography)
+    return render_template('dashbrd.html', groups=getSets, type=session.get('TYPE'), biography=biography, result_args=result)
 
 
 @app.route("/edit/<username>", methods=["GET", "POST"])
@@ -522,6 +528,12 @@ def members(sid):
         mycursor.execute('SELECT user.user_id, username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user JOIN regular JOIN joinset ON regular.user_id = user.user_id and regular.user_id = joinset.user_id and user.user_id=joinset.user_id WHERE joinset.sid = %s', (sid,))
         getMembers = list(mycursor.fetchall())
 
+        mycursor.execute('SELECT * from setusergroup WHERE sid = %s', (sid,))
+        formed = mycursor.fetchall()
+
+        if formed:
+            return redirect(url_for('groupMembers', sid=sid))
+
         if request.method == "POST" and form.validate_on_submit() and int(form.numPersons.data) <= len(getMembers):
             criteria = form.grpBy.data    # Compatible or Incompatible
             # Number of Persons in Each Group
@@ -568,6 +580,7 @@ def members(sid):
 @app.route('/Group/<sid>', methods=["GET", "POST"])
 def groupMembers(sid):
     numb = GroupNum()
+    transfer = TranferGrp()
 
     mycursor = mysql.connection.cursor()
     mycursor.execute('SELECT * from sets WHERE sid = %s', (sid,))
@@ -588,10 +601,34 @@ def groupMembers(sid):
             'SELECT sum(CSI) as CSI, sum(percentage) as percentage, sum(personality_score) as personality_score, sum(leadership_score) as leadership_score, sum(hobby_score) as hobby_score, sum(gender_score) as gender_score, sum(age_score) as age_score, sum(height_score) as height_score, sum(ethnicity_score) as ethnicity_score, sum(education_score) as education_score, sum(occupation_score) as occupation_score, count(CSI) as amount from SetUserGroup JOIN SetGroupScore ON SetGroupScore.`userA username` = SetUserGroup.username AND SetGroupScore.group_num = SetUserGroup.group_num WHERE SetUserGroup.sid = %s AND SetGroupScore.group_num = %s', (sid, group_num, ))
         cur_set = mycursor.fetchall()
 
-        print(cur_set[0])
+        return render_template('groupMembers.html', group_num=group_num, mems=mems, cur_set=cur_set[0], fullSet=fullSet[0], numb=numb, biography=biography, transfer=transfer)
 
-        return render_template('groupMembers.html', group_num=group_num, mems=mems, cur_set=cur_set[0], fullSet=fullSet[0], numb=numb, biography=biography)
-    return render_template('groupMembers.html', fullSet=fullSet[0], numb=numb, biography=biography)
+    if request.method == "POST" and transfer.validate_on_submit():
+        first_name = transfer.first_name.data
+        last_name = transfer.last_name.data
+        group_number = int(transfer.group_number.data)
+
+        mycursor.execute(
+            'SELECT first_name, last_name, user.username from User JOIN SetUserGroup on SetUserGroup.username = user.username WHERE first_name = %s AND last_name = %s', (first_name, last_name, ))
+        member = mycursor.fetchall()
+
+        if member:
+            sql = "UPDATE SetUserGroup SET group_num = %s WHERE username = %s AND sid = %s"
+            val = (group_number, member[0]['username'], sid, )
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+
+            sql = "UPDATE SetGroupScore SET group_num = %s WHERE (`userA username` = %s OR `userB username` = %s) AND sid = %s"
+            val = (group_number, member[0]['username'],
+                   member[0]['username'], sid, )
+
+            mycursor.execute(sql, val)
+            mysql.connection.commit()
+        else:
+            flash('Member does not exist - Check Spelling', category="danger")
+
+    return render_template('groupMembers.html', fullSet=fullSet[0], numb=numb, biography=biography, transfer=transfer)
 
 
 @app.route('/about/<typeUser>', methods=["GET", "POST"])
@@ -656,7 +693,6 @@ def aboutFriend():
         #            'occupation_score': 0.662, 'con_personality_score': 8, 'con_leadership_score': 11, 'con_hobby_score': 13, 'con_gender_score': 13, 'con_age_score': 12, 'con_height_score': 10, 'con_ethnicity_score': 9, 'con_education_score': 13, 'con_occupation_score': 8}]
         # int((user['CSI'] / 9) * 100)
         # Success Message Appears
-        flash('Your information has been updated :) ', 'success')
 
         # Redirect User to Main Page
         return render_template('friend_page.html', result=result[0], biography=biography)

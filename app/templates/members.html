@@ -2,11 +2,17 @@
 <div>
   <div class="page_header">
     <h2 class="dash_header">{{ fullSet[0]['set_name'] }}</h2>
-    <!-- {% include 'flash_messages.html' %} -->
+    {% include 'flash_messages.html' %}
   </div>
+</div>
+    {% if not getMembers %}
+    <div class = "alert alert-primary mt-5">
+            No one has joined the Set.
+        </div>
+    {% endif %}
 
   <!-- <h4 class="grp_header">Members:</h4> -->
-  {% if session.get('TYPE') == "Organizer"%}
+  {% if session.get('TYPE') == "Organizer" and getMembers %}
   <div class="row mb-3">
           
     <div class="col">
@@ -36,9 +42,9 @@
         </div>
       </button>
     </div>
-    {% endfor %} {% endif %}
+    {% endfor %} 
+    {% endif %} 
   </div>
-  
 <div class="modal fade" id="formgroupmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -82,6 +88,5 @@
       </div>
     </div>
   </div>
-</div>
 </div>
 {% endblock %}

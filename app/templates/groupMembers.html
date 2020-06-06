@@ -4,6 +4,7 @@
     <h2 class="dash_header">{{ fullSet['set_name'] }}</h2>
     <h3 class="dash_header">{{ fullSet['purpose'] }}</h3>
   </div>
+  {% include 'flash_messages.html' %}
   <br>
 <br>
   <form
@@ -20,6 +21,28 @@
             <div>
               <input type="submit" value="Go" class="btn ok-sml" />
             </div>
+          </div>
+  </form>
+  <br>
+  <br>
+  <form
+    method="post"
+    action="{{ url_for('groupMembers', sid = fullSet['sid']) }}"
+  >
+  {{ transfer.csrf_token }}
+          <div class="row">
+            {{ transfer.first_name.label(class='control-label mr-2') }}
+            {{ transfer.first_name(class='mydropdown mr-2') }}
+
+            {{ transfer.last_name.label(class='control-label mx-2') }}
+            {{ transfer.last_name(class='mydropdown') }}
+          </div>
+          <div class="row mt-1">
+            {{ transfer.group_number.label(class='control-label mr-2') }}
+              {{ transfer.group_number(class='mydropdown') }}
+            <span>
+              <input type="submit" value="Go" class="btn ok-sml" />
+            </span>
           </div>
   </form>
 </div>

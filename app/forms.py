@@ -150,13 +150,12 @@ def intcheck(self, field):
 
 
 class TranferGrp(FlaskForm):
-    # NOT WOKRING :(
-    grpNum = IntegerField('First Group Number', validators=[
-                          DataRequired(), intcheck])
-    grpNum2 = IntegerField('Second Group Number', validators=[
-                           DataRequired(), intcheck])
+    first_name = StringField('First Name: ', validators=[DataRequired()])
+    last_name = StringField('Last Name: ', validators=[DataRequired()])
+    group_number = IntegerField('To Group Number: ', validators=[
+                           DataRequired()])
 
-    submit = SubmitField('Next')
+    submit = SubmitField('Move')
 
 
 class Criteria(FlaskForm):
