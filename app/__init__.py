@@ -5,7 +5,9 @@ from flask_login import LoginManager
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "CompatibiltyScore"
 
-UPLOAD_FOLDER = 'C:\\Program Files\\heroku\\flasky\\Compatibility-Score-Index\\app\\static\\uploads'
+# UPLOAD_FOLDER = 'C:\\Program Files\\heroku\\flasky\\Compatibility-Score-Index\\app\\static\\uploads'
+UPLOAD_FOLDER = 'C:\\Users\\Loretta\\Desktop\\CSI\\Compatibility-Score-Index\\app\\static\\uploads'
+
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root@localhost/csi"
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True

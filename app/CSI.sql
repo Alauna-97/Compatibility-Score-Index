@@ -23,7 +23,8 @@ create table User(
     username varchar(30) not null unique,
     email varchar(65) not null,
     password varchar(255) not null,
-    primary key(user_id)
+    primary key(user_id),
+    unique index (username)
 );
 
 create table Regular (

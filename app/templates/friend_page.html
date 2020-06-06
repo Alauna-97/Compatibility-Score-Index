@@ -1,0 +1,129 @@
+{% extends "sidebar.html" %} {% block div %}
+<div>
+<div>
+  <div class="page_header">
+    <p class="dash_header mt-5">{{ result['userA username '] }}</p>
+    <span>
+        <img
+          src="/static/images/transfer.svg"
+          class="reload"
+        />
+    </span>
+    <p class="dash_header mt-2">{{ result['userB username'] }}</p>
+  </div>
+  <br>
+</div>
+
+<span class="" id="PercentageHolder"></span>
+<span class="ml-5" id="CSIHolder"></span>
+<span class="ml-5" id="MaxHolder">Max: 9</span>
+<br>
+<br>
+<br>
+        <canvas id="myChart" width="800" height="450" class="mb-4"></canvas>
+  </div>
+
+  <script>
+    var personality = {{result['personality_score']|tojson}} * 100;
+    var leadership = {{result['leadership_score']|tojson}} * 100;
+    var hobby = {{result['hobby_score']|tojson}} * 100;
+    var sex = {{result['gender_score']|tojson}} * 100;
+    var age = {{result['age_score']|tojson}} * 100;
+    var height = {{result['height_score']|tojson}} * 100;
+    var ethnicity = {{result['ethnicity_score']|tojson}} * 100;
+    var education= {{result['education_score']|tojson}} * 100;
+    var occupation = {{result['occupation_score']|tojson}} * 100;
+
+    
+    score = parseFloat({{result['CSI']}}).toFixed(5);
+    document.getElementById("CSIHolder").innerHTML = "CSI Score: " + score;
+    document.getElementById("PercentageHolder").innerHTML = "Similarity: " + parseInt(score / 9 * 100) + "%";
+
+
+    var ctx = document.getElementById("myChart");
+      //Global
+      Chart.defaults.scale.gridLines.drawOnChartArea = false;
+
+      let firstlabels = [
+        "Personality",
+        "Leadership",
+        "Hobby",
+        "Sex",
+        "Age",
+        "Height",
+        "Ethnicity",
+        "Education",
+        "Occupation",
+      ];
+      initial = {
+        labels: firstlabels,
+        datasets: [
+          {
+            label: "Scores",
+            data: [personality, leadership, hobby, sex, age, height, ethnicity, education, occupation],
+            backgroundColor: [
+              "#4E77D2",
+              "#7EA2F3",
+              "#ABC5FE",
+              "#D8E4FF",
+              "#4E77D2",
+              "#7EA2F3",
+              "#ABC5FE",
+              "#D8E4FF",
+            ],
+            borderColor: ["#4E77D2", "#7EA2F3", "#ABC5FE", "#D8E4FF"],
+            borderWidth: 1,
+            maxBarThickness: 16,
+          },
+        ],
+      };
+
+      var myChart = new Chart(ctx, {
+        type: "horizontalBar",
+        data: initial,
+        options: {
+          responsive: false,
+          maintainAspectRatio: this.maintainAspectRatio,
+          title: {
+            display: true,
+            text: "Stats",
+            fontSize: 18,
+          },
+          legend: {
+            display: false,
+            labels: {
+              // This more specific font property overrides the global property
+              fontColor: "rgba(0, 0, 0, 0.8)",
+              fontFamily: "Monserrat",
+              fontsize: 16,
+              fontColor: "red",
+            },
+          },
+          tooltips: {
+            enabled: false,
+          },
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+              },
+            ],
+            xAxes: [
+              {
+                stacked: true,
+                scaleLabel: {
+                  labelString: "Compatibility",
+                  display: true,
+                  fontSize: 16,
+                },
+              },
+            ],
+          },
+        },
+      });
+  </script>
+</div>
+
+{% endblock %}
