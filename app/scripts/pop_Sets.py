@@ -14,9 +14,17 @@ mycursor = mydb.cursor()
 
 
 def populateSet(records):
+
+    # creating an admin
+    sql = "INSERT INTO User (user_id, type, first_name, last_name, username, email, password) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+    val = (1, "Administrator", "", "","admin", "csi@gmail.com", "pass")
+
+    mycursor.execute(sql, val)
+    mydb.commit()
+
     # creating a new organizer
     sql = "INSERT INTO User (user_id, type, first_name, last_name, username, email, password) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-    val = (1, "Organizer", "Carl", "Beckford",
+    val = (2, "Organizer", "Carl", "Beckford",
            "Carl", "carl.beckford@yahoo.com", "1100")
 
     mycursor.execute(sql, val)
@@ -33,14 +41,14 @@ def populateSet(records):
 
     # creating one set
     sql = "INSERT INTO Sets (sid, set_name, purpose, code, organizer) VALUES (%s, %s, %s, %s, %s)"
-    val = (1, "Maths", "Teach maths", "XU38JSUFK", 1)
+    val = (1, "Maths", "Teach maths", "XU38JSUFK", 2)
 
     mycursor.execute(sql, val)
     mydb.commit()
 
     # Lanai
     sql = "INSERT INTO User (user_id, type, first_name, last_name, username, email, password) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-    val = (2, "Regular", "Lanai", "Nevers",
+    val = (3, "Regular", "Lanai", "Nevers",
            "Lanai", "lanai@yahoo.com", "pass")
 
     mycursor.execute(sql, val)
@@ -76,7 +84,7 @@ def populateSet(records):
     mydb.commit()
 
     # to populate the set with users
-    for i in range(3, records):
+    for i in range(4, records):
         def populateScores(username):
             x = random.uniform(2, 9)
             sql = "INSERT INTO Scores (`userA username`, `userB username`, CSI, percentage, personality_score, leadership_score, hobby_score, gender_score, age_score, height_score, ethnicity_score, education_score, occupation_score, con_personality_score, con_leadership_score, con_hobby_score, con_gender_score, con_age_score, con_height_score, con_ethnicity_score, con_education_score, con_occupation_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"

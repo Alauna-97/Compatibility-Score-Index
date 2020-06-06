@@ -15,7 +15,7 @@
   >
     {{ PropicForm.csrf_token }}
     <div class="form-body-login">
-
+        <p class="basic-heading mb-0 pt-3">Profile Picture</p>
 
         {% if biography.pro_photo %}
         <div>
@@ -23,7 +23,7 @@
             src="{{ url_for('static', filename='uploads/' + biography.pro_photo) }}"
             width="220"
             height="220"
-            class="img-thumbnail ml-0 mt-4"
+            class="img-thumbnail ml-0 mt-0"
             alt="profile picture"
           />
         </div>
@@ -33,7 +33,7 @@
             src="../static/images/no_profilepic.png"
             width="220"
             height="220"
-            class="img-thumbnail ml-0 mt-4"
+            class="img-thumbnail ml-0 mt-0"
             alt="profile picture"
           />
         </div>
@@ -41,21 +41,23 @@
       {% endif %}
     </div>
 
-        <div class="sleeve">
-            <img src = "../static/images/plus.png" width = "40" height = "40">
-            {{ PropicForm.profPic(class='browse-hidden')}}
-          </div>
+    <div class="sleeve" data-toggle="tooltip" data-placement="right" title="Add a picture">
+       <img src = "../static/images/plus.png" width = "40" height = "40">
+        {{ PropicForm.profPic(class='browse-hidden')}}
+    </div>
 
 
-      <div class="row pt-5 mb-1">
+      
         <div class="col">
+          <p class="basic-heading mb-0 pt-3">Biography</p>
+
           <div class="form-group row">
             <div class="col-sm-7">
               {{ PropicForm.about(class='form-control abtP2', placeholder = biography['about']) }}
             </div>
           </div>
         </div>
-      </div>
+     
       <div class="row my-2">
         <div class="col">
           <div class="row">

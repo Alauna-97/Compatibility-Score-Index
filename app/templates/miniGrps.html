@@ -2,11 +2,11 @@
 <div>
   <div class="page_header">
     <h2 class="dash_header">{{ fullSet['set_name'] }}</h2>
-    <h3 class="dash_header">{{ fullSet['purpose'] }}</h3>
-    <h4 class="dash_header2">{{grpAmt}} Groups of {{numPersons}}: <button class=" btn recom">Disband Groups</button></h2>
-    <h4 class = "grp_header ml-3">
-            <a href = "{{ url_for('groupMembers', sid = fullSet['sid']) }}" class=" btn recom">Show Members</a>
-    </h4>
+    <h3 class="grp_header basic-heading mt-4"> Purpose: {{ fullSet['purpose'] }}</h3>
+    <a href = "{{ url_for('groupMembers', sid = fullSet['sid']) }}" class=" btn btn-secondary">Show Members</a>
+  
+    <h4 class="dash_header2 mb-4">{{grpAmt}} Groups of {{numPersons}}: <button class="btn recom">Disband Groups</button></h2>
+    
   </div>
 
   <div class="row">

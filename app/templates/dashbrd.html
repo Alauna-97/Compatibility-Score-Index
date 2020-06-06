@@ -5,7 +5,7 @@
     </div>
 
     {% if type == "Regular"%}
-        <h4 class = "grp_header ml-3">My Groups 
+        <h4 class = "grp_header ml-3 mb-4">My Groups 
             <a href = "{{ url_for('recommend', username=session.get('username')) }}" class=" btn recom">Recommend Matches</a>
         </h4>
     {% endif %} 
@@ -17,7 +17,7 @@
     {% endif %}
 
     {% if type == "Organizer" %}
-        <h4 class = "grp_header">My Sets</h4>
+        <h4 class = "grp_header ml-3 mb-4">My Sets</h4>
     {% endif %} 
 
     {% if type == "Organizer" and not groups %}
@@ -29,13 +29,22 @@
     <div class = "row">
         {% if type == "Organizer" and groups %}
             {% for group in groups %}
-                <div class="col-4 grid-spacing">
+                <div class="col-4 grid-spacing hovereffect text-left">
                     <a href="{{ url_for('members', sid=group['sid']) }}">
-                    <button class = "tile">
+                    <button class = "tile text-center img-responsive">
+                        <div class = "tile-title mt-0 pt-0">
+                            {{ group['set_name'] }}
+                        </div>
+                 
+                        
                         <div class = "grp_title py-3"> 
-                            {{ group['set_name'] }} <span class="code">-{{ group['code'] }}</span>
+                            <span class="code">set code: {{ group['code'] }}</span>
+                        </div>
+                        <div class="overlay2">
+                            <h2 class = "info mt-2">Group Purpose: <br> {{ group['purpose'] }} </h2>
                         </div>
                     </button>
+                    
                     </a>
                 </div>
             {% endfor %}
@@ -45,7 +54,7 @@
             {% if type == "Organizer" %}
             <a href="{{ url_for('createSet', username=session.get('username')) }}">
             <button class = "tile add">
-                <img src="../static/images/plus.png" width="50" height="50" class = "img-add grow" />
+                <img src="../static/images/plus.png" width="50" height="50"  data-toggle="tooltip" data-placement="right" title="Create a Set" class = "img-add grow"/>
             </button>
             </a>
             {% endif %}
@@ -55,12 +64,20 @@
     <div class = "row">
         {% if type == "Regular" and groups %}
             {% for item in groups %}
-                <div class="col-4">
-                    <button class = "tile">
-                        <div class = "grp_title py-3"> 
-                            {{ item['set_name'] }}
-                        </div>
-                    </button>
+            
+                <div class="col-4 hovereffect">
+                    <a href="{{ url_for('members', sid=item['sid']) }}">
+                        <button class = "tile text-center img-responsive">
+
+                            <div class = "tile-title mt-0 pt-0"> 
+                                {{ item['set_name'] }}
+                            </div>
+
+                            <div class="overlay2">
+                                <h2 class = "info mt-2">Group Purpose: <br> {{ item['purpose'] }} </h2>
+                            </div>
+                        </button>
+                    </a>
                 </div>
             {% endfor %}
         {% endif %} 
@@ -69,7 +86,7 @@
             {% if type == "Regular" %}
             <a href="{{ url_for('joinASet', username=session.get('username')) }}">
             <button class = "tile add">
-                <img src="../static/images/plus.png" width="50" height="50" class = "img-add grow" />
+                <img src="../static/images/plus.png" width="50" height="50" data-toggle="tooltip" data-placement="right" title="Join a Set" class = "img-add grow" />
             </button>
             </a>
             {% endif %}
