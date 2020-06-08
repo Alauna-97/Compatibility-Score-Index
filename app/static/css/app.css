@@ -925,7 +925,7 @@ p.dash_header {
   text-align: center;
 }
 
-.btn.recom {
+.btn.recom, .btn.recom.ml-5 {
   color: #fff;
   background-color: #0e267a;
   border: 1px solid #0e267a;
@@ -933,6 +933,11 @@ p.dash_header {
   padding-bottom: 8px;
   margin-bottom: 1rem;
   margin-left: 50%;
+}
+
+.btn.recom.ml-5 {
+  display: inline-block;
+  margin: 0;
 }
 
 .btn.recom:hover {

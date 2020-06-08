@@ -102,8 +102,11 @@
       {% for member in mems %}
       <div class="col-4 mb-4">
         <button class="member-tile">
-          <div class="py-3">
-            {{ member['first_name']}} {{member['last_name']}}
+          <div class="py-3"> {% if member['leader'] != None %}
+            Leader - {{ member['first_name']}} {{member['last_name']}} 
+            {% else %}
+            {{ member['first_name']}} {{member['last_name']}} 
+            {% endif %}
           </div>
         </button>
       </div>

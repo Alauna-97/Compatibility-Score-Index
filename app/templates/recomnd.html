@@ -33,208 +33,48 @@
   </div>
 
   {% if not matches %}
-  <div class = "alert alert-primary mt-5">
+  <div class="alert alert-primary mt-5">
     Currently No Matches, possible reasons:
     <ul class="mt-2">
-      <li class = "bullets"> You have not clicked the Run button  
+      <li class="bullets">
+        You have not clicked the Run button
         <img
-        src="/static/images/multimedia.png"
-        class="ml-1 grow"
-        width="20"
-        height="20"
-      />
-    </li>
-      <li class = "bullets"> We don't have any information on you, go to Dashboard and click the
+          src="/static/images/multimedia.png"
+          class="ml-1 grow"
+          width="20"
+          height="20"
+        />
+      </li>
+      <li class="bullets">
+        We don't have any information on you, go to Dashboard and click the
         <img
-        src="/static/images/edit (2).png"
-        class="ml-1 grow"
-        width="20"
-        height="20"
-      />
-    </li>
-      <li class = "bullets"> There are currently no users in the system</li>
+          src="/static/images/edit (2).png"
+          class="ml-1 grow"
+          width="20"
+          height="20"
+        />
+      </li>
+      <li class="bullets">There are currently no users in the system</li>
     </ul>
-</div>
+  </div>
   {% else %}
   <!-- RECOMMEND TILE LAYOUT -->
   <div class="row pl-5 pr-4">
     {% for match in matches %}
     <div class="col-4">
-      <button
-        class="rmndTile"
-        data-toggle="modal"
-        data-target="#formgroupmodal"
-        data-id="{{ match['userB username'] }} {{ match.CSI }} {{ match.percentage }} {{ match.personality_score }} {{ match.leadership_score }} {{ match.hobby_score }} {{ match.gender_score }} {{ match.age_score }} {{ match.height_score }} {{ match.ethnicity_score }} {{ match.education_score }} {{ match.occupation_score }}"
-        id="getuser"
-      >
-        <span class="delete_" aria-hidden="true">&times;</span>
-
-        <span class="percentage">{{(match['percentage'])|round|int}} %</span>
-        <div class="grp_title py-3">
-          {{match['userB username']}}
-        </div>
-      </button>
+      <a href="{{ url_for('recommended', match = match['userB username']) }}">
+        <button class="rmndTile">
+          <span class="delete_" aria-hidden="true">&times;</span>
+          <span class="percentage">{{(match['percentage'])|round|int}} %</span>
+          <div class="grp_title py-3">
+            {{match['userB username']}}
+          </div>
+        </button>
+      </a>
     </div>
     {% endfor %}
   </div>
   {% endif %}
-
-  <div
-    class="modal fade"
-    id="formgroupmodal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="PopUpTitle"></h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-            onclick="location.reload()"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="row" id="formgroupmodalClick">
-            <div class="col text-center">
-              <p class="csimatch" id="nameHolder"></p>
-              <span class="" id="PercentageHolder"></span>
-              <span class="ml-5" id="CSIHolder"></span>
-              <span class="ml-5">Max: 9</span>
-            </div>
-          </div>
-          <div class="hr-bar mt-1"></div>
-          <canvas id="myChart" width="450" height="250"></canvas>
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-dismiss="modal"
-            onclick="location.reload()"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    $(document).on("click", "#getuser", function () {
-      var id = $(this).attr("data-id"); //data-id of button
-      var array = id.split(" ");
-
-      $("#nameHolder").html(array[0]);
-      $("#PercentageHolder").html("Similarity: " + array[2] + "%");
-      score = parseFloat(array[1]).toFixed(5);
-      $("#CSIHolder").html("CSI Score: " + score);
-
-      var ctx = document.getElementById("myChart");
-
-      //Global
-      Chart.defaults.scale.gridLines.drawOnChartArea = false;
-
-      let firstValues = [
-        parseFloat(array[3]) * 100,
-        parseFloat(array[4]) * 100,
-        parseFloat(array[5]) * 100,
-        parseFloat(array[6]) * 100,
-        parseFloat(array[7]) * 100,
-        parseFloat(array[8]) * 100,
-        parseFloat(array[9]) * 100,
-        parseFloat(array[10]) * 100,
-        parseFloat(array[11]) * 100,
-        parseFloat(array[12]) * 100,
-      ];
-      let firstlabels = [
-        "Personality",
-        "Leadership",
-        "Hobby",
-        "Sex",
-        "Age",
-        "Height",
-        "Ethnicity",
-        "Education",
-        "Occupation",
-      ];
-      initial = {
-        labels: firstlabels,
-        datasets: [
-          {
-            label: "Scores",
-            data: firstValues,
-            backgroundColor: [
-              "#4E77D2",
-              "#7EA2F3",
-              "#ABC5FE",
-              "#D8E4FF",
-              "#4E77D2",
-              "#7EA2F3",
-              "#ABC5FE",
-              "#D8E4FF",
-            ],
-            borderColor: ["#4E77D2", "#7EA2F3", "#ABC5FE", "#D8E4FF"],
-            borderWidth: 1,
-            maxBarThickness: 16,
-          },
-        ],
-      };
-
-      var myChart = new Chart(ctx, {
-        type: "horizontalBar",
-        data: initial,
-        options: {
-          responsive: false,
-          maintainAspectRatio: this.maintainAspectRatio,
-          title: {
-            display: true,
-            text: "Stats",
-            fontSize: 18,
-          },
-          legend: {
-            display: false,
-            labels: {
-              // This more specific font property overrides the global property
-              fontColor: "rgba(0, 0, 0, 0.8)",
-              fontFamily: "Monserrat",
-              fontsize: 16,
-              fontColor: "red",
-            },
-          },
-          tooltips: {
-            enabled: false,
-          },
-          scales: {
-            yAxes: [
-              {
-                ticks: {
-                  beginAtZero: true,
-                },
-              },
-            ],
-            xAxes: [
-              {
-                stacked: true,
-                scaleLabel: {
-                  labelString: "Compatibility",
-                  display: true,
-                  fontSize: 16,
-                },
-              },
-            ],
-          },
-        },
-      });
-    });
-  </script>
 </div>
 
 {% endblock %}
