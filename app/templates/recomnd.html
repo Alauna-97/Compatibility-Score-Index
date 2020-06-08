@@ -62,19 +62,28 @@
   <div class="row pl-5 pr-4">
     {% for match in matches %}
     <div class="col-4">
-      <a href="{{ url_for('recommended', match = match['userB username']) }}">
-        <button class="rmndTile">
-          <span class="delete_" aria-hidden="true">&times;</span>
-          <span class="percentage">{{(match['percentage'])|round|int}} %</span>
+      <button class="rmndTile">
+        <span class="delete_" aria-hidden="true">&times;</span>
+        <span class="percentage">{{(match['percentage'])|round|int}} %</span>
+        <a href="{{ url_for('recommended', match = match['userB username']) }}">
           <div class="grp_title py-3">
             {{match['userB username']}}
           </div>
-        </button>
-      </a>
+        </a>
+      </button>
     </div>
     {% endfor %}
   </div>
   {% endif %}
 </div>
+<script>
+  closeBtn = $(".delete_");
+  closeOnClick();
 
+  function closeOnClick() {
+    closeBtn.on("click", function () {
+      $(this).parent().hide();
+    });
+  }
+</script>
 {% endblock %}
