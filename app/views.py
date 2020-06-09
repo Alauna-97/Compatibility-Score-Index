@@ -778,15 +778,15 @@ def recommend(username):
         crit = form.crit.data
         if crit == "compatible":
             mycursor.execute(
-                'SELECT * from Scores WHERE `userA username` = %s ORDER BY percentage DESC LIMIT 9', (session['username'],))
+                'SELECT * from Scores JOIN user on user.username=scores.`userB username` WHERE `userA username` = %s order by csi DESC LIMIT 9', (session['username'],))
         else:
             mycursor.execute(
                 'SELECT * from Scores WHERE `userA username` = %s ORDER BY percentage ASC LIMIT 9', (session['username'],))
         matches = list(mycursor.fetchall())
+        print(matches)
         return render_template('recomnd.html', form=form, matches=matches, biography=biography)
     mycursor.execute(
-
-        'SELECT * from User JOIN Scores ON scores.`userA username`=user.username WHERE scores.`userA username` = %s ORDER BY CSI DESC', (session['username'],))
+        'SELECT * from Scores JOIN user on user.username=scores.`userB username` WHERE `userA username` = %s order by csi DESC LIMIT 9', (session['username'],))
     matches = list(mycursor.fetchmany(9))
 
     return render_template('recomnd.html', form=form, matches=matches, biography=biography)
