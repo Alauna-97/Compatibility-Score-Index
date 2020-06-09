@@ -593,14 +593,14 @@ def members(sid):
             # # # CSI MAGIC
 
             # for i in range(grpAmt):
-            #     sql = "INSERT INTO SetUserGroup (username, sid, group_num) VALUES (%s, %s, %s)"
-            #     val = (results[i][0]['userA username '], sid, i+1)
+            #     sql = "INSERT INTO SetUserGroup (username, sid, group_num, leader) VALUES (%s, %s, %s, %s)"
+            #     val = (results[i][0]['userA username '], sid, i+1, 1)
 
             #     mycursor.execute(sql, val)
             #     mysql.connection.commit()
             #     for result in results[i]:
-            #         sql = "INSERT INTO SetUserGroup (username, sid, group_num) VALUES (%s, %s, %s)"
-            #         val = (result['userB username'], sid, i+1)
+            #         sql = "INSERT INTO SetUserGroup (username, sid, group_num, leader) VALUES (%s, %s, %s, %s)"
+            #         val = (result['userB username'], sid, i+1, 0)
 
             #         mycursor.execute(sql, val)
             #         mysql.connection.commit()
