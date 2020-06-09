@@ -74,6 +74,7 @@ create table SetUserGroup (
     username varchar(30),
     sid int not null,
     group_num int not null,
+    leader tinyint (1) DEFAULT 0,
     primary key (username, sid, group_num),
     foreign key (username) references User(username) on delete cascade
 );

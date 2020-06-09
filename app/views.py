@@ -555,9 +555,8 @@ def members(sid):
             mycursor.execute(
                 'SELECT sum(CSI) as csi, sum(percentage) as percentage, sum(personality_score) as personality_score, sum(leadership_score) as leadership_score, sum(hobby_score) as hobby_score, sum(gender_score) as gender_score, sum(age_score) as age_score, sum(height_score) as height_score, sum(ethnicity_score) as ethnicity_score, sum(education_score) as education_score, sum(occupation_score) as occupation_score, count(CSI) as amount from SetUserGroup JOIN SetGroupScore ON SetGroupScore.`userA username` = SetUserGroup.username AND SetGroupScore.group_num = SetUserGroup.group_num WHERE SetUserGroup.sid = %s AND SetGroupScore.group_num = %s', (sid, group['group_num'], ))
             cur_set = mycursor.fetchall()
-            print(cur_set)
 
-            return render_template('members.html', grp_num=group['group_num'], set_name=set_name, biography=biography, getMembers=getMembers, cur_set=cur_set[0])
+            return render_template('members.html', grp_num=group['group_num'], set_name=set_name, biography=biography, getMembers=getMembers)
         else:  # if they aren't
             return render_template('members.html', set_name=set_name, biography=biography)
 
@@ -570,7 +569,10 @@ def members(sid):
         formed = mycursor.fetchall()
 
         if formed:
-            return redirect(url_for('groupMembers', sid=sid))
+            mycursor.execute(
+                'SELECT max(group_num)from SetUserGroup where sid = %s ', (sid, ))
+            grpAmt = list(mycursor.fetchall())
+            return render_template('miniGrps.html', fullSet=fullSet[0], grpAmt=grpAmt[0]['max(group_num)'], biography=biography)
 
         if request.method == "POST" and form.validate_on_submit() and int(form.numPersons.data) <= len(getMembers):
             criteria = form.grpBy.data    # Compatible or Incompatible
@@ -611,7 +613,7 @@ def members(sid):
             #         mycursor.execute(sql, val)
             #         mysql.connection.commit()
 
-            return render_template('miniGrps.html', fullSet=fullSet[0], numPersons=numPersons, grpAmt=grpAmt, biography=biography)
+            return render_template('miniGrps.html', fullSet=fullSet[0], grpAmt=grpAmt, biography=biography)
     return render_template('members.html', sid=sid, form=form, fullSet=fullSet, getMembers=getMembers, biography=biography)
 
 
@@ -619,6 +621,7 @@ def members(sid):
 def disband(sid):
     mycursor = mysql.connection.cursor()
     mycursor.execute('DELETE from SetUserGroup WHERE sid = %s', (sid,))
+    mycursor.execute('DELETE from SetGroupScore WHERE sid = %s', (sid,))
 
     flash('Group disbanded', 'success')
     return redirect(url_for("members", sid=sid))
@@ -647,7 +650,6 @@ def groupMembers(sid):
         mycursor.execute(
             'SELECT sum(CSI) as CSI, sum(percentage) as percentage, sum(personality_score) as personality_score, sum(leadership_score) as leadership_score, sum(hobby_score) as hobby_score, sum(gender_score) as gender_score, sum(age_score) as age_score, sum(height_score) as height_score, sum(ethnicity_score) as ethnicity_score, sum(education_score) as education_score, sum(occupation_score) as occupation_score, count(CSI) as amount from SetUserGroup JOIN SetGroupScore ON SetGroupScore.`userA username` = SetUserGroup.username AND SetGroupScore.group_num = SetUserGroup.group_num WHERE SetUserGroup.sid = %s AND SetGroupScore.group_num = %s', (sid, group_num, ))
         cur_set = mycursor.fetchall()
-        print(cur_set)
 
         return render_template('groupMembers.html', group_num=group_num, mems=mems, cur_set=cur_set[0], fullSet=fullSet[0], numb=numb, biography=biography, transfer=transfer)
 
@@ -668,15 +670,24 @@ def groupMembers(sid):
             mysql.connection.commit()
 
             sql = "UPDATE SetGroupScore SET group_num = %s WHERE `userB username` = %s AND sid = %s"
-            val = (group_number, member[0]['username'],
-                   member[0]['username'], sid, )
+            val = (group_number, member[0]['username'], sid, )
 
             mycursor.execute(sql, val)
             mysql.connection.commit()
         else:
             flash('Member does not exist - Check Spelling', category="danger")
 
-    return render_template('groupMembers.html', fullSet=fullSet[0], numb=numb, biography=biography, transfer=transfer)
+    mycursor.execute(
+        'SELECT * from SetUserGroup where sid = %s ', (sid, ))
+    groupsFormed = list(mycursor.fetchall())
+    if groupsFormed:
+        mycursor.execute(
+            'SELECT max(group_num), count(group_num) from SetUserGroup where sid = %s ', (sid, ))
+        grpAmt = list(mycursor.fetchall())
+        return render_template('groupMembers.html', fullSet=fullSet[0], numb=numb, biography=biography, transfer=transfer)
+
+    else:
+        return redirect(url_for('members', sid=sid))
 
 
 @app.route('/about/<typeUser>', methods=["GET", "POST"])

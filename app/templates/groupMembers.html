@@ -28,6 +28,8 @@
         </div>
 
         <div class="modal-body">
+          <p class="mb-0 instruct">NB: Group Leaders cannot be transferred to another group.</p>
+          <p class="mb-4 instruct">Minimum 2 persons per group.</p>
           <form
           method="post"
           action="{{ url_for('groupMembers', sid = fullSet['sid']) }}"
