@@ -2,7 +2,7 @@
 <div>
 <div>
   <div class="page_header">
-    <p class="dash_header mt-5">{{ result['userA username '] }}</p>
+    <p class="dash_header mt-5">{{ session.get('username') }}</p>
     <span>
         <img
           src="/static/images/transfer.svg"
@@ -25,7 +25,6 @@
 
   <script>
     let friend = {{ result | tojson }};
-    console.log(friend);
 
     var personality = friend.personality_score * 100;
     var leadership = friend.leadership_score * 100;
@@ -37,7 +36,7 @@
     var education= friend.education_score * 100;
     var occupation = friend.occupation_score * 100;
 
-    score = parseFloat(friend.CSI).toFixed(5);
+    score = parseFloat(friend.csi).toFixed(5);
     document.getElementById("CSIHolder").innerHTML = "CSI Score: " + score;
     
     document.getElementById("PercentageHolder").innerHTML = "Similarity: " + parseInt(score / 9 * 100) + "%";

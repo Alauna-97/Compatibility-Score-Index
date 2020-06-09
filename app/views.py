@@ -529,11 +529,11 @@ def joinASet(username):
 
 @app.route('/members/<sid>',  methods=['GET', 'POST'])
 def members(sid):
+    form = Groupings()
     mycursor = mysql.connection.cursor()
     mycursor.execute('SELECT * from sets WHERE sid = %s', (sid,))
     fullSet = mycursor.fetchall()
 
-    form = Groupings()
     mycursor.execute(
         'Select * from Biography WHERE user_id = %s', (session['id'],))
     biography = mycursor.fetchone()
@@ -544,16 +544,22 @@ def members(sid):
         set_name = mycursor.fetchone()
 
         mycursor.execute(
-            'SELECT group_num FROM SetUserGroup WHERE sid = %s', (sid,))
-        grp_num = mycursor.fetchone()
-        if grp_num:  # if the regular user is in groups
+            'SELECT group_num FROM SetUserGroup WHERE sid = %s AND username = %s', (sid, session['username'], ))
+        group = mycursor.fetchone()
+
+        if group:  # if the regular user is in groups
             mycursor.execute(
-                'SELECT username FROM SetUserGroup WHERE grp_num = %s', (grp_num))
+                'SELECT first_name, last_name, user.username, leader from User JOIN SetUserGroup on SetUserGroup.username = user.username WHERE group_num = %s', (group['group_num'], ))
             getMembers = mycursor.fetchall()
 
-            return render_template('members.html', grp_num=grp_num, set_name=set_name, biography=biography, getMembers=getMembers)
+            mycursor.execute(
+                'SELECT sum(CSI) as csi, sum(percentage) as percentage, sum(personality_score) as personality_score, sum(leadership_score) as leadership_score, sum(hobby_score) as hobby_score, sum(gender_score) as gender_score, sum(age_score) as age_score, sum(height_score) as height_score, sum(ethnicity_score) as ethnicity_score, sum(education_score) as education_score, sum(occupation_score) as occupation_score, count(CSI) as amount from SetUserGroup JOIN SetGroupScore ON SetGroupScore.`userA username` = SetUserGroup.username AND SetGroupScore.group_num = SetUserGroup.group_num WHERE SetUserGroup.sid = %s AND SetGroupScore.group_num = %s', (sid, group['group_num'], ))
+            cur_set = mycursor.fetchall()
+            print(cur_set)
+
+            return render_template('members.html', grp_num=group['group_num'], set_name=set_name, biography=biography, getMembers=getMembers, cur_set=cur_set[0])
         else:  # if they aren't
-            return render_template('members.html', grp_num=grp_num, set_name=set_name, biography=biography)
+            return render_template('members.html', set_name=set_name, biography=biography)
 
     # FOR ORGANIZER SIDE
     if 'username' in session and session.get('TYPE') == "Organizer":
@@ -637,11 +643,11 @@ def groupMembers(sid):
         mycursor.execute(
             'SELECT first_name, last_name, user.username, leader from User JOIN SetUserGroup on SetUserGroup.username = user.username WHERE group_num = %s ', (group_num, ))
         mems = mycursor.fetchall()
-        print(mems)
 
         mycursor.execute(
             'SELECT sum(CSI) as CSI, sum(percentage) as percentage, sum(personality_score) as personality_score, sum(leadership_score) as leadership_score, sum(hobby_score) as hobby_score, sum(gender_score) as gender_score, sum(age_score) as age_score, sum(height_score) as height_score, sum(ethnicity_score) as ethnicity_score, sum(education_score) as education_score, sum(occupation_score) as occupation_score, count(CSI) as amount from SetUserGroup JOIN SetGroupScore ON SetGroupScore.`userA username` = SetUserGroup.username AND SetGroupScore.group_num = SetUserGroup.group_num WHERE SetUserGroup.sid = %s AND SetGroupScore.group_num = %s', (sid, group_num, ))
         cur_set = mycursor.fetchall()
+        print(cur_set)
 
         return render_template('groupMembers.html', group_num=group_num, mems=mems, cur_set=cur_set[0], fullSet=fullSet[0], numb=numb, biography=biography, transfer=transfer)
 
@@ -708,38 +714,29 @@ def aboutFriend():
     mycursor = mysql.connection.cursor()
 
     mycursor.execute(
-        'SELECT username, first_name, last_name, sex, pref_sex, age, height, leadership, education, ethnicity, pref_ethnicity, hobby, occupation, personality from user join regular on user.user_id=regular.user_id WHERE user.username = %s', (session['username'],))
-    userA = list(mycursor.fetchone())    # Current User
-
-    mycursor.execute(
         'Select * from Biography WHERE user_id = %s', (session['id'],))
     biography = mycursor.fetchone()
 
     if request.method == "POST" and form.validate_on_submit():
-        fname = request.form['fname']
-        lname = request.form['lname']
-        gender = request.form['sex']
-        age = request.form['age']
-        height = request.form['height']
-        leadership = request.form['leadership']
-        ethnicity = request.form['ethnicity']
-        personality = request.form['personality']
-        education = request.form['education']
-        hobby = request.form['hobby']
-        occupation = request.form['occupation']
+        username = request.form['username']
 
-        # CSI grabs userA info and userB from the form variables above
-        # username can be the fname as well if it is required
+        # Check of username exists in database
+        mycursor.execute(
+            'SELECT * from user WHERE user.username = %s', (
+                username,))
 
-        result = [{'userA username ': 'Lanai', 'userB username': 'Nicholas', 'CSI': 7.684324826524442, 'personality_score': 0.618, 'leadership_score': 0.853, 'hobby_score': 1.0, 'gender_score': 1, 'age_score': 0.953, 'height_score': 0.838, 'ethnicity_score': 0.76, 'education_score': 1.0,
-                   'occupation_score': 0.662, 'con_personality_score': 8, 'con_leadership_score': 11, 'con_hobby_score': 13, 'con_gender_score': 13, 'con_age_score': 12, 'con_height_score': 10, 'con_ethnicity_score': 9, 'con_education_score': 13, 'con_occupation_score': 8}]
-        # Success Message Appears
+        userB = mycursor.fetchone()    # Friend
 
-        # Redirect User to Main Page
-        return render_template('friend_page.html', result=result[0], biography=biography)
+        if userB:
+            mycursor.execute(
+                'SELECT * from scores WHERE `userA username` = %s AND `userB username` = %s', (session['username'], username, ))
+            result = list(mycursor.fetchall())
+
+            # Redirect User to Main Page
+            return render_template('friend_page.html', result=result[0], biography=biography)
 
         # if form entry is invalid, redirected to the same page to fill in required details
-
+        flash("User does not exist. Try again.", category="danger")
     return render_template('about_friend.html', form=form, biography=biography)
 
 
@@ -780,7 +777,6 @@ def recommended(match):
 
         'SELECT * from User JOIN Scores ON scores.`userA username`=user.username WHERE scores.`userA username` = %s AND `userB username` = %s', (session['username'], match, ))
     matched = mycursor.fetchone()
-    print(matched)
     mycursor.execute(
         'Select * from Biography WHERE user_id = %s', (session['id'],))
     biography = mycursor.fetchone()
