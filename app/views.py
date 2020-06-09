@@ -659,21 +659,34 @@ def groupMembers(sid):
         group_number = int(transfer.group_number.data)
 
         mycursor.execute(
-            'SELECT first_name, last_name, user.username from User JOIN SetUserGroup on SetUserGroup.username = user.username WHERE first_name = %s AND last_name = %s', (first_name, last_name, ))
+            'SELECT DISTINCT count(group_num) as number from setusergroup WHERE group_num = %s', (group_number, ))
+        count = list(mycursor.fetchall())
+
+        mycursor.execute(
+            'SELECT first_name, last_name, user.username, leader from User JOIN SetUserGroup on SetUserGroup.username = user.username WHERE first_name = %s AND last_name = %s', (first_name, last_name, ))
         member = mycursor.fetchall()
 
         if member:
-            sql = "UPDATE SetUserGroup SET group_num = %s WHERE username = %s AND sid = %s"
-            val = (group_number, member[0]['username'], sid, )
+            if member[0]['leader'] == 0:
+                if count[0]['number'] > 2:
+                    sql = "UPDATE SetUserGroup SET group_num = %s WHERE username = %s AND sid = %s"
+                    val = (group_number, member[0]['username'], sid, )
 
-            mycursor.execute(sql, val)
-            mysql.connection.commit()
+                    mycursor.execute(sql, val)
+                    mysql.connection.commit()
 
-            sql = "UPDATE SetGroupScore SET group_num = %s WHERE `userB username` = %s AND sid = %s"
-            val = (group_number, member[0]['username'], sid, )
+                    sql = "UPDATE SetGroupScore SET group_num = %s WHERE `userB username` = %s AND sid = %s"
+                    val = (group_number, member[0]['username'], sid, )
 
-            mycursor.execute(sql, val)
-            mysql.connection.commit()
+                    mycursor.execute(sql, val)
+                    mysql.connection.commit()
+                    flash('Member has been tranferred', category="success")
+                else:
+                    flash(
+                        'Member cannot be moved. At least 2 persons per group.', category="danger")
+            else:
+                flash('Cannot transfer group leaders to another group',
+                      category="danger")
         else:
             flash('Member does not exist - Check Spelling', category="danger")
 
