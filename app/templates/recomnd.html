@@ -63,12 +63,11 @@
     {% for match in matches%}
     <div class="col-4">
       <a href="{{ url_for('recommended', match = match['userB username']) }}">
-        <button class="rmndTile">
+        <button class="rmndTile" data-toggle="tooltip" data-placement="top" title="{{match['email']}}" >
           <span class="delete_" aria-hidden="true">&times;</span>
           <span class="percentage">{{(match['percentage'])|round|int}} %</span>
           <div class="grp_title py-3">
             {{match['userB username']}}
-            {{match['email']}}
           </div>
         </button>
       </a>

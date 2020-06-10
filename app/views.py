@@ -345,6 +345,7 @@ def edit_info(username):
 
         flash('Your edits were saved', 'success')
         redirect(url_for('dashboard',  username=session.get('username')))
+    print(biography)
 
     return render_template('edit.html', PropicForm=PropicForm, biography=biography)
 

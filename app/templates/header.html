@@ -47,7 +47,14 @@
           aria-haspopup="true"
           aria-expanded="false"
         >
+        {% if biography.pro_photo %}
+        <img src="{{ url_for('static', filename='uploads/' + biography.pro_photo) }}" class="mr-2 radius-3" width = "40" height = "40" />
+
+
+        {% else %}
+      
           <img src="/static/images/User Header Icon.png" class="mr-2" />
+        {% endif %}
           {{session['username']}}
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">

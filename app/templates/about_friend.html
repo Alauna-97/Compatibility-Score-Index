@@ -2,24 +2,27 @@
 <div class="register-form center-block less ml-5">
   {% if 'username' in session %}
   <div class="page_header">
-    <h2 class="dash_header darken">How Compatible are You?</h2>
+    <h2 class="dash_header darken">Test Your Compatibility</h2>
   </div>
 </div>
 {% include 'flash_messages.html' %}
   <form
-    class="card-user-reg mt-4 mb-0"
-    action="{{ url_for('aboutFriend') }}"
+    class="compare-card"
+    action="{{ url_for('aboutFriend', username=username) }}"
     method="POST"
   >
     {{ form.csrf_token }}
-    <div class="row">
-            {{ form.username.label(class='control-label mr-2') }}
+    <div class = "text-center pt-4">
+            <div>
+              {{ form.username.label(class='control-label mr-2') }}
+            </div>
+           <br>
             <div>
               {{ form.username(class='mydropdown') }}
             </div>
 
             <div>
-              <input type="submit" value="Go" class="btn ok-sml" />
+              <input type="submit" value="Go" class="btn ok-sml mt-3 mb-4" />
             </div>
           </div>
 
