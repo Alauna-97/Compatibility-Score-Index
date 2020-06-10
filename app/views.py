@@ -34,19 +34,36 @@ mysql = MySQL(app)
 @app.route('/')
 def home():
     """Render website's home page."""
-
+    if 'logged_in' in session:
+        mycursor = mysql.connection.cursor()
+        mycursor.execute(
+            'Select * from Biography WHERE user_id = %s', (session['id'],))
+        biography = mycursor.fetchone()
+        return render_template('home.html', biography=biography)
     return render_template('home.html')
 
 
 @app.route('/about/')
 def about():
     """Render the website's about page."""
+    if 'logged_in' in session:
+        mycursor = mysql.connection.cursor()
+        mycursor.execute(
+            'Select * from Biography WHERE user_id = %s', (session['id'],))
+        biography = mycursor.fetchone()
+        return render_template('about.html', biography=biography)
     return render_template('about.html')
 
 
 @app.route('/testimonies/')
 def testimonies():
     """Render the website's about page."""
+    if 'logged_in' in session:
+        mycursor = mysql.connection.cursor()
+        mycursor.execute(
+            'Select * from Biography WHERE user_id = %s', (session['id'],))
+        biography = mycursor.fetchone()
+        return render_template('testimonies.html', biography=biography)
     return render_template('testimonies.html')
 
 
@@ -236,12 +253,16 @@ def deleteUser(user_id):
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    mycursor = mysql.connection.cursor()
+    form = LoginForm()
+
     if 'logged_in' in session:
+        mycursor.execute(
+            'Select * from Biography WHERE user_id = %s', (session['id'],))
+        biography = mycursor.fetchone()
         return redirect(url_for('home'))
 
-    form = LoginForm()
     if request.method == "POST" and form.validate_on_submit():
-        mycursor = mysql.connection.cursor()
         username = form.username.data
         # Query if User exists
         mycursor.execute(

@@ -16,7 +16,7 @@
   {{ PropicForm.csrf_token }}
   <div class="form-body-login">
     {% if PropicForm.profPic.errors %}
-    <p class="basic-heading mb-0 pt-3 error">{{ ', '.join(PropicForm.profPic.errors) }}</p>
+    <p class="basic-heading mb-0 pt-3" style="color: red;">{{ ', '.join(PropicForm.profPic.errors) }}</p>
     {% endif %}
         <p class="basic-heading mb-0 pt-3">Profile Picture</p>
 
