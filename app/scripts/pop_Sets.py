@@ -146,5 +146,5 @@ def populateSet(records):
 
 
 if __name__ == '__main__':
-    populateSet(16)
+    populateSet(22)
     print("Sets Populated!")

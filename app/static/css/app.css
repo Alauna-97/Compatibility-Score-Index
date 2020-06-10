@@ -1008,7 +1008,7 @@ h5#PopUpTitle {
 }
 
 .hr-bar {
-  height: 10px;
+  height: 3px;
   background: linear-gradient(
     90deg,
     rgba(255, 113, 175, 0.9) -151.77%,

@@ -58,7 +58,7 @@
   {% else %}
   <!-- RECOMMEND TILE LAYOUT -->
   <div class="row pl-5 pr-4">
-    {% for match in matches %}
+    {% for match in matches%}
     <div class="col-4">
       <button
         class="rmndTile"
@@ -67,7 +67,7 @@
         data-id="{{ match['userB username'] }} {{ match.CSI }} {{ match.percentage }} {{ match.personality_score }} {{ match.leadership_score }} {{ match.hobby_score }} {{ match.gender_score }} {{ match.age_score }} {{ match.height_score }} {{ match.ethnicity_score }} {{ match.education_score }} {{ match.occupation_score }}"
         id="getuser"
       >
-        <span class="delete_" aria-hidden="true">&times;</span>
+        <span class="delete_" aria-hidden="true" onclick="location.reload()">&times;</span>
 
         <span class="percentage">{{(match['percentage'])|round|int}} %</span>
         <div class="grp_title py-3">
@@ -79,6 +79,14 @@
   </div>
   {% endif %}
 
+<!-- TRYING TO GET EX OFF TO WORKKKK -->
+  <script>
+    $(document).on("click", ".delete_", function(){
+      $(this).parent('button').remove();
+   });
+  </script>
+
+  
   <div
     class="modal fade"
     id="formgroupmodal"
@@ -104,13 +112,13 @@
         <div class="modal-body">
           <div class="row" id="formgroupmodalClick">
             <div class="col text-center">
-              <p class="csimatch" id="nameHolder"></p>
+              <p class="csimatch mb-4" id="nameHolder"></p>
               <span class="" id="PercentageHolder"></span>
               <span class="ml-5" id="CSIHolder"></span>
               <span class="ml-5">Max: 9</span>
             </div>
           </div>
-          <div class="hr-bar mt-1"></div>
+          <div class="hr-bar mt-2 mb-3"></div>
           <canvas id="myChart" width="450" height="250"></canvas>
         </div>
         <div class="modal-footer">
