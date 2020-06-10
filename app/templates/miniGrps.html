@@ -2,17 +2,31 @@
 <div>
   <div class="page_header">
     <h2 class="dash_header">{{ fullSet['set_name'] }}</h2>
-    <h3 class="grp_header basic-heading mt-4"> Purpose: {{ fullSet['purpose'] }}</h3>
-    <a href = "{{ url_for('groupMembers', sid = fullSet['sid']) }}" class=" btn btn-secondary">Show Members</a>
-  
-    <h4 class="dash_header2 mb-4">{{grpAmt}} Groups of {{numPersons}}: <a href="{{ url_for('disband', sid=fullSet['sid']) }}" class="btn recom">Disband Groups</a></h2>
-    
+    <h3 class="grp_header basic-heading mt-4">
+      Purpose: {{ fullSet['purpose'] }}
+    </h3>
+    <a
+      href="{{ url_for('groupMembers', sid = fullSet['sid']) }}"
+      class="btn btn-secondary"
+      >Show Members</a
+    >
+
+    <h4 class="dash_header2 mb-4">{{grpAmt}} Groups
+    <a href="{{ url_for('disband', sid=fullSet['sid']) }}" class="btn recom"
+      >Disband Groups</a
+    >
+    </h4>
   </div>
 
   <div class="row">
     {% for i in range(1, grpAmt + 1) %}
     <div class="col-4 mb-4">
-      <button class="member-tile" data-toggle="modal" data-target="#formgroupmodal" id="getMembers">
+      <button
+        class="member-tile"
+        data-toggle="modal"
+        data-target="#formgroupmodal"
+        id="getMembers"
+      >
         <div class="py-3">
           Group {{i}}
         </div>

@@ -33,47 +33,45 @@
   </div>
 
   {% if not matches %}
-  <div class = "alert alert-primary mt-5">
+  <div class="alert alert-primary mt-5">
     Currently No Matches, possible reasons:
     <ul class="mt-2">
-      <li class = "bullets"> You have not clicked the Run button  
+      <li class="bullets">
+        You have not clicked the Run button
         <img
-        src="/static/images/multimedia.png"
-        class="ml-1 grow"
-        width="20"
-        height="20"
-      />
-    </li>
-      <li class = "bullets"> We don't have any information on you, go to Dashboard and click the
+          src="/static/images/multimedia.png"
+          class="ml-1 grow"
+          width="20"
+          height="20"
+        />
+      </li>
+      <li class="bullets">
+        We don't have any information on you, go to Dashboard and click the
         <img
-        src="/static/images/edit (2).png"
-        class="ml-1 grow"
-        width="20"
-        height="20"
-      />
-    </li>
-      <li class = "bullets"> There are currently no users in the system</li>
+          src="/static/images/edit (2).png"
+          class="ml-1 grow"
+          width="20"
+          height="20"
+        />
+      </li>
+      <li class="bullets">There are currently no users in the system</li>
     </ul>
-</div>
+  </div>
   {% else %}
   <!-- RECOMMEND TILE LAYOUT -->
   <div class="row pl-5 pr-4">
     {% for match in matches%}
     <div class="col-4">
-      <button
-        class="rmndTile"
-        data-toggle="modal"
-        data-target="#formgroupmodal"
-        data-id="{{ match['userB username'] }} {{ match.CSI }} {{ match.percentage }} {{ match.personality_score }} {{ match.leadership_score }} {{ match.hobby_score }} {{ match.gender_score }} {{ match.age_score }} {{ match.height_score }} {{ match.ethnicity_score }} {{ match.education_score }} {{ match.occupation_score }}"
-        id="getuser"
-      >
-        <span class="delete_" aria-hidden="true" onclick="location.reload()">&times;</span>
-
-        <span class="percentage">{{(match['percentage'])|round|int}} %</span>
-        <div class="grp_title py-3">
-          {{match['userB username']}}
-        </div>
-      </button>
+      <a href="{{ url_for('recommended', match = match['userB username']) }}">
+        <button class="rmndTile">
+          <span class="delete_" aria-hidden="true">&times;</span>
+          <span class="percentage">{{(match['percentage'])|round|int}} %</span>
+          <div class="grp_title py-3">
+            {{match['userB username']}}
+            {{match['email']}}
+          </div>
+        </button>
+      </a>
     </div>
     {% endfor %}
   </div>

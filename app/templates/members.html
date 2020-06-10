@@ -14,7 +14,6 @@
           </div>
       {% endif %}
 
-    <!-- <h4 class="grp_header">Members:</h4> -->
     {% if session.get('TYPE') == "Organizer" and getMembers %}
     <div class="row mb-3">
             
@@ -99,21 +98,27 @@
   <div>
     <div class="page_header">
       <h2 class="dash_header mb-5">{{set_name['set_name']}}</h2>
-      <!-- {% include 'flash_messages.html' %} -->
     </div>
   </div>
 
+  
+
   {% if grp_num %}
-    <h2 class="basic-heading mb-5">Group {{set_name}}</h2>
+    <h2 class="dash_header mb-5">Group {{grp_num}}</h2>
+<br>
+
+    <div class="row">
     {% for member in getMembers %}
     <div class="col-4 mb-4">
       <button class="member-tile">
         <div class="py-3">
-          {{ item['first_name'] }} {{ item['last_name'] }}
+          {{ member['first_name'] }} {{ member['last_name'] }} 
         </div>
       </button>
     </div>
     {% endfor %} 
+    <canvas id="myChart" width="800" height="350" class="mb-4"></canvas>
+  </div>
 
   {% else %}
       <div class = "alert alert-primary mt-5">
@@ -122,4 +127,5 @@
   {% endif %}
 
 {% endif %}
+
 {% endblock %}
