@@ -345,7 +345,6 @@ def edit_info(username):
 
         flash('Your edits were saved', 'success')
         redirect(url_for('dashboard',  username=session.get('username')))
-    print(biography)
 
     return render_template('edit.html', PropicForm=PropicForm, biography=biography)
 
@@ -461,9 +460,12 @@ def register(typeUser):
 def createSet(username):
     """Render the website's page."""
     form = newSet()
+    mycursor = mysql.connection.cursor()
+    mycursor.execute(
+        'Select * from Biography WHERE user_id = %s', (session['id'],))
+    biography = mycursor.fetchone()
     # If user is logged in session and is an organizer
     if 'username' in session and session.get('TYPE') == "Organizer":
-        mycursor = mysql.connection.cursor()
 
         if request.method == "POST" and form.validate_on_submit():
             set_name = form.set_name.data
@@ -498,15 +500,18 @@ def createSet(username):
 
                 # Redirects to Dashboard
                 return redirect(url_for('dashboard', username=session.get('username')))
-    return render_template('createSet.html', form=form)
+    return render_template('createSet.html', form=form, biography=biography)
 
 
 @app.route('/<username>/joinSet',  methods=['GET', 'POST'])
 def joinASet(username):
     """Render the website's  page."""
     form = joinNewSet()
+    mycursor = mysql.connection.cursor()
+    mycursor.execute(
+        'Select * from Biography WHERE user_id = %s', (session['id'],))
+    biography = mycursor.fetchone()
     if request.method == "POST" and form.validate_on_submit() and session.get('TYPE') == "Regular":
-        mycursor = mysql.connection.cursor()
         # Code entered in form for joining a set
         code = form.set_code.data
 
@@ -525,7 +530,7 @@ def joinASet(username):
             flash('Successfully Added to Set', 'success')
 
             return redirect(url_for('dashboard', username=session.get('username')))
-    return render_template('joinSet.html', form=form)
+    return render_template('joinSet.html', form=form, biography=biography)
 
 
 @app.route('/members/<sid>',  methods=['GET', 'POST'])
@@ -784,7 +789,6 @@ def recommend(username):
             mycursor.execute(
                 'SELECT * from Scores WHERE `userA username` = %s ORDER BY percentage ASC LIMIT 9', (session['username'],))
         matches = list(mycursor.fetchall())
-        print(matches)
         return render_template('recomnd.html', form=form, matches=matches, biography=biography)
     mycursor.execute(
         'SELECT * from Scores JOIN user on user.username=scores.`userB username` WHERE `userA username` = %s order by csi DESC LIMIT 9', (session['username'],))

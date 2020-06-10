@@ -8,13 +8,16 @@
   <h2 class="mb-5 mt-3">Edit Profile</h2>
   {% include 'flash_messages.html' %}
   <form
-    action="{{ url_for('edit_info', username=session.get('username')) }}"
-    method="post"
-    class="card-user-login mb-5 form-horizontal"
-    enctype="multipart/form-data"
+  action="{{ url_for('edit_info', username=session.get('username')) }}"
+  method="post"
+  class="card-user-login mb-5 form-horizontal"
+  enctype="multipart/form-data"
   >
-    {{ PropicForm.csrf_token }}
-    <div class="form-body-login">
+  {{ PropicForm.csrf_token }}
+  <div class="form-body-login">
+    {% if PropicForm.profPic.errors %}
+    <p class="basic-heading mb-0 pt-3 error">{{ ', '.join(PropicForm.profPic.errors) }}</p>
+    {% endif %}
         <p class="basic-heading mb-0 pt-3">Profile Picture</p>
 
         {% if biography.pro_photo %}

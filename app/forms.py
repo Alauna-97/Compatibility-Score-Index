@@ -160,7 +160,7 @@ class adminSettings(FlaskForm):
 
 class Profile_About(FlaskForm):
     profPic = FileField(
-        validators=[FileAllowed(['jpg', 'png', 'Images only!'])])
+        validators=[FileAllowed(['jpg', 'jpeg', 'png', 'Images only!'],"Only .jpg, .jpeg, .png should be uploaded")])
     about = TextAreaField(
         validators=[Length(max=100, message=('Max 200 Characters'))])
     submit = SubmitField('Save')
