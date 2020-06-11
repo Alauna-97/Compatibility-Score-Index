@@ -73,6 +73,11 @@ def admin():
     form = adminSettings()
 
     mycursor = mysql.connection.cursor()
+
+    mycursor.execute(
+        'Select * from Biography WHERE user_id = %s', (session['id'],))
+    biography = mycursor.fetchone()
+
     mycursor.execute('Select * from Dictionary')
     definitions = mycursor.fetchone()
 
@@ -224,7 +229,7 @@ def admin():
 
         flash('Settings Updated', 'success')
 
-    return render_template('admin.html', form=form, definitions=definitions)
+    return render_template('admin.html', form=form, definitions=definitions, biography=biography)
 
 
 @app.route('/admin/currentusers/', methods=["GET", "POST"])
@@ -234,7 +239,11 @@ def allUsers():
                      (session['id'],))
     users = mycursor.fetchall()
 
-    return render_template('all_users.html', users=users)
+    mycursor.execute(
+        'Select * from Biography WHERE user_id = %s', (session['id'],))
+    biography = mycursor.fetchone()
+
+    return render_template('all_users.html', users=users, biography=biography)
 
 
 @app.route('/deleteuser/<user_id>')
