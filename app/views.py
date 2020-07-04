@@ -25,7 +25,7 @@ import uuid
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'csi'
+app.config['MYSQL_DB'] = 'newcsi'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
@@ -333,6 +333,26 @@ def dashboard(username):
         biography = mycursor.fetchone()
 
     return render_template('dashbrd.html', groups=getSets, type=session.get('TYPE'), biography=biography)
+
+
+@app.route('/profile/<username>', methods=["GET", "POST"])
+def frndProfile(username):
+    """Render the another user's dashboard page."""
+    mycursor = mysql.connection.cursor()
+    mycursor.execute('SELECT * FROM user JOIN regular ON user.user_id = regular.user_id WHERE user.username = %s', (username,))
+    user = mycursor.fetchone()
+
+    mycursor.execute('Select * from Biography WHERE user_id = %s', (user['user_id'],))
+    frnbiography = mycursor.fetchone()
+
+    # just so that the image remains in the header
+    mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
+    biography = mycursor.fetchone()
+    
+
+    return render_template('friendprofile.html', biography = biography, frnbiography=frnbiography, user=user, friend = 1)
+
+
 
 
 @app.route("/edit/<username>", methods=["GET", "POST"])
@@ -820,6 +840,16 @@ def recommend(username):
                 'SELECT * from Scores WHERE `userA username` = %s AND blocked = 0 ORDER BY percentage ASC LIMIT 9', (session['username'],))
         matches = list(mycursor.fetchall())
         return render_template('recomnd.html', form=form, matches=matches, biography=biography)
+    
+    
+    print('BefforreHerrrrrreeeee')
+    mycursor.execute(
+        'Select * from Scores WHERE blocked = %s', (0,))
+    x = mycursor.fetchall()
+    print('Herrrrrreeeee',x)
+
+
+
     mycursor.execute(
         'SELECT * from Scores JOIN user on user.username=scores.`userB username` WHERE `userA username` = %s AND blocked = 0 order by csi DESC LIMIT 9', (session['username'],))
     matches = list(mycursor.fetchmany(9))
@@ -851,6 +881,8 @@ def recommended(match):
     mycursor.execute(
         'Select * from Biography WHERE user_id = %s', (session['id'],))
     biography = mycursor.fetchone()
+
+    
 
     return render_template('match.html', match=matched, biography=biography)
 

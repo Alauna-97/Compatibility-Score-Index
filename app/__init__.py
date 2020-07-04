@@ -4,8 +4,8 @@ from flask_login import LoginManager
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "CompatibiltyScore"
 
-# UPLOAD_FOLDER = 'C:\\Users\\Jada-Rae\\Compatibility-Score-Index\\app\\static\\uploads'
-UPLOAD_FOLDER = 'C:\\Users\\Loretta\\Desktop\\CSI\\Compatibility-Score-Index\\app\\static\\uploads'
+UPLOAD_FOLDER = 'C:\\Users\\Jada-Rae\\Compatibility-Score-Index\\app\\static\\uploads'
+# UPLOAD_FOLDER = 'C:\\Users\\Loretta\\Desktop\\CSI\\Compatibility-Score-Index\\app\\static\\uploads'
 
 
 # Flask-Login login manager

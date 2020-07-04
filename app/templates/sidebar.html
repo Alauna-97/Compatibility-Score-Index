@@ -1,6 +1,72 @@
 {% extends "base.html" %} {% block mains %}
 
-<!-- Sidebar -->
+<!-- Sidebar for Friends Profile -->
+
+{% if friend %}
+<div class="row extra-marg">
+  <div class="col-4 sidebar-spacing">
+    <nav id="sidebar">
+      
+      <div class="sidebar-header">
+        <h4> {{user.first_name}} {{user.last_name}}  </h4>
+      </div>
+
+      {% if frnbiography.pro_photo %}
+      <div>
+        <img
+          src="{{ url_for('static', filename='uploads/' + frnbiography.pro_photo) }}"
+          width="220"
+          height="220"
+          class="img-thumbnail"
+          alt="profile picture"
+        />
+      </div>
+    {% else %}
+      <div>
+        <img
+          src="../static/images/no_profilepic.png"
+          width="220"
+          height="220"
+          class="img-thumbnail"
+          alt="profile picture"
+        />
+      </div>
+    {% endif %}
+    {% if frnbiography.about %}
+
+        <div class="abt px-5 text-left">
+          <p>
+            <b>About</b>
+          </p>
+
+          <p id="abtP">
+           {{frnbiography.about}}
+          </p>
+        </div>
+
+      {% else %}
+        <div class="abt px-5 text-left">
+          <p>
+            <b>About</b>
+          </p>
+
+          <p id="abtP">
+           {{ user.first_name }} has yet to add a biography.
+          </p>
+        </div>
+
+      {% endif %}
+
+    
+    </nav>
+  </div>
+
+
+
+{% else %}
+
+
+<!-- Sidebar for user -->
 <div class="row extra-marg">
   <div class="col-4 sidebar-spacing">
     <nav id="sidebar">
@@ -201,14 +267,11 @@
 
       </ul>
       {% endif %}
-
-     
-
-
-
-
     </nav>
   </div>
+
+{% endif %}
+
   <div class="col-8">
     <div class="content">
       {% block div %}{% endblock %}

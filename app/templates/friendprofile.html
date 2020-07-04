@@ -1,0 +1,83 @@
+{% extends "sidebar.html" %} {% block div %}
+<div class="page_header mb-5">
+  <h2 class="dash_header">Dashboard</h2>
+  {% include 'flash_messages.html' %}
+</div>
+
+<h4 class="grp_header ml-3 mb-5">
+  Get to Know  {{ user.first_name }}:
+</h4>
+
+<div class = "row ml-5">
+    <div class = "col-4 text-center">
+        <img class="" src="/static/images/age.png" alt="Card image cap" width = "50" height = "50">
+        <div class="card-body">
+            {{user.age}} years
+        </div>
+        
+    </div>
+    <div class = "col-4 text-center">
+        <img class="" src="/static/images/height.png" alt="Card image cap" width = "50" height = "50">
+        <div class="card-body">
+            {{user.height}} cm
+        </div>
+    </div>
+    <div class = "col-4 text-center">
+        <img class="" src="/static/images/skin.png" alt="Card image cap" width = "50" height = "50">
+        <div class="card-body">
+            {{user.ethnicity}}
+        </div>
+    </div>
+</div>
+
+<div class = "row ml-5">
+    <div class = "col-4 text-center">
+        <img class="" src="/static/images/gender.png" alt="Card image cap" width = "50" height = "50">
+        <div class="card-body">
+            {{user.sex}}
+        </div>
+    </div>
+    <div class = "col-4 text-center">
+        <img class="" src="/static/images/executive.png" alt="Card image cap" width = "50" height = "50">
+        <div class="card-body">
+            {{user.leadership}}
+        </div>
+    </div>
+    <div class = "col-4 text-center">
+        <img class="" src="/static/images/emotions.png" alt="Card image cap" width = "50" height = "50">
+        <div class="card-body">
+            {{user.personality}}
+        </div>
+    </div>
+</div>
+
+<div class = "row ml-5">
+    <div class = "col-4 text-center">
+        <img class="" src="/static/images/graduation.png" alt="Card image cap" width = "50" height = "50">
+        <div class="card-body">
+            {{user.education}}
+        </div>
+    </div>
+    <div class = "col-4 text-center">
+        <img class="" src="/static/images/soccer.png" alt="Card image cap" width = "50" height = "50">
+        <div class="card-body">
+            {{user.hobby}}
+        </div>
+    </div>
+    <div class = "col-4 text-center">
+        <img class="" src="/static/images/doctor.png" alt="Card image cap" width = "50" height = "50">
+        <div class="card-body">
+            {{user.occupation}}
+        </div>
+    </div>
+
+</div>
+
+<hr>
+<div class = "contact">
+    <b>email:</b> {{ user.email }}
+</div>
+
+
+
+{% endblock %}

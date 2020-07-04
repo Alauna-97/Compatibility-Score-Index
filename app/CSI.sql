@@ -1,6 +1,6 @@
-drop database IF EXISTS csi;
-create database csi;
-use csi;
+-- drop database IF EXISTS csi;
+create database newcsi;
+use newcsi;
 
 drop table IF EXISTS User;
 drop table IF EXISTS Regular;
@@ -82,17 +82,17 @@ create table SetUserGroup (
 create table Scores(
     `userA username` varchar(30),
     `userB username` varchar(30),
-    CSI decimal (10, 9),
-    percentage decimal (4, 1),
-    personality_score decimal (4, 3),
-    leadership_score decimal (4, 3),
-    hobby_score decimal (4, 3),
-    gender_score decimal (4, 3),
-    age_score decimal (4, 3),
-    height_score decimal (4, 3),
-    ethnicity_score decimal (4, 3),
-    education_score decimal (4, 3),
-    occupation_score decimal (4, 3),
+    CSI float (10, 9),
+    percentage float (4, 1),
+    personality_score float (4, 3),
+    leadership_score float (4, 3),
+    hobby_score float (4, 3),
+    gender_score float (4, 3),
+    age_score float (4, 3),
+    height_score float (4, 3),
+    ethnicity_score float (4, 3),
+    education_score float (4, 3),
+    occupation_score float (4, 3),
     con_personality_score int,
     con_leadership_score int,
     con_hobby_score int,
@@ -112,17 +112,17 @@ create table SetGroupScore(
     `userB username` varchar(30),
     sid int not null,
     group_num int not null,
-    CSI decimal (10, 9),
-    percentage decimal (4, 1),
-    personality_score decimal (4, 3),
-    leadership_score decimal (4, 3),
-    hobby_score decimal (4, 3),
-    gender_score decimal (4, 3),
-    age_score decimal (4, 3),
-    height_score decimal (4, 3),
-    ethnicity_score decimal (4, 3),
-    education_score decimal (4, 3),
-    occupation_score decimal (4, 3),
+    CSI float (10, 9),
+    percentage float (4, 1),
+    personality_score float (4, 3),
+    leadership_score float (4, 3),
+    hobby_score float (4, 3),
+    gender_score float (4, 3),
+    age_score float (4, 3),
+    height_score float (4, 3),
+    ethnicity_score float (4, 3),
+    education_score float (4, 3),
+    occupation_score float (4, 3),
     con_personality_score int,
     con_leadership_score int,
     con_hobby_score int,
