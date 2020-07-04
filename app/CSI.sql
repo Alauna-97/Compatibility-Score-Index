@@ -202,6 +202,8 @@ DELIMITER //
  	SELECT count(distinct sid) FROM joinSet WHERE user_id = my_id;
  END //
 
+ alter table scores add column blocked tinyint (1) default 0 after con_occupation_score;
+
 -- insert into user values (11, 'Regular', 'Bradley', 'Pitt', 'Brad', 'bradpitt@gmail.com', PASSWORD('pass'));
 
 -- insert into pin_user values (1, 5);

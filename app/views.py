@@ -814,17 +814,29 @@ def recommend(username):
         crit = form.crit.data
         if crit == "compatible":
             mycursor.execute(
-                'SELECT * from Scores JOIN user on user.username=scores.`userB username` WHERE `userA username` = %s order by csi DESC LIMIT 9', (session['username'],))
+                'SELECT * from Scores JOIN user on user.username=scores.`userB username` WHERE `userA username` = %s AND blocked = 0 order by csi DESC LIMIT 9', (session['username'],))
         else:
             mycursor.execute(
-                'SELECT * from Scores WHERE `userA username` = %s ORDER BY percentage ASC LIMIT 9', (session['username'],))
+                'SELECT * from Scores WHERE `userA username` = %s AND blocked = 0 ORDER BY percentage ASC LIMIT 9', (session['username'],))
         matches = list(mycursor.fetchall())
         return render_template('recomnd.html', form=form, matches=matches, biography=biography)
     mycursor.execute(
-        'SELECT * from Scores JOIN user on user.username=scores.`userB username` WHERE `userA username` = %s order by csi DESC LIMIT 9', (session['username'],))
+        'SELECT * from Scores JOIN user on user.username=scores.`userB username` WHERE `userA username` = %s AND blocked = 0 order by csi DESC LIMIT 9', (session['username'],))
     matches = list(mycursor.fetchmany(9))
 
     return render_template('recomnd.html', form=form, matches=matches, biography=biography)
+
+
+@app.route('/block/<userB>', methods=['GET'])
+def block(userB):
+    mycursor = mysql.connection.cursor()
+
+    sql = "UPDATE Scores SET blocked = 1  WHERE `userA username` = %s AND `userB username` = %s"
+    val = (session['username'], userB)
+    mycursor.execute(sql, val)
+    mysql.connection.commit()
+
+    return redirect(url_for('recommend', username=session.get('username')))
 
 
 @app.route('/recommended/<match>', methods=['GET'])
@@ -855,11 +867,11 @@ def run():
     # Index 0 has in the 25 or so people to write to the db
     for user in comp_list[0]:
         # insert response to database
-        sql = "INSERT INTO Scores (`userA username`, `userB username`, CSI, percentage, personality_score, leadership_score, hobby_score, gender_score, age_score, height_score, ethnicity_score, education_score, occupation_score, con_personality_score, con_leadership_score, con_hobby_score, con_gender_score, con_age_score, con_height_score, con_ethnicity_score, con_education_score, con_occupation_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        sql = "INSERT INTO Scores (`userA username`, `userB username`, CSI, percentage, personality_score, leadership_score, hobby_score, gender_score, age_score, height_score, ethnicity_score, education_score, occupation_score, con_personality_score, con_leadership_score, con_hobby_score, con_gender_score, con_age_score, con_height_score, con_ethnicity_score, con_education_score, con_occupation_score, blocked) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
         # userA username has an extra space
         val = (user['userA username '], user['userB username'], user['CSI'], int((user['CSI'] / 9) * 100), user['personality_score'], user['leadership_score'], user['hobby_score'], user['gender_score'], user['age_score'], user['height_score'], user['ethnicity_score'], user['education_score'],
-               user['occupation_score'], user['con_personality_score'], user['con_leadership_score'], user['con_hobby_score'], user['con_gender_score'], user['con_age_score'], user['con_height_score'], user['con_ethnicity_score'], user['con_education_score'], user['con_occupation_score'])
+               user['occupation_score'], user['con_personality_score'], user['con_leadership_score'], user['con_hobby_score'], user['con_gender_score'], user['con_age_score'], user['con_height_score'], user['con_ethnicity_score'], user['con_education_score'], user['con_occupation_score'], 0)
 
         mycursor.execute(sql, val)
         mysql.connection.commit()
