@@ -339,20 +339,20 @@ def dashboard(username):
 def frndProfile(username):
     """Render the another user's dashboard page."""
     mycursor = mysql.connection.cursor()
-    mycursor.execute('SELECT * FROM user JOIN regular ON user.user_id = regular.user_id WHERE user.username = %s', (username,))
+    mycursor.execute(
+        'SELECT * FROM user JOIN regular ON user.user_id = regular.user_id WHERE user.username = %s', (username,))
     user = mycursor.fetchone()
 
-    mycursor.execute('Select * from Biography WHERE user_id = %s', (user['user_id'],))
+    mycursor.execute(
+        'Select * from Biography WHERE user_id = %s', (user['user_id'],))
     frnbiography = mycursor.fetchone()
 
     # just so that the image remains in the header
-    mycursor.execute('Select * from Biography WHERE user_id = %s', (session['id'],))
+    mycursor.execute(
+        'Select * from Biography WHERE user_id = %s', (session['id'],))
     biography = mycursor.fetchone()
-    
 
-    return render_template('friendprofile.html', biography = biography, frnbiography=frnbiography, user=user, friend = 1)
-
-
+    return render_template('friendprofile.html', biography=biography, frnbiography=frnbiography, user=user, friend=1)
 
 
 @app.route("/edit/<username>", methods=["GET", "POST"])
@@ -834,24 +834,15 @@ def recommend(username):
         crit = form.crit.data
         if crit == "compatible":
             mycursor.execute(
-                'SELECT * from Scores JOIN user on user.username=scores.`userB username` WHERE `userA username` = %s AND blocked = 0 order by csi DESC LIMIT 9', (session['username'],))
+                'SELECT * from Scores JOIN user on user.username=scores.`userB username` WHERE `userA username` = %s AND blocked = 0 AND `userA username` <> `userB username` order by csi DESC LIMIT 9', (session['username'],))
         else:
             mycursor.execute(
-                'SELECT * from Scores WHERE `userA username` = %s AND blocked = 0 ORDER BY percentage ASC LIMIT 9', (session['username'],))
+                'SELECT * from Scores WHERE `userA username` = %s AND blocked = 0 AND `userA username` <> `userB username` ORDER BY percentage ASC LIMIT 9', (session['username'],))
         matches = list(mycursor.fetchall())
         return render_template('recomnd.html', form=form, matches=matches, biography=biography)
-    
-    
-    print('BefforreHerrrrrreeeee')
-    mycursor.execute(
-        'Select * from Scores WHERE blocked = %s', (0,))
-    x = mycursor.fetchall()
-    print('Herrrrrreeeee',x)
-
-
 
     mycursor.execute(
-        'SELECT * from Scores JOIN user on user.username=scores.`userB username` WHERE `userA username` = %s AND blocked = 0 order by csi DESC LIMIT 9', (session['username'],))
+        'SELECT * from Scores JOIN user on user.username=scores.`userB username` WHERE `userA username` = %s AND blocked = 0 AND `userA username` <> `userB username` order by csi DESC LIMIT 9', (session['username'],))
     matches = list(mycursor.fetchmany(9))
 
     return render_template('recomnd.html', form=form, matches=matches, biography=biography)
@@ -881,8 +872,6 @@ def recommended(match):
     mycursor.execute(
         'Select * from Biography WHERE user_id = %s', (session['id'],))
     biography = mycursor.fetchone()
-
-    
 
     return render_template('match.html', match=matched, biography=biography)
 
