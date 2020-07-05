@@ -1,6 +1,6 @@
-drop database IF EXISTS csi;
-create database csi;
-use csi;
+-- drop database IF EXISTS csi;
+create database newcsi;
+use newcsi;
 
 drop table IF EXISTS User;
 drop table IF EXISTS Regular;

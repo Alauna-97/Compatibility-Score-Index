@@ -1,6 +1,13 @@
 {% extends "sidebar.html" %} {% block div %}
 <div class="page_header mb-5">
   <h2 class="dash_header">Dashboard</h2>
+  {% if type == "Regular" %}
+    <h2 class="type_header">Regular</h2>
+  {% else %}
+    <h2 class="type_header">Organizer</h2>
+  {% endif %}
+
+
   {% include 'flash_messages.html' %}
 </div>
 

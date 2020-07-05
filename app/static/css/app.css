@@ -836,6 +836,12 @@ p.dash_header {
   color: #99b0d1;
 }
 
+.type_header{
+  font-size: 24px;
+  line-height: 30px;
+  letter-spacing: -0.015em;
+  color: #275392;
+}
 .col.btn-align {
   text-align: right;
   margin-right: 2%;
