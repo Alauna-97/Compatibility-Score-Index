@@ -844,7 +844,8 @@ def recommend(username):
                 'SELECT * from Scores WHERE `userA username` = %s AND blocked = 0 AND `userA username` <> `userB username` ORDER BY percentage ASC LIMIT 9', (session['username'],))
         matches = list(mycursor.fetchall())
         return render_template('recomnd.html', form=form, matches=matches, biography=biography)
-    #  QUERIES ARE TWEAKED TO ONLY RETRIEVE THOSE MATCHES THAT HAVE NOT BEEN 'EXED' OFF
+
+    #  QUERIES ARE TWEAKED TO ONLY RETRIEVE THOSE MATCHES THAT HAVE NOT BEEN 'EXED' OFF (BLOCKED IS 0 == FALSE )
     mycursor.execute(
         'SELECT * from Scores JOIN user on user.username=scores.`userB username` WHERE `userA username` = %s AND blocked = 0 AND `userA username` <> `userB username` order by csi DESC LIMIT 9', (session['username'],))
     matches = list(mycursor.fetchmany(9))
@@ -852,11 +853,13 @@ def recommend(username):
     return render_template('recomnd.html', form=form, matches=matches, biography=biography)
 
 #  NEW FUNCTION !!!
-#   FOR 'EX OFF' FUNCTIONALITY
+#  FOR 'EX OFF' FUNCTIONALITY
 @app.route('/block/<userB>', methods=['GET'])
 def block(userB):
+    """Accepts a username and 'EX OFF' that person from appearing in recommended matches """
     mycursor = mysql.connection.cursor()
 
+    # EX OFF A PERSON FROM APPEARING IN RECOMMENDATIONS BY SETTING BLOCKED TO 1 (TRUE)
     sql = "UPDATE Scores SET blocked = 1  WHERE `userA username` = %s AND `userB username` = %s"
     val = (session['username'], userB)
     mycursor.execute(sql, val)
