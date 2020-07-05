@@ -18,6 +18,7 @@
 <span class="ml-5" id="CSIHolder"></span>
 <span class="ml-5" id="MaxHolder">Max: 9</span>
 
+<!-- PROFILE BUTTON ADDED AND RENAMED BACK BUTTON FOR MATCHES -->
 <a href = "{{ url_for('frndProfile', username= match['userB username']) }}" class="ml-5 mr-5 btn btn-secondary">View {{ match['userB username'] }}</a>
 <a href = "{{ url_for('recommend', username=session.get('username')) }}" class="ml-5 btn recom">Back to Matches</a>
 <br>

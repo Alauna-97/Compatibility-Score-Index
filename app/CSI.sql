@@ -202,7 +202,11 @@ DELIMITER //
  	SELECT count(distinct sid) FROM joinSet WHERE user_id = my_id;
  END //
 
+
+-- ADDS THE COLUMN 'BLOCKED' TO BLOCK THOSE MATCHES THAT HAVE BEEN 'EXED' OFF
  alter table scores add column blocked tinyint (1) default 0 after con_occupation_score;
+
+
 
 -- insert into user values (11, 'Regular', 'Bradley', 'Pitt', 'Brad', 'bradpitt@gmail.com', PASSWORD('pass'));
 

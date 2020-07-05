@@ -334,7 +334,8 @@ def dashboard(username):
 
     return render_template('dashbrd.html', groups=getSets, type=session.get('TYPE'), biography=biography)
 
-
+# NEW FUNCTION !!!
+# REDIRECTS TO MATCHES' PROFILE
 @app.route('/profile/<username>', methods=["GET", "POST"])
 def frndProfile(username):
     """Render the another user's dashboard page."""
@@ -347,11 +348,12 @@ def frndProfile(username):
         'Select * from Biography WHERE user_id = %s', (user['user_id'],))
     frnbiography = mycursor.fetchone()
 
-    # just so that the image remains in the header
+    # just so that the current user's image remains in the header
     mycursor.execute(
         'Select * from Biography WHERE user_id = %s', (session['id'],))
     biography = mycursor.fetchone()
 
+    # NEW TEMPLATE FRIENDPROFILE.HTML
     return render_template('friendprofile.html', biography=biography, frnbiography=frnbiography, user=user, friend=1)
 
 
@@ -833,21 +835,24 @@ def recommend(username):
     if request.method == "POST" and 'logged_in' in session:
         crit = form.crit.data
         if crit == "compatible":
+            #  QUERIES ARE TWEAKED TO ONLY RETRIEVE THOSE MATCHES THAT HAVE NOT BEEN 'EXED' OFF
             mycursor.execute(
                 'SELECT * from Scores JOIN user on user.username=scores.`userB username` WHERE `userA username` = %s AND blocked = 0 AND `userA username` <> `userB username` order by csi DESC LIMIT 9', (session['username'],))
         else:
+            #  QUERIES ARE TWEAKED TO ONLY RETRIEVE THOSE MATCHES THAT HAVE NOT BEEN 'EXED' OFF
             mycursor.execute(
                 'SELECT * from Scores WHERE `userA username` = %s AND blocked = 0 AND `userA username` <> `userB username` ORDER BY percentage ASC LIMIT 9', (session['username'],))
         matches = list(mycursor.fetchall())
         return render_template('recomnd.html', form=form, matches=matches, biography=biography)
-
+    #  QUERIES ARE TWEAKED TO ONLY RETRIEVE THOSE MATCHES THAT HAVE NOT BEEN 'EXED' OFF
     mycursor.execute(
         'SELECT * from Scores JOIN user on user.username=scores.`userB username` WHERE `userA username` = %s AND blocked = 0 AND `userA username` <> `userB username` order by csi DESC LIMIT 9', (session['username'],))
     matches = list(mycursor.fetchmany(9))
 
     return render_template('recomnd.html', form=form, matches=matches, biography=biography)
 
-
+#  NEW FUNCTION !!!
+#   FOR 'EX OFF' FUNCTIONALITY
 @app.route('/block/<userB>', methods=['GET'])
 def block(userB):
     mycursor = mysql.connection.cursor()
