@@ -30,15 +30,16 @@
   <script>
     let person = {{ match | tojson }};
 
-    var personality = person.personality_score * 100;
-    var leadership = person.leadership_score * 100;
-    var hobby = person.hobby_score * 100;
-    var sex = person.gender_score * 100;
-    var age = person.age_score * 100;
-    var height = person.height_score * 100;
-    var ethnicity = person.ethnicity_score * 100;
-    var education= person.education_score * 100;
-    var occupation = person.occupation_score * 100;
+    // Converts float to integer
+    var personality = parseInt(person.personality_score * 100);
+    var leadership = parseInt(person.leadership_score * 100);
+    var hobby = parseInt(person.hobby_score * 100);
+    var sex = parseInt(person.gender_score * 100);
+    var age = parseInt(person.age_score * 100);
+    var height = parseInt(person.height_score * 100);
+    var ethnicity = parseInt(person.ethnicity_score * 100);
+    var education= parseInt(person.education_score * 100);
+    var occupation = parseInt(person.occupation_score * 100);
 
     
     score = parseFloat(person.csi).toFixed(5);
@@ -106,7 +107,8 @@
             },
           },
           tooltips: {
-            enabled: false,
+            // On hover, tooltips displays
+            enabled: true,
           },
           scales: {
             yAxes: [

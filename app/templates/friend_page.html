@@ -26,15 +26,17 @@
   <script>
     let friend = {{ result | tojson }};
 
-    var personality = friend.personality_score * 100;
-    var leadership = friend.leadership_score * 100;
-    var hobby = friend.hobby_score * 100;
-    var sex = friend.gender_score * 100;
-    var age = friend.age_score * 100;
-    var height = friend.height_score * 100;
-    var ethnicity = friend.ethnicity_score * 100;
-    var education= friend.education_score * 100;
-    var occupation = friend.occupation_score * 100;
+
+    // Converts float to integer
+    var personality = parseInt(friend.personality_score * 100);
+    var leadership = parseInt(friend.leadership_score * 100);
+    var hobby = parseInt(friend.hobby_score * 100);
+    var sex = parseInt(friend.gender_score * 100);
+    var age = parseInt(friend.age_score * 100);
+    var height = parseInt(friend.height_score * 100);
+    var ethnicity = parseInt(friend.ethnicity_score * 100);
+    var education= parseInt(friend.education_score * 100);
+    var occupation = parseInt(friend.occupation_score * 100);
 
     score = parseFloat(friend.csi).toFixed(5);
     document.getElementById("CSIHolder").innerHTML = "CSI Score: " + score;
@@ -102,7 +104,8 @@
             },
           },
           tooltips: {
-            enabled: false,
+            // On hover, tooltips displays
+            enabled: true,
           },
           scales: {
             yAxes: [
