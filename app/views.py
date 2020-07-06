@@ -356,6 +356,25 @@ def frndProfile(username):
     # NEW TEMPLATE FRIENDPROFILE.HTML
     return render_template('friendprofile.html', biography=biography, frnbiography=frnbiography, user=user, friend=1)
 
+# NEW FUNCTION !!!
+# REDIRECTS TO MATCHES' PROFILE
+@app.route('/features/<username>', methods=["GET", "POST"])
+def featureProfile(username):
+    """Render the another user's dashboard page."""
+    mycursor = mysql.connection.cursor()
+    mycursor.execute(
+        'SELECT * FROM user JOIN regular ON user.user_id = regular.user_id WHERE user.username = %s', (username,))
+    user = mycursor.fetchone()
+
+
+    # just so that the current user's image remains in the header
+    mycursor.execute(
+        'Select * from Biography WHERE user_id = %s', (session['id'],))
+    biography = mycursor.fetchone()
+
+    # NEW TEMPLATE USER_FEATURES.HTML
+    return render_template('user_features.html', biography=biography, user=user)
+
 
 @app.route("/edit/<username>", methods=["GET", "POST"])
 def edit_info(username):

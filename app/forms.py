@@ -42,7 +42,7 @@ class AboutYou(FlaskForm):
         'Sex', choices=[(0, 'Select an option'), ('Female', 'Female'), ('Male', 'Male')])
 
     pref_sex = SelectField('Your preferred sex:', choices=[(
-        0, 'Select an option'), ('Female', 'Female'), ('Male', 'Male')])
+        0, 'Select an option'), ('Either', 'Either'), ('Female', 'Female'), ('Male', 'Male')])
 
     age = StringField('Age', validators=[DataRequired()])
 
