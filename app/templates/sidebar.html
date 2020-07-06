@@ -259,6 +259,14 @@
         </li>
         <li>
           <a
+            href="{{ url_for('featureProfile', username=session.get('username') ) }}"
+            class="btn rec-button"
+            >Feature Profile</a
+          >
+        </li>
+
+        <li>
+          <a
             href="{{ url_for('aboutFriend')}}"
             class="btn rec-button"
             >Compare Friend</a
