@@ -157,17 +157,18 @@
       //Global
       Chart.defaults.scale.gridLines.drawOnChartArea = false;
 
+      // Converts float to integer
       let firstValues = [
-        parseFloat(array[2])/divide_by * 100,
-        parseFloat(array[3])/divide_by * 100,
-        parseFloat(array[4])/divide_by * 100,
-        parseFloat(array[5])/divide_by * 100,
-        parseFloat(array[6])/divide_by * 100,
-        parseFloat(array[7])/divide_by * 100,
-        parseFloat(array[8])/divide_by * 100,
-        parseFloat(array[9])/divide_by * 100,
-        parseFloat(array[10])/divide_by * 100,
-        parseFloat(array[11])/divide_by * 100,
+        parseInt(parseFloat(array[2])/divide_by * 100),
+        parseInt(parseFloat(array[3])/divide_by * 100),
+        parseInt(parseFloat(array[4])/divide_by * 100),
+        parseInt(parseFloat(array[5])/divide_by * 100),
+        parseInt(parseFloat(array[6])/divide_by * 100),
+        parseInt(parseFloat(array[7])/divide_by * 100),
+        parseInt(parseFloat(array[8])/divide_by * 100),
+        parseInt(parseFloat(array[9])/divide_by * 100),
+        parseInt(parseFloat(array[10])/divide_by * 100),
+        parseInt(parseFloat(array[11])/divide_by * 100),
       ];
       let firstlabels = [
         "Personality",
@@ -225,7 +226,8 @@
             },
           },
           tooltips: {
-            enabled: false,
+            // On hover, tooltips displays
+            enabled: true,
           },
           scales: {
             yAxes: [

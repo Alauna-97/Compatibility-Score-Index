@@ -102,6 +102,7 @@ create table Scores(
     con_ethnicity_score int,
     con_education_score int,
     con_occupation_score int,
+    blocked tinyint(1) DEFAULT 0,
     primary key (`userA username`, `userB username`),
     foreign key (`userA username`) references User(username) on delete cascade on update cascade,
     foreign key (`userB username`) references User(username) on delete cascade on update cascade
@@ -190,39 +191,6 @@ insert into Administrator values('A-01', 'Horfield', 'Brovers');
 insert into Dictionary values('D-01', 'A-01', 5, 5, 5,'participative leadership or shared leadership,members of the group take a more participative role in the decision-making process', 'authoritarian leadership, individual control over all decisions and little input from group members.rarely accept advice from followers', 'delegative leadership,leaders are hands-off and allow group members to make the decisions. lowest productivity among group members', 'normal overall behavior is between introversion and extroversion', 'Their outgoing, vibrant nature draws people to them, and they have a hard time turning away the attention. They thrive off the interaction', 'Introverts tend to feel drained after socializing and regain their energy by spending time alone', 'activity needing physical effort and skill that is played according to rules, for enjoyment or as a job', 'an art of sound in time that expresses ideas and emotions in significant forms through the elements of rhythm, melody, harmony, and color', 'activity requiring physical effort, carried out to sustain or improve health and fitness', 'cognitive process of decoding symbols to derive meaning', 'Searching for or buying goods', 'using symbols to communicate thoughts and ideas in a readable form', "to move one's body, rhythmically in a pattern of steps", 'expression of human creative skill and imagination', 'keep under attentive view or observation or view attentively with interest to a broadcast on television');
 
 
-DELIMITER //
- CREATE PROCEDURE GetSetCount(IN my_id INT)
- BEGIN
- 	SELECT count(distinct sid) FROM Sets WHERE organizer = my_id;
- END //
 
-DELIMITER //
- CREATE PROCEDURE GetGroupCount(IN my_id INT)
- BEGIN
- 	SELECT count(distinct sid) FROM joinSet WHERE user_id = my_id;
- END //
-
-
--- ADDS THE COLUMN 'BLOCKED' TO BLOCK THOSE MATCHES THAT HAVE BEEN 'EXED' OFF
- alter table scores add column blocked tinyint (1) default 0 after con_occupation_score;
-
-
-
--- insert into user values (11, 'Regular', 'Bradley', 'Pitt', 'Brad', 'bradpitt@gmail.com', PASSWORD('pass'));
-
--- insert into pin_user values (1, 5);
--- insert into pin_user values (5, 1);
-
--- insert into pin_user values (1, 6);
--- insert into pin_user values (6, 1);
-
--- insert into pin_user values (1, 7);
--- insert into pin_user values (7, 1);
-
-
--- insert into pin_user values (1, 8);
--- insert into pin_user values (8, 1);
-
-
--- insert into pin_user values (1, 9);
--- insert into pin_user values (9, 1);
+-- ADDS THE COLUMN 'BLOCKED' TO BLOCK THOSE MATCHES THAT HAVE BEEN 'EXED' OFF, execute iff blocked is not an attribute in scores schema
+-- alter table scores add column blocked tinyint (1) default 0 after con_occupation_score;
